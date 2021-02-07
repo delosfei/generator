@@ -22,7 +22,7 @@ use Symfony\Component\Console\Input\InputArgument;
 class MakeCodeCommand extends Command
 {
     use MakerTrait;
-    protected $name = 'ds:code';
+    protected $name = 'make:scaffold';
     protected $description = '新建模块应用';
     protected $meta;
     protected $files;

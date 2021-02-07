@@ -14,12 +14,13 @@
   "autoload": {
     "psr-4": {
       "Delosfei\\Generator\\": "src/"
-    },
+    }
+  },
     "authors": [
       {
         "name": "Delosfei",
         "email": "9739723@qq.com"
       }
     ]
-  }
+
 }

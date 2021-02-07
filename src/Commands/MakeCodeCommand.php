@@ -59,12 +59,12 @@ class MakeCodeCommand extends Command
         $this->makeViews();
         $this->makeViewLayout();
 
-        // $this->call('migrate');
+         $this->call('migrate');
 
         $this->line("\n----------- $footer -----------");
         $this->comment("----------- $dump -----------");
 
-        //  $this->composer->dumpAutoloads();
+          $this->composer->dumpAutoloads();
 
     }
     protected function getArguments()

@@ -10,6 +10,7 @@ use Delosfei\Generator\Makes\MakeModelObserver;
 use Delosfei\Generator\Makes\MakeRoute;
 use Delosfei\Generator\Makes\MakerTrait;
 use Delosfei\Generator\Makes\MakeView;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Input;
 use Delosfei\Generator\Makes\MakePolicy;
 use Delosfei\Generator\Makes\MakeSeed;
@@ -59,7 +60,8 @@ class MakeCodeCommand extends Command
         $this->makeViews();
         $this->makeViewLayout();
 
-         $this->call('migrate');
+        // $this->call('migrate');
+        Artisan::call("migrate");
 
         $this->line("\n----------- $footer -----------");
         $this->comment("----------- $dump -----------");

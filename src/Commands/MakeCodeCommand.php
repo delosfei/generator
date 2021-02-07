@@ -230,7 +230,7 @@ class MakeCodeCommand extends Command
         } else {
             $names['namespace_name_app'] = './app/';
             $names['namespace_name_gen'] = './';
-            $names['namespace_path_app'] = 'APP\\';
+            $names['namespace_path_app'] = 'App\\';
             $names['views_path_gen'] = $names['namespace_name_app'].'resources/views/';
 
         }

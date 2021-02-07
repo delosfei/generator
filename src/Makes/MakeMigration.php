@@ -10,7 +10,7 @@ class MakeMigration
 {
     use MakerTrait;
     protected function start(){
-        $name = 'create_'.\Str::plural(strtolower( str_replace('/','_',$this->scaffoldCommandObj->argument('name')))).'_table';
+        $name = 'create_'.strtolower( str_replace('/','_',$this->scaffoldCommandObj->argument('name'))).'_table';
         $path = $this->getPath($name);
 
         if ( ! $this->classExists($name))

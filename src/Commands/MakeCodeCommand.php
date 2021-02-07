@@ -59,13 +59,6 @@ class MakeCodeCommand extends Command
         $this->makeViews();
         $this->makeViewLayout();
 
-//
-//        $this->info($this->getObjName('namespace_name_app'));
-//        $this->info($this->getObjName('namespace_name_gen'));
-//        $this->info($this->getObjName('namespace_path_app'));
-//        $this->info($this->getObjName('Names'));
-
-
         // $this->call('migrate');
 
         $this->line("\n----------- $footer -----------");

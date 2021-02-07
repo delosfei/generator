@@ -21,12 +21,5 @@
         "email": "9739723@qq.com"
       }
     ]
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Delosfei\\Generator\\GeneratorsServiceProvider"
-      ]
-    }
   }
 }

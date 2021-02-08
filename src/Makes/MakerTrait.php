@@ -86,8 +86,6 @@ trait MakerTrait
 
         return $stubs;
     }
-
-
     protected function getStubViews($ui)
     {
         $viewsPath = $this->getStubPath().join(DIRECTORY_SEPARATOR, ['views', $ui, 'pages', '']);
@@ -100,11 +98,6 @@ trait MakerTrait
 
         return $viewFiles;
     }
-
-
-
-
-
     protected function buildStub(array $metas, &$template)
     {
         foreach ($metas as $k => $v) {

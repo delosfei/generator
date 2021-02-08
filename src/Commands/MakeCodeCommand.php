@@ -23,6 +23,7 @@ use Symfony\Component\Console\Input\InputArgument;
 class MakeCodeCommand extends Command
 {
     use MakerTrait;
+
     protected $name = 'ds:code';
     protected $description = '新建模块应用';
     protected $meta;
@@ -66,9 +67,10 @@ class MakeCodeCommand extends Command
         $this->line("\n----------- $footer -----------");
         $this->comment("----------- $dump -----------");
 
-          $this->composer->dumpAutoloads();
+        $this->composer->dumpAutoloads();
 
     }
+
     protected function getArguments()
     {
         return
@@ -138,20 +140,17 @@ class MakeCodeCommand extends Command
 
         $this->meta['action'] = 'create';
         $this->meta['var_name'] = $this->getObjName("name");
-        $this->meta['table'] = $this->getObjName("names");//obsoleto
-
-        $this->meta['ui'] = $this->option('ui');
-
+        $this->meta['table'] = $this->getObjName("names");//obsole to
         $this->meta['namespace_name_app'] = $this->getObjName('namespace_name_app');
         $this->meta['namespace_name_gen'] = $this->getObjName('namespace_name_gen');
         $this->meta['namespace_path_app'] = $this->getObjName('namespace_path_app');
-
         $this->meta['Model'] = $this->getObjName('Name');
         $this->meta['Models'] = $this->getObjName('Names');
         $this->meta['model'] = $this->getObjName('name');
         $this->meta['models'] = $this->getObjName('names');
         $this->meta['ModelMigration'] = "Create{$this->meta['Models']}Table";
 
+        $this->meta['ui'] = $this->option('ui');
         $this->meta['schema'] = $this->option('schema');
         $this->meta['prefix'] = ($prefix = $this->option('prefix')) ? "$prefix." : "";
     }
@@ -204,6 +203,7 @@ class MakeCodeCommand extends Command
     {
         new MakeView($this, $this->files);
     }
+
     private function makeViewLayout()
     {
         new MakeLayout($this, $this->files);
@@ -220,29 +220,47 @@ class MakeCodeCommand extends Command
         $args_name = $this->argument('name');
 
         if (strstr($args_name, '/')) {
-
-            $names['namespace_name_app'] = "Modules/".substr($args_name, 0, strrpos($args_name, '/') + 1);
-            $names['namespace_name_gen'] = $names['namespace_name_app'];
-            $names['namespace_path_app'] = str_replace('/', '\\', $names['namespace_name_app']);
-            $names['views_path_gen'] = $names['namespace_name_app'].'vue/views/';
             $ex = explode('/', $args_name);
+            //模块名称
+            $Module_name = $ex['0'];
+            //Edu
+            $names['Module'] = \Str::singular(ucfirst($Module_name));
+            //edu
+            $names['module'] = \Str::singular(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
+            //得模型名称
             $args_name = $ex[count($ex) - 1];
+            // Article
+            $names['Name'] = \Str::singular(ucfirst($args_name));
+            // Articles
+            $names['Names'] = \Str::plural(ucfirst($args_name));
+            // articles
+            $names['names'] = \Str::plural(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
+            // article
+            $names['name'] = \Str::singular(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
+            //命名空间
+            // Modules/Edu/
+            $names['namespace_name_app'] = "Modules/".$names['Module']."/";
+            $names['namespace_name_gen'] = "Modules/".$names['Module']."/";
+            // Modules\Edu\
+            $names['namespace_path_app'] = "Modules\\".$names['Module']."\\";
+
+            $names['views_path_gen'] = $names['namespace_name_gen']."vue/views/";
+
         } else {
+            // Article
+            $names['Name'] = \Str::singular(ucfirst($args_name));
+            // Articles
+            $names['Names'] = \Str::plural(ucfirst($args_name));
+            // articles
+            $names['names'] = \Str::plural(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
+            // article
+            $names['name'] = \Str::singular(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
+
             $names['namespace_name_app'] = './app/';
             $names['namespace_name_gen'] = './';
             $names['namespace_path_app'] = 'App\\';
-            $names['views_path_gen'] = $names['namespace_name_app'].'resources/views/';
-
+            $names['views_path_gen'] = $names['namespace_name_gen'].'resources/views/';
         }
-
-        // Name[0] = Tweet
-        $names['Name'] = \Str::singular(ucfirst($args_name));
-        // Name[1] = Tweets
-        $names['Names'] = \Str::plural(ucfirst($args_name));
-        // Name[2] = tweets
-        $names['names'] = \Str::plural(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
-        // Name[3] = tweet
-        $names['name'] = \Str::singular(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
         $names['views_path'] = $names['views_path_gen'].$names['name'].'/';
 
 

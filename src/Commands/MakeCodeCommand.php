@@ -228,7 +228,7 @@ class MakeCodeCommand extends Command
             //Edu
             $names['Module'] = \Str::singular(ucfirst($Module_name));
             //edu
-            $names['module'] = \Str::singular(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
+            $names['module'] = \Str::singular(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $Module_name)));
             //得模型名称
             $args_name = $ex[count($ex) - 1];
             // Article

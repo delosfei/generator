@@ -37,7 +37,7 @@ class MakeSeed
 
     protected function generateSeed()
     {
-        $path = $this->getPath($this->scaffoldCommandObj->getObjName('Names') . 'TableSeeder', 'seed');
+        $path = $this->getPath($this->scaffoldCommandObj->getObjName('Name') . 'TableSeeder', 'seed');
 
         if ($this->files->exists($path)) {
             return $this->scaffoldCommandObj->comment('x ' . $path);

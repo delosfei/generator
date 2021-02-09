@@ -25,7 +25,7 @@ class MakeMigration
 
     protected function getPath($name)
     {
-        return $this->scaffoldCommandObj->getObjName('migrations_path').'migrations/'.date('Y_m_d_His').'_'.$name.'.php';
+        return $this->scaffoldCommandObj->getObjName('database_path').'migrations/'.date('Y_m_d_His').'_'.$name.'.php';
     }
 
 

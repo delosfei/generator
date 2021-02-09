@@ -50,7 +50,10 @@ class MakeSeed
 
     protected function updateDatabaseSeeder()
     {
-        $path = $this->scaffoldCommandObj->getObjName('database_path').'seeders/DatabaseSeeder.php';
+        $seeder_path=$this->scaffoldCommandObj->getObjName('database_path').'seeders/';
+        $seeder_name=$this->scaffoldCommandObj->getObjName('seeder_name');
+
+        $path = $seeder_path.$seeder_name;
 
         $content = $this->files->get($path);
         $name = $this->scaffoldCommandObj->getObjName('Names') . 'TableSeeder';

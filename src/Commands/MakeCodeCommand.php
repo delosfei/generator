@@ -252,10 +252,11 @@ class MakeCodeCommand extends Command
 
             $names['ModelMigration'] = "Create{$names['module']}.'_'.{$names['Names']}Table";
 
-            $names['migrations_path'] = $names['namespace_name_gen'].'Database/';
-
-
+            $names['database_path'] = $names['namespace_name_gen'].'Database/';
         } else {
+            $names['Module'] = '';
+            //edu
+            $names['module'] = '';
             // Article
             $names['Name'] = \Str::singular(ucfirst($args_name));
             // Articles
@@ -271,10 +272,12 @@ class MakeCodeCommand extends Command
             $names['views_path_gen'] = $names['namespace_name_gen'].'resources/views/';
             $names['table'] = $names['names'];
             $names['ModelMigration'] = "Create{$names['Names']}Table";
-            $names['migrations_path'] = $names['namespace_name_gen'].'database/';
+            $names['database_path'] = $names['namespace_name_gen'].'database/';
 
         }
         $names['views_path'] = $names['views_path_gen'].$names['name'].'/';
+
+        $names['seeder_name'] = $names['Module'].'DatabaseSeeder.php';
 
         if (!isset($names[$config])) {
             throw new \Exception("Position name is not found");

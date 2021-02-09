@@ -112,7 +112,7 @@ trait MakerTrait
     {
         $namespace_app = $this->scaffoldCommandObj->getObjName('namespace_name_app');
         $namespace_gen = $this->scaffoldCommandObj->getObjName('namespace_name_gen');
-        $migrations_path = $this->scaffoldCommandObj->getObjName('migrations_path');
+        $database_path = $this->scaffoldCommandObj->getObjName('database_path');
 
 
         if ($path == "controller") {
@@ -124,13 +124,13 @@ trait MakerTrait
         } elseif ($path == "policy") {
             return $namespace_app.'Policies/'.$file_name.'.php';
         } elseif ($path == "factory") {
-            return $migrations_path.'factories/'.$file_name.'Factory.php';
+            return $database_path.'factories/'.$file_name.'Factory.php';
         } elseif ($path == "model") {
             return $namespace_app.'Models/'.$file_name.'.php';
         } elseif ($path == "model-trait") {
             return $namespace_app.'Models/Traits/'.$file_name.'Operation.php';
         } elseif ($path == "seed") {
-            return $migrations_path.'seeders/'.$file_name.'.php';
+            return $database_path.'seeders/'.$file_name.'.php';
         } elseif ($path == "view-index") {
             return $namespace_gen.'resources/views/'.$file_name.'/index.blade.php';
         } elseif ($path == "view-edit") {

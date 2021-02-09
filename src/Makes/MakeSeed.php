@@ -22,7 +22,7 @@ class MakeSeed
 
     protected function generateFactory()
     {
-        $name = $this->scaffoldCommandObj->getObjName('migrations_path');
+        $name = $this->scaffoldCommandObj->getObjName('Name');
         $path = $this->getPath($name, 'factory');
 
         if (!$this->files->exists($path)) {
@@ -50,7 +50,7 @@ class MakeSeed
 
     protected function updateDatabaseSeeder()
     {
-        $path = $this->scaffoldCommandObj->getObjName('migrations_path').'seeders/DatabaseSeeder.php';
+        $path = $this->scaffoldCommandObj->getObjName('database_path').'seeders/DatabaseSeeder.php';
 
         $content = $this->files->get($path);
         $name = $this->scaffoldCommandObj->getObjName('Names') . 'TableSeeder';

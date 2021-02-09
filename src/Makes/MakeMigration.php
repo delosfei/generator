@@ -10,7 +10,7 @@ class MakeMigration
 {
     use MakerTrait;
     protected function start(){
-        $name = 'create_'.\Str::plural(strtolower( str_replace('/','_',$this->scaffoldCommandObj->argument('name')))).'_table';
+        $name = 'create_'.$this->scaffoldCommandObj->getObjName('table').'_table';
         $path = $this->getPath($name);
 
         if ( ! $this->classExists($name))
@@ -25,7 +25,7 @@ class MakeMigration
 
     protected function getPath($name)
     {
-        return './database/migrations/'.date('Y_m_d_His').'_'.$name.'.php';
+        return $this->scaffoldCommandObj->getObjName('migrations_path').'migrations/'.date('Y_m_d_His').'_'.$name.'.php';
     }
 
 

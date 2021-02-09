@@ -10,7 +10,7 @@ class MakeController
 
     private function start()
     {
-        $name = $this->scaffoldCommandObj->getObjName('Names') . 'Controller';
+        $name = $this->scaffoldCommandObj->getObjName('Name') . 'Controller';
         $path = $this->getPath($name, 'controller');
         if ($this->files->exists($path))
         {

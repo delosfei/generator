@@ -250,6 +250,9 @@ class MakeCodeCommand extends Command
 
             $names['ModelMigration'] = "Create{$names['module']}.'_'.{$names['Names']}Table";
 
+            $names['migrations_path'] = $names['namespace_name_gen'].'Database/';
+
+
         } else {
             // Article
             $names['Name'] = \Str::singular(ucfirst($args_name));
@@ -266,6 +269,7 @@ class MakeCodeCommand extends Command
             $names['views_path_gen'] = $names['namespace_name_gen'].'resources/views/';
             $names['table'] = $names['names'];
             $names['ModelMigration'] = "Create{$names['Names']}Table";
+            $names['migrations_path'] = $names['namespace_name_gen'].'database/';
 
         }
         $names['views_path'] = $names['views_path_gen'].$names['name'].'/';

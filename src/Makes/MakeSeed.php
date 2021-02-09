@@ -22,7 +22,7 @@ class MakeSeed
 
     protected function generateFactory()
     {
-        $name = $this->scaffoldCommandObj->getObjName('Name');
+        $name = $this->scaffoldCommandObj->getObjName('migrations_path');
         $path = $this->getPath($name, 'factory');
 
         if (!$this->files->exists($path)) {

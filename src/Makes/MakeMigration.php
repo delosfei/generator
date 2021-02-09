@@ -13,6 +13,7 @@ class MakeMigration
         $name = 'create_'.$this->scaffoldCommandObj->getObjName('table').'_table';
         $path = $this->getPath($name);
 
+
         if ( ! $this->classExists($name))
         {
             $this->makeDirectory($path);
@@ -21,6 +22,7 @@ class MakeMigration
         }
         return $this->scaffoldCommandObj->comment('x ' . $path);
     }
+
 
 
     protected function getPath($name)

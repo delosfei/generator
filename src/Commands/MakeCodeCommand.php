@@ -140,7 +140,7 @@ class MakeCodeCommand extends Command
 
         $this->meta['action'] = 'create';
         $this->meta['var_name'] = $this->getObjName("name");
-        $this->meta['table'] = $this->getObjName("names");//obsole to
+        $this->meta['table'] = $this->getObjName("table");//obsole to
         $this->meta['namespace_name_app'] = $this->getObjName('namespace_name_app');
         $this->meta['namespace_name_gen'] = $this->getObjName('namespace_name_gen');
         $this->meta['namespace_path_app'] = $this->getObjName('namespace_path_app');
@@ -148,7 +148,7 @@ class MakeCodeCommand extends Command
         $this->meta['Models'] = $this->getObjName('Names');
         $this->meta['model'] = $this->getObjName('name');
         $this->meta['models'] = $this->getObjName('names');
-        $this->meta['ModelMigration'] = "Create{$this->meta['Models']}Table";
+        $this->meta['ModelMigration'] = $this->getObjName('ModelMigration');
 
         $this->meta['ui'] = $this->option('ui');
         $this->meta['schema'] = $this->option('schema');
@@ -218,7 +218,7 @@ class MakeCodeCommand extends Command
     {
         $names = [];
         $args_name = $this->argument('name');
-
+        // 如果有'/'，代表是模块化内部模型
         if (strstr($args_name, '/')) {
             $ex = explode('/', $args_name);
             //模块名称
@@ -246,6 +246,10 @@ class MakeCodeCommand extends Command
 
             $names['views_path_gen'] = $names['namespace_name_gen']."vue/views/";
 
+            $names['table'] =$names['module'].'_'. $names['names'];
+
+            $names['ModelMigration'] = "Create{$names['module']}.'_'.{$names['Names']}Table";
+
         } else {
             // Article
             $names['Name'] = \Str::singular(ucfirst($args_name));
@@ -260,9 +264,11 @@ class MakeCodeCommand extends Command
             $names['namespace_name_gen'] = './';
             $names['namespace_path_app'] = 'App\\';
             $names['views_path_gen'] = $names['namespace_name_gen'].'resources/views/';
+            $names['table'] = $names['names'];
+            $names['ModelMigration'] = "Create{$names['Names']}Table";
+
         }
         $names['views_path'] = $names['views_path_gen'].$names['name'].'/';
-
 
         if (!isset($names[$config])) {
             throw new \Exception("Position name is not found");

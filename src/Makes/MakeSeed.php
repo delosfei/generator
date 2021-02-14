@@ -37,7 +37,7 @@ class MakeSeed
 
     protected function generateSeed()
     {
-        $path = $this->getPath($this->scaffoldCommandObj->getObjName('Name') . 'TableSeeder', 'seed');
+        $path = $this->getPath($this->scaffoldCommandObj->getObjName('Name') . 'Seeder', 'seed');
 
         if ($this->files->exists($path)) {
             return $this->scaffoldCommandObj->comment('x ' . $path);
@@ -56,13 +56,13 @@ class MakeSeed
         $path = $seeder_path.$seeder_name;
 
         $content = $this->files->get($path);
-        $name = $this->scaffoldCommandObj->getObjName('Names') . 'TableSeeder';
+        $name = $this->scaffoldCommandObj->getObjName('Names') . 'Seeder';
 
         if (strpos($content, $name) === false) {
 
             $content = str_replace(
                 'UserSeeder::class,',
-                "UserSeeder::class,\n\t\t$name::class,",
+                "UserSeeder::class,\n\t\t\$name::class,",
                 $content
             );
             $this->files->put($path, $content);

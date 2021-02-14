@@ -126,7 +126,7 @@ trait MakerTrait
         } elseif ($path == "policy") {
             return $namespace_app.'Policies/'.$file_name.'.php';
         }  elseif ($path == "resource") {
-            return $namespace_app.'Http/Resource/'.$file_name.'.php';
+            return $namespace_app.'Http/Resources/'.$file_name.'.php';
         } elseif ($path == "factory") {
             return $database_path.'factories/'.$file_name.'Factory.php';
         } elseif ($path == "model") {

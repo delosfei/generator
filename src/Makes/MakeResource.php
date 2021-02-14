@@ -10,7 +10,8 @@ class MakeResource
     private function start()
     {
         $name = $this->scaffoldCommandObj->getObjName('Name');
-        $path = $this->getPath($name, 'resource');
+        $resource_name = $name . 'Resource';
+        $path = $this->getPath($resource_name, 'resource');
 
         if (!$this->files->exists($path)) {
             $this->makeDirectory($path);

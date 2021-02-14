@@ -146,6 +146,7 @@ class MakeCodeCommand extends Command
         $this->meta['namespace_name_app'] = $this->getObjName('namespace_name_app');
         $this->meta['namespace_name_gen'] = $this->getObjName('namespace_name_gen');
         $this->meta['namespace_path_app'] = $this->getObjName('namespace_path_app');
+        $this->meta['namespace_database'] = $this->getObjName('namespace_database');
         $this->meta['Model'] = $this->getObjName('Name');
         $this->meta['Models'] = $this->getObjName('Names');
         $this->meta['model'] = $this->getObjName('name');
@@ -279,6 +280,8 @@ class MakeCodeCommand extends Command
             $names['namespace_name_app'] = './app/';
             $names['namespace_name_gen'] = './';
             $names['namespace_path_app'] = 'App\\';
+            $names['namespace_database'] = 'Database\\';
+
             $names['views_path_gen'] = $names['namespace_name_gen'].'resources/views/';
             $names['table'] = $names['names'];
             $names['ModelMigration'] = "Create{$names['Names']}Table";

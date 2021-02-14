@@ -24,8 +24,8 @@ use Symfony\Component\Console\Input\InputArgument;
 class MakeCodeCommand extends Command
 {
     use MakerTrait;
-    protected $signature = 'ds:code';
-   // protected $name = 'ds:code';
+   // protected $signature = 'ds:code';
+    protected $name = 'ds:code';
     protected $description = '新建模块应用';
     protected $meta;
     protected $files;
@@ -51,7 +51,7 @@ class MakeCodeCommand extends Command
         $this->line("\n----------- $header -----------\n");
         $this->makeMeta();
         $this->makeMigration();
-       // $this->makeSeed();
+        $this->makeSeed();
         $this->makeModel();
         $this->makeController();
         $this->makeFormRequest();

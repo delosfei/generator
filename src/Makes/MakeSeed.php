@@ -62,7 +62,7 @@ class MakeSeed
 
             $content = str_replace(
                 ' // \App\Models\User::factory(10)->create();',
-                " // \App\Models\User::factory(10)->create();\n\t\t\$this->call($name::class);",
+                ' // \App\Models\User::factory(10)->create();\n\t\t\$this->call($name::class);',
                 $content
             );
             $this->files->put($path, $content);

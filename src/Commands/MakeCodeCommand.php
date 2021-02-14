@@ -51,7 +51,7 @@ class MakeCodeCommand extends Command
         $this->line("\n----------- $header -----------\n");
         $this->makeMeta();
         $this->makeMigration();
-        $this->makeSeed();
+       // $this->makeSeed();
         $this->makeModel();
         $this->makeController();
         $this->makeFormRequest();

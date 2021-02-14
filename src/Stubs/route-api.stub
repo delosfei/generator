@@ -1,1 +1,1 @@
-Route::apiResource('{{models}}', \App\Api\{{Models}}Controller::class);
+Route::apiResource('{{model}}', \App\Api\{{Model}}Controller::class);

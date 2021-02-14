@@ -117,12 +117,16 @@ trait MakerTrait
 
         if ($path == "controller") {
             return $namespace_app.'Http/Controllers/'.$file_name.'.php';
+        } elseif($path == "controller-api") {
+            return $namespace_app.'Api/'.$file_name.'.php';
         } elseif ($path == "request") {
             return $namespace_app.'Http/Requests/'.$file_name.'.php';
         } elseif ($path == "observer") {
             return $namespace_app.'Observers/'.$file_name.'.php';
         } elseif ($path == "policy") {
             return $namespace_app.'Policies/'.$file_name.'.php';
+        }  elseif ($path == "resource") {
+            return $namespace_app.'Http/Resource/'.$file_name.'.php';
         } elseif ($path == "factory") {
             return $database_path.'factories/'.$file_name.'Factory.php';
         } elseif ($path == "model") {
@@ -145,6 +149,8 @@ trait MakerTrait
             return $namespace_gen.'routes/web.php';
         } elseif ($path == "route_old") {
             return $namespace_app.'Http/routes.php';
+        } elseif ($path == "route-api") {
+            return $namespace_app.'routes/api.php';
         }
 
     }

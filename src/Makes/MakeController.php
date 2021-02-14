@@ -11,7 +11,7 @@ class MakeController
     private function start()
     {
         $name = $this->scaffoldCommandObj->getObjName('Name') . 'Controller';
-        $path = $this->getPath($name, 'controller');
+        $path = $this->getPath($name, 'controller-api');
         if ($this->files->exists($path))
         {
             return $this->scaffoldCommandObj->comment("x " . $path);
@@ -29,7 +29,7 @@ class MakeController
     {
 
 
-        $stub = $this->files->get(substr(__DIR__,0, -5) . 'Stubs/controller.stub');
+        $stub = $this->files->get(substr(__DIR__,0, -5) . 'Stubs/controller-api.stub');
 
 
         $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);

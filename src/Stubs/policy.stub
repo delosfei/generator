@@ -3,10 +3,13 @@
 namespace {{namespace_path_app}}Policies;
 
 use {{namespace_path_app}}Models\User;
-use {{namespace_path_app}}{{Model}};
+use {{namespace_path_app}}Models\{{Model}};
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class {{Model}}Policy extends Policy
 {
+    use HandlesAuthorization;
+
     public function update(User $user, {{Model}} ${{model}})
     {
         // return ${{model}}->user_id == $user->id;
@@ -15,6 +18,7 @@ class {{Model}}Policy extends Policy
 
     public function destroy(User $user, {{Model}} ${{model}})
     {
+        // return ${{model}}->user_id == $user->id;
         return true;
     }
 }

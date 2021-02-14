@@ -13,6 +13,7 @@ use Delosfei\Generator\Makes\MakeView;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Input;
 use Delosfei\Generator\Makes\MakePolicy;
+use Delosfei\Generator\Makes\MakeResource;
 use Delosfei\Generator\Makes\MakeSeed;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
@@ -56,6 +57,7 @@ class MakeCodeCommand extends Command
         $this->makeFormRequest();
         $this->makeModelObserver();
         $this->makePolicy();
+        $this->makeResource();
         $this->makeRoute();
 //        // $this->makeLocalization(); //ToDo - implement in future version
         $this->makeViews();
@@ -198,6 +200,12 @@ class MakeCodeCommand extends Command
         new MakePolicy($this, $this->files);
     }
 
+    private function makeResource()
+    {
+        new MakeResource($this, $this->files);
+    }
+
+
     private function makeRoute()
     {
         new MakeRoute($this, $this->files);
@@ -250,7 +258,7 @@ class MakeCodeCommand extends Command
 
             $names['views_path_gen'] = $names['namespace_name_gen']."vue/views/";
 
-            $names['table'] =$names['module'].'_'. $names['names'];
+            $names['table'] = $names['module'].'_'.$names['names'];
 
             $names['ModelMigration'] = "Create{$names['module']}.'_'.{$names['Names']}Table";
 

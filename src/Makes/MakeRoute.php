@@ -13,15 +13,14 @@ class MakeRoute
     private function start()
     {
         $name = $this->scaffoldCommandObj->getObjName('Name');
-        $route_name = floatval(app()::VERSION) < 5.3 ? 'route_old' : 'route';
+//        $route_name = floatval(app()::VERSION) < 5.3 ? 'route_old' : 'route';
+        $route_name = 'route-api';
         $path = $this->getPath($name, $route_name);
 
         if (!$this->files->exists($path)) {
             $this->makeDirectory($path);
             $this->files->put($path, $this->compileStub($route_name));
         }
-
-
 
         $stub = $this->compileRouteStub();
 
@@ -38,7 +37,7 @@ class MakeRoute
 
     protected function compileRouteStub()
     {
-        $stub = $this->files->get(substr(__DIR__,0, -5) . 'Stubs/route.stub');
+        $stub = $this->files->get(substr(__DIR__,0, -5) . 'Stubs/route-api.stub');
 
         $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);
 

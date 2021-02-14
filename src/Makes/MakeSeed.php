@@ -61,8 +61,8 @@ class MakeSeed
         if (strpos($content, $name) === false) {
 
             $content = str_replace(
-                'UserSeeder::class,',
-                "UserSeeder::class,\n\t\t$name::class,",
+                ' // \App\Models\User::factory(10)->create();',
+                " // \App\Models\User::factory(10)->create();,\n\t\t$this->call($name::class);",
                 $content
             );
             $this->files->put($path, $content);

@@ -62,7 +62,7 @@ class MakeSeed
 
             $content = str_replace(
                 'UserSeeder::class,',
-                "UserSeeder::class,\n\t\t\$name::class,",
+                "UserSeeder::class,\n\t\t$name::class,",
                 $content
             );
             $this->files->put($path, $content);

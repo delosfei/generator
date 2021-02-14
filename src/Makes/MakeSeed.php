@@ -61,8 +61,8 @@ class MakeSeed
         if (strpos($content, $name) === false) {
 
             $content = str_replace(
-                '(UsersTableSeeder::class);',
-                "(UsersTableSeeder::class);\n\t\t\$this->call($name::class);",
+                'UserSeeder::class,',
+                "UserSeeder::class,\n\t\t$name::class,",
                 $content
             );
             $this->files->put($path, $content);

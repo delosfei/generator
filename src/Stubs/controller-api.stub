@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\{{Model}}Request;
 use App\Http\Resources\{{Model}}Resource;
 
-class {{Models}}Controller extends Controller
+class {{Model}}Controller extends Controller
 {
     public function __construct()
     {
@@ -19,7 +19,7 @@ class {{Models}}Controller extends Controller
 
 	public function index()
 	{
-        return {{Models}}Resource::collection();
+        return {{Model}}Resource::collection();
 	}
 
     public function show({{Model}} ${{model}})

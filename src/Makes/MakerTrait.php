@@ -150,7 +150,7 @@ trait MakerTrait
         } elseif ($path == "route_old") {
             return $namespace_app.'Http/routes.php';
         } elseif ($path == "route-api") {
-            return $namespace_app.'routes/api.php';
+            return $namespace_gen.'routes/api.php';
         }
 
     }

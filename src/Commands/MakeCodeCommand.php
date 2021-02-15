@@ -4,25 +4,32 @@ namespace Delosfei\Generator\Commands;
 
 use Illuminate\Console\Command;
 
+
 class MakeCodeCommand extends Command
 {
 
-    protected $signature = 'ds:code';
-//    protected $name = 'ds:code';
+
+    protected $name = 'ds:code';
 
 
-    protected $description = 'Command description';
-
-
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $description = 'Create a laralib scaffold';
 
 
     public function handle()
     {
-        return 1;
+        $header = "scaffolding: {$this->getObjName("Name")}";
+        $footer = str_pad('', strlen($header), '-');
+        $dump = str_pad('>DUMP AUTOLOAD<', strlen($header), ' ', STR_PAD_BOTH);
+
+        $this->line("\n----------- $header -----------\n");
+
+
+        $this->line("\n----------- $footer -----------");
+        $this->comment("----------- $dump -----------");
+
+
+
     }
+
+
 }

@@ -1,38 +1,56 @@
 <?php
 
-namespace Delosfei\Generator\Commands;
+namespace Summerblue\Generator\Commands;
 
-use Delosfei\Generator\Makes\MakeFormRequest;
-use Delosfei\Generator\Makes\MakeLayout;
-use Delosfei\Generator\Makes\MakeMigration;
-use Delosfei\Generator\Makes\MakeModel;
-use Delosfei\Generator\Makes\MakeModelObserver;
-use Delosfei\Generator\Makes\MakeRoute;
-use Delosfei\Generator\Makes\MakerTrait;
-use Delosfei\Generator\Makes\MakeView;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Input;
-use Delosfei\Generator\Makes\MakePolicy;
-use Delosfei\Generator\Makes\MakeResource;
-use Delosfei\Generator\Makes\MakeSeed;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Delosfei\Generator\Makes\MakeController;
+use Illuminate\Support\Facades\Input;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class MakeCodeCommand extends Command
+class ScaffoldMakeCommand extends Command
 {
-    use MakerTrait;
-   // protected $signature = 'ds:code';
+
+    /**
+     * The console command name!
+     *
+     * @var string
+     */
     protected $name = 'ds:code';
-    protected $description = '新建模块应用';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Create a laralib scaffold';
+
+    /**
+     * Meta information for the requested migration.
+     *
+     * @var array
+     */
     protected $meta;
-    protected $files;
+
+    /**
+     * @var Composer
+     */
     private $composer;
+
+    /**
+     * Store name from Model
+     *
+     * @var string
+     */
     private $nameModel = "";
 
-
+    /**
+     * Create a new command instance.
+     *
+     * @param Filesystem $files
+     * @param Composer $composer
+     * @return void
+     */
     public function __construct(Filesystem $files)
     {
         parent::__construct();
@@ -41,7 +59,11 @@ class MakeCodeCommand extends Command
         $this->composer = app()['composer'];
     }
 
-
+    /**
+     * Execute the console command.
+     *
+     * @return void
+     */
     public function handle()
     {
         $header = "scaffolding: {$this->getObjName("Name")}";
@@ -49,6 +71,7 @@ class MakeCodeCommand extends Command
         $dump = str_pad('>DUMP AUTOLOAD<', strlen($header), ' ', STR_PAD_BOTH);
 
         $this->line("\n----------- $header -----------\n");
+
         $this->makeMeta();
         $this->makeMigration();
         $this->makeSeed();
@@ -57,14 +80,12 @@ class MakeCodeCommand extends Command
         $this->makeFormRequest();
         $this->makeModelObserver();
         $this->makePolicy();
-        $this->makeResource();
         $this->makeRoute();
-//        // $this->makeLocalization(); //ToDo - implement in future version
+        // $this->makeLocalization(); //ToDo - implement in future version
         $this->makeViews();
         $this->makeViewLayout();
 
-        // $this->call('migrate');
-        Artisan::call("migrate");
+        $this->call('migrate');
 
         $this->line("\n----------- $footer -----------");
         $this->comment("----------- $dump -----------");
@@ -73,6 +94,131 @@ class MakeCodeCommand extends Command
 
     }
 
+    /**
+     * Generate the desired migration.
+     *
+     * @return void
+     */
+    protected function makeMeta()
+    {
+        // ToDo - Verificar utilidade...
+        $this->meta['action'] = 'create';
+        $this->meta['var_name'] = $this->getObjName("name");
+        $this->meta['table'] = $this->getObjName("names");//obsoleto
+
+        $this->meta['ui'] = $this->option('ui');
+
+        $this->meta['namespace'] = $this->getAppNamespace();
+
+        $this->meta['Model'] = $this->getObjName('Name');
+        $this->meta['Models'] = $this->getObjName('Names');
+        $this->meta['model'] = $this->getObjName('name');
+        $this->meta['models'] = $this->getObjName('names');
+        $this->meta['ModelMigration'] = "Create{$this->meta['Models']}Table";
+
+        $this->meta['schema'] = $this->option('schema');
+        $this->meta['prefix'] = ($prefix = $this->option('prefix')) ? "$prefix." : "";
+    }
+
+    /**
+     * Generate the desired migration.
+     *
+     * @return void
+     */
+    protected function makeMigration()
+    {
+        new MakeMigration($this, $this->files);
+    }
+
+    /**
+     * Make a Controller with default actions
+     *
+     * @return void
+     */
+    private function makeController()
+    {
+        new MakeController($this, $this->files);
+    }
+
+    /**
+     * Make a layout.blade.php with bootstrap
+     *
+     * @return void
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    private function makeViewLayout()
+    {
+        new MakeLayout($this, $this->files);
+    }
+
+    /**
+     * Generate an Eloquent model, if the user wishes.
+     *
+     * @return void
+     */
+    protected function makeModel()
+    {
+        new MakeModel($this, $this->files);
+    }
+
+    /**
+     * Generate a Seed
+     *
+     * @return void
+     */
+    private function makeSeed()
+    {
+        new MakeSeed($this, $this->files);
+    }
+
+    /**
+     * Setup views and assets
+     *
+     * @return void
+     */
+    private function makeViews()
+    {
+        new MakeView($this, $this->files);
+    }
+
+    /**
+     * Setup views and assets
+     *
+     * @return void
+     */
+    private function makeRoute()
+    {
+        new MakeRoute($this, $this->files);
+    }
+
+    /**
+     * Setup the localizations
+     */
+    private function makeLocalization()
+    {
+        new MakeLocalization($this, $this->files);
+    }
+
+    private function makeFormRequest()
+    {
+        new MakeFormRequest($this, $this->files);
+    }
+
+    private function makeModelObserver()
+    {
+        new MakeModelObserver($this, $this->files);
+    }
+
+    private function makePolicy()
+    {
+        new MakePolicy($this, $this->files);
+    }
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
     protected function getArguments()
     {
         return
@@ -81,6 +227,11 @@ class MakeCodeCommand extends Command
             ];
     }
 
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
     protected function getOptions()
     {
         return
@@ -90,28 +241,28 @@ class MakeCodeCommand extends Command
                     's',
                     InputOption::VALUE_REQUIRED,
                     'Schema to generate scaffold files. (Ex: --schema="title:string")',
-                    null,
+                    null
                 ],
                 [
                     'ui',
                     'ui',
                     InputOption::VALUE_OPTIONAL,
                     'UI Framework to generate scaffold. (Default bs4 - bootstrap 4)',
-                    'bs4',
+                    'bs4'
                 ],
                 [
                     'validator',
                     'a',
                     InputOption::VALUE_OPTIONAL,
                     'Validators to generate scaffold files. (Ex: --validator="title:required")',
-                    null,
+                    null
                 ],
                 [
                     'localization',
                     'l',
                     InputOption::VALUE_OPTIONAL,
                     'Localizations to generate scaffold files. (Ex. --localization="key:value")',
-                    null,
+                    null
                 ],
                 [
                     'lang',
@@ -125,172 +276,49 @@ class MakeCodeCommand extends Command
                     'f',
                     InputOption::VALUE_OPTIONAL,
                     'Use Illumintate/Html Form facade to generate input fields',
-                    false,
+                    false
                 ],
                 [
                     'prefix',
                     'p',
                     InputOption::VALUE_OPTIONAL,
                     'Generate schema with prefix',
-                    false,
-                ],
+                    false
+                ]
             ];
     }
 
-    protected function makeMeta()
-    {
-
-        $this->meta['action'] = 'create';
-        $this->meta['var_name'] = $this->getObjName("name");
-        $this->meta['table'] = $this->getObjName("table");//obsole to
-        $this->meta['namespace_name_app'] = $this->getObjName('namespace_name_app');
-        $this->meta['namespace_name_gen'] = $this->getObjName('namespace_name_gen');
-        $this->meta['namespace_path_app'] = $this->getObjName('namespace_path_app');
-        $this->meta['namespace_database'] = $this->getObjName('namespace_database');
-        $this->meta['Model'] = $this->getObjName('Name');
-        $this->meta['Models'] = $this->getObjName('Names');
-        $this->meta['model'] = $this->getObjName('name');
-        $this->meta['models'] = $this->getObjName('names');
-        $this->meta['ModelMigration'] = $this->getObjName('ModelMigration');
-        $this->meta['database_path'] = $this->getObjName('database_path');
-
-
-        $this->meta['ui'] = $this->option('ui');
-        $this->meta['schema'] = $this->option('schema');
-        $this->meta['prefix'] = ($prefix = $this->option('prefix')) ? "$prefix." : "";
-        $this->meta['seeder_name'] = $this->getObjName('seeder_name');
-
-    }
-
-    protected function makeMigration()
-    {
-        new MakeMigration($this, $this->files);
-    }
-
-
-    private function makeSeed()
-    {
-        new MakeSeed($this, $this->files);
-    }
-
-    protected function makeModel()
-    {
-        new MakeModel($this, $this->files);
-    }
-
-
-    private function makeController()
-    {
-        new MakeController($this, $this->files);
-    }
-
-    private function makeFormRequest()
-    {
-        new MakeFormRequest($this, $this->files);
-    }
-
-
-    private function makeModelObserver()
-    {
-        new MakeModelObserver($this, $this->files);
-    }
-
-
-    private function makePolicy()
-    {
-        new MakePolicy($this, $this->files);
-    }
-
-    private function makeResource()
-    {
-        new MakeResource($this, $this->files);
-    }
-
-
-    private function makeRoute()
-    {
-        new MakeRoute($this, $this->files);
-    }
-
-    private function makeViews()
-    {
-        new MakeView($this, $this->files);
-    }
-
-    private function makeViewLayout()
-    {
-        new MakeLayout($this, $this->files);
-    }
-
+    /**
+     * Get access to $meta array
+     *
+     * @return array
+     */
     public function getMeta()
     {
         return $this->meta;
     }
 
+    /**
+     * Generate names
+     *
+     * @param string $config
+     * @return mixed
+     * @throws \Exception
+     */
     public function getObjName($config = 'Name')
     {
         $names = [];
         $args_name = $this->argument('name');
-        // 如果有'/'，代表是模块化内部模型
-        if (strstr($args_name, '/')) {
-            $ex = explode('/', $args_name);
-            //模块名称
-            $Module_name = $ex['0'];
-            //Edu
-            $names['Module'] = \Str::singular(ucfirst($Module_name));
-            //edu
-            $names['module'] = \Str::singular(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $Module_name)));
-            //得模型名称
-            $args_name = $ex[count($ex) - 1];
-            // Article
-            $names['Name'] = \Str::singular(ucfirst($args_name));
-            // Articles
-            $names['Names'] = \Str::plural(ucfirst($args_name));
-            // articles
-            $names['names'] = \Str::plural(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
-            // article
-            $names['name'] = \Str::singular(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
-            //命名空间
-            // Modules/Edu/
-            $names['namespace_name_app'] = "Modules/".$names['Module']."/";
-            $names['namespace_name_gen'] = "Modules/".$names['Module']."/";
-            // Modules\Edu\
-            $names['namespace_path_app'] = "Modules\\".$names['Module']."\\";
 
-            $names['views_path_gen'] = $names['namespace_name_gen']."vue/views/";
+        // Name[0] = Tweet
+        $names['Name'] = \Str::singular(ucfirst($args_name));
+        // Name[1] = Tweets
+        $names['Names'] = \Str::plural(ucfirst($args_name));
+        // Name[2] = tweets
+        $names['names'] = \Str::plural(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
+        // Name[3] = tweet
+        $names['name'] = \Str::singular(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
 
-            $names['table'] = $names['module'].'_'.$names['names'];
-
-            $names['ModelMigration'] = "Create{$names['module']}.'_'.{$names['Names']}Table";
-
-            $names['database_path'] = $names['namespace_name_gen'].'Database/';
-        } else {
-            $names['Module'] = '';
-            //edu
-            $names['module'] = '';
-            // Article
-            $names['Name'] = \Str::singular(ucfirst($args_name));
-            // Articles
-            $names['Names'] = \Str::plural(ucfirst($args_name));
-            // articles
-            $names['names'] = \Str::plural(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
-            // article
-            $names['name'] = \Str::singular(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
-
-            $names['namespace_name_app'] = './app/';
-            $names['namespace_name_gen'] = './';
-            $names['namespace_path_app'] = 'App\\';
-            $names['namespace_database'] = 'Database\\';
-
-            $names['views_path_gen'] = $names['namespace_name_gen'].'resources/views/';
-            $names['table'] = $names['names'];
-            $names['ModelMigration'] = "Create{$names['Names']}Table";
-            $names['database_path'] = $names['namespace_name_gen'].'database/';
-
-        }
-        $names['views_path'] = $names['views_path_gen'].$names['name'].'/';
-
-        $names['seeder_name'] = $names['Module'].'DatabaseSeeder.php';
 
         if (!isset($names[$config])) {
             throw new \Exception("Position name is not found");

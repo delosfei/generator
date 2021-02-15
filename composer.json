@@ -17,12 +17,14 @@
       "Delosfei\\Generator\\": "src/"
     }
   },
+
   "authors": [
     {
       "name": "Delosfei",
       "email": "9739723@qq.com"
     }
   ],
+
   "extra": {
     "laravel": {
       "providers": [

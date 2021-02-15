@@ -56,7 +56,7 @@ class MakeSeed
         $path = $seeder_path.$seeder_name;
 
         $content = $this->files->get($path);
-        $name = $this->scaffoldCommandObj->getObjName('Names') . 'Seeder';
+        $name = $this->scaffoldCommandObj->getObjName('Name') . 'Seeder';
 
         if (strpos($content, $name) === false) {
 

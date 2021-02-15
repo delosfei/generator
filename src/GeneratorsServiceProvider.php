@@ -35,7 +35,7 @@ class GeneratorsServiceProvider extends ServiceProvider
     private function registerScaffoldGenerator()
     {
         $this->app->singleton('command.larascaf.scaffold', function ($app) {
-            return $app['Delosfei\Generator\Commands\ScaffoldMakeCommand'];
+            return $app['Delosfei\Generator\Commands\MakeCodeCommand'];
         });
 
         $this->commands('command.larascaf.scaffold');

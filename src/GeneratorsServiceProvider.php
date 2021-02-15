@@ -14,7 +14,7 @@ class GeneratorsServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
-		//
+        $this->registerScaffoldGenerator();
 	}
 
 	/**
@@ -24,7 +24,7 @@ class GeneratorsServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		$this->registerScaffoldGenerator();
+
 	}
 
 	/**

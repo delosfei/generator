@@ -63,9 +63,9 @@ class MakeSeed
 
             $content = str_replace(
 
-                'UserSeeder::class,',
+                '// \App\Models\User::factory(10)->create();',
 
-                "UserSeeder::class,\n\t\t\$name::class",
+                "// \App\Models\User::factory(10)->create();\n\t\t\$this->call($name::class);",
 
 
 

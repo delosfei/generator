@@ -7,12 +7,6 @@ class MakeSeed
 {
     use MakerTrait;
 
-
-    /**
-     * Start make seed.
-     *
-     * @return void
-     */
     protected function start()
     {
         $this->generateFactory();
@@ -65,7 +59,7 @@ class MakeSeed
 
                 '// \App\Models\User::factory(10)->create();',
 
-                "// \App\Models\User::factory(10)->create();\n\t\t\$this->call($name::class);",
+                "\$this->call($name::class);\n\t\t// \App\Models\User::factory(10)->create();",
 
 
 

@@ -26,7 +26,7 @@ class MakeCodeCommand extends Command
     use MakerTrait;
    // protected $signature = 'ds:code';
     protected $name = 'ds:code';
-    protected $description = '新建模块应用';
+    protected $description = '生成结构代码';
     protected $meta;
     protected $files;
     private $composer;

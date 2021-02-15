@@ -154,7 +154,6 @@ class MakeCodeCommand extends Command
         $this->meta['ModelMigration'] = $this->getObjName('ModelMigration');
         $this->meta['database_path'] = $this->getObjName('database_path');
 
-
         $this->meta['ui'] = $this->option('ui');
         $this->meta['schema'] = $this->option('schema');
         $this->meta['prefix'] = ($prefix = $this->option('prefix')) ? "$prefix." : "";

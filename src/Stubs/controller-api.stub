@@ -1,0 +1,57 @@
+<?php
+
+namespace {{namespace_path_app}}Api;
+
+use {{namespace_path_app}}Models\{{Model}};
+use Auth;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\{{Model}}Request;
+use App\Http\Resources\{{Model}}Resource;
+
+class {{Model}}Controller extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+    }
+
+
+	public function index()
+	{
+        return {{Model}}Resource::collection();
+	}
+
+    public function show({{Model}} ${{model}})
+    {
+        return new {{Model}}Resource(${{model}});
+    }
+
+	public function store({{Model}}Request $request,{{Model}} ${{model}})
+	{
+      //  $site->fill($request->input());
+      //  $site->user_id = Auth::id();
+      //  $site->config = [];
+      //  $site->save();
+      //  return  $this->message('站点添加成功');
+
+		${{model}} = fill($request->input());
+		${{model}}->save();
+		return  $this->message('添加成功');
+	}
+
+
+	public function update({{Model}}Request $request, {{Model}} ${{model}})
+    {
+        $this->authorize('update', ${{model}});
+        ${{model}}->fill($request->input())->save();
+        return ['message' => '修改成功'];
+    }
+
+	public function destroy({{Model}} ${{model}})
+    {
+        $this->authorize('delete', ${{model}});
+        ${{model}}->delete();
+        return ['message' => '删除成功'];
+    }
+}

@@ -113,14 +113,13 @@ trait MakerTraitVueui
 
     protected function getPath($file_name, $path = 'vue-layout')
     {
-
-
-        if ($path == "vue-layout" || $path == "vue-edit" || $path == "vue-create" || $path == "vue-form" || $path == "vue-index") {
+        if ($path == "vue-layout") {
             return 'vue/layouts/'.$file_name.'.vue';
         } elseif ($path == "vue-tabs") {
-            return 'vue/layouts/'.$file_name.'.js';
+            return 'vue/layouts/views/'.$file_name.'.js';
+        }elseif ($path == "vue-edit" || $path == "vue-create" || $path == "vue-form" || $path == "vue-index") {
+            return 'vue/layouts/views/'.$file_name.'.vue';
         }
-
     }
 
     protected function getFile($file)

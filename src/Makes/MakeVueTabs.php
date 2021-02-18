@@ -19,7 +19,7 @@ class MakeVueTabs
 
         $this->makeDirectory($path);
 
-        $this->files->put($path, $this->compileViewStub('layout.vue'));
+        $this->files->put($path, $this->compileViewStub('tabs.js'));
 
         $this->scaffoldCommandObj->info('+ '.$path);
     }

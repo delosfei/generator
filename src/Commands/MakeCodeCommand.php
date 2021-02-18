@@ -60,8 +60,8 @@ class MakeCodeCommand extends Command
         $this->makeResource();
         $this->makeRoute();
 //        // $this->makeLocalization(); //ToDo - implement in future version
-        $this->makeViews();
-        $this->makeViewLayout();
+//        $this->makeViews();
+//        $this->makeViewLayout();
 
         // $this->call('migrate');
         Artisan::call("migrate");
@@ -139,7 +139,6 @@ class MakeCodeCommand extends Command
 
     protected function makeMeta()
     {
-
         $this->meta['action'] = 'create';
         $this->meta['var_name'] = $this->getObjName("name");
         $this->meta['table'] = $this->getObjName("table");//obsole to
@@ -158,7 +157,6 @@ class MakeCodeCommand extends Command
         $this->meta['schema'] = $this->option('schema');
         $this->meta['prefix'] = ($prefix = $this->option('prefix')) ? "$prefix." : "";
         $this->meta['seeder_name'] = $this->getObjName('seeder_name');
-
     }
 
     protected function makeMigration()
@@ -280,12 +278,10 @@ class MakeCodeCommand extends Command
             $names['namespace_name_gen'] = './';
             $names['namespace_path_app'] = 'App\\';
             $names['namespace_database'] = 'Database\\';
-
             $names['views_path_gen'] = $names['namespace_name_gen'].'resources/views/';
             $names['table'] = $names['names'];
             $names['ModelMigration'] = "Create{$names['Names']}Table";
             $names['database_path'] = $names['namespace_name_gen'].'database/';
-
         }
         $names['views_path'] = $names['views_path_gen'].$names['name'].'/';
 

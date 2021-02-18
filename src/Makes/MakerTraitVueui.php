@@ -111,52 +111,11 @@ trait MakerTraitVueui
     }
 
 
-    protected function getPath($file_name, $path = 'controller')
+    protected function getPath($file_name, $path = 'vue-layout')
     {
-        $namespace_app = $this->scaffoldCommandObj->getObjName('namespace_name_app');
-        $namespace_gen = $this->scaffoldCommandObj->getObjName('namespace_name_gen');
-        $database_path = $this->scaffoldCommandObj->getObjName('database_path');
 
 
-        if ($path == "controller") {
-            return $namespace_app.'Http/Controllers/'.$file_name.'.php';
-        } elseif ($path == "controller-api") {
-            return $namespace_app.'Api/'.$file_name.'.php';
-        } elseif ($path == "request") {
-            return $namespace_app.'Http/Requests/'.$file_name.'.php';
-        } elseif ($path == "observer") {
-            return $namespace_app.'Observers/'.$file_name.'.php';
-        } elseif ($path == "policy") {
-            return $namespace_app.'Policies/'.$file_name.'.php';
-        } elseif ($path == "resource") {
-            return $namespace_app.'Http/Resources/'.$file_name.'.php';
-        } elseif ($path == "factory") {
-            return $database_path.'factories/'.$file_name.'Factory.php';
-        } elseif ($path == "model") {
-            return $namespace_app.'Models/'.$file_name.'.php';
-        } elseif ($path == "model-trait") {
-            return $namespace_app.'Models/Traits/'.$file_name.'Operation.php';
-        } elseif ($path == "seed") {
-            return $database_path.'seeders/'.$file_name.'.php';
-        } elseif ($path == "view-index") {
-            return $namespace_gen.'resources/views/'.$file_name.'/index.blade.php';
-        } elseif ($path == "view-edit") {
-            return $namespace_gen.'resources/views/'.$file_name.'/edit.blade.php';
-        } elseif ($path == "view-show") {
-            return $namespace_gen.'resources/views/'.$file_name.'/show.blade.php';
-        } elseif ($path == "view-create") {
-            return $namespace_gen.'resources/views/'.$file_name.'/create.blade.php';
-        } elseif ($path == "localization") {
-            return $namespace_gen.'resources/lang/'.$file_name.'.php';
-        } elseif ($path == "route") {
-            return $namespace_gen.'routes/web.php';
-        } elseif ($path == "route_old") {
-            return $namespace_app.'Http/routes.php';
-        } elseif ($path == "route-api") {
-            return $namespace_gen.'routes/api.php';
-        } elseif ($path == "facade" || $path == "services" || $path == "service-provider") {
-            return 'App/Services/'.$this->scaffoldCommandObj->getObjName('Name').'/'.$file_name.'.php';
-        } elseif ($path == "vue-layout" || $path == "vue-edit" || $path == "vue-create" || $path == "vue-form" || $path == "vue-index") {
+        if ($path == "vue-layout" || $path == "vue-edit" || $path == "vue-create" || $path == "vue-form" || $path == "vue-index") {
             return 'vue/layouts/'.$file_name.'.vue';
         } elseif ($path == "vue-tabs") {
             return 'vue/layouts/'.$file_name.'.js';

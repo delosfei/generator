@@ -7,31 +7,20 @@ use Illuminate\Support\ServiceProvider;
 class GeneratorsServiceProvider extends ServiceProvider
 {
 
-	/**
-	 * Bootstrap the application services.
-	 *
-	 * @return void
-	 */
+
 	public function boot()
 	{
         $this->registerScaffoldGenerator();
+        $this->registerServicesGenerator();
 	}
 
-	/**
-	 * Register the application services.
-	 *
-	 * @return void
-	 */
+
 	public function register()
 	{
 
 	}
 
-	/**
-	 * Register the make:scaffold generator.
-	 *
-	 * @return void
-	 */
+
 	private function registerScaffoldGenerator()
 	{
 		$this->app->singleton('command.larascaf.scaffold', function ($app) {
@@ -40,4 +29,13 @@ class GeneratorsServiceProvider extends ServiceProvider
 
 		$this->commands('command.larascaf.scaffold');
 	}
+
+    private function registerServicesGenerator()
+    {
+        $this->app->singleton('command.larascaf.services', function ($app) {
+            return $app['Delosfei\Services\Commands\MakeServicesCommand'];
+        });
+
+        $this->commands('command.larascaf.services');
+    }
 }

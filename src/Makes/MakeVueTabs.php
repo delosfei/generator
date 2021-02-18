@@ -12,7 +12,7 @@ class MakeVueTabs
         $cname = strtolower($this->scaffoldCommandObj->getObjName('Name'));
         $name = $dirname.'/'.$cname.'/'.'tabs';
 
-        $path = $this->getPath($name, 'vue-tab');
+        $path = $this->getPath($name, 'vue-tabs');
         if ($this->files->exists($path)) {
             return $this->scaffoldCommandObj->comment("x ".$path);
         }

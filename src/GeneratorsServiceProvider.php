@@ -12,6 +12,7 @@ class GeneratorsServiceProvider extends ServiceProvider
 	{
         $this->registerScaffoldGenerator();
         $this->registerServicesGenerator();
+        $this->registerVueuiGenerator();
 	}
 
 
@@ -33,9 +34,17 @@ class GeneratorsServiceProvider extends ServiceProvider
     private function registerServicesGenerator()
     {
         $this->app->singleton('command.larascaf.services', function ($app) {
-            return $app['Delosfei\Services\Commands\MakeServicesCommand'];
+            return $app['Delosfei\Generator\Commands\MakeServicesCommand'];
         });
 
         $this->commands('command.larascaf.services');
+    }
+    private function registerVueuiGenerator()
+    {
+        $this->app->singleton('command.larascaf.vueui', function ($app) {
+            return $app['Delosfei\Generator\Commands\MakeVueuiCommand'];
+        });
+
+        $this->commands('command.larascaf.vueui');
     }
 }

@@ -4,7 +4,7 @@ namespace Delosfei\Generator\Makes;
 
 class MakeVueIndex
 {
-    use MakerTrait;
+    use MakerTraitVueui;
 
     private function start()
     {

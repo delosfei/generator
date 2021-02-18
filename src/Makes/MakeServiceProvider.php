@@ -4,7 +4,7 @@ namespace Delosfei\Generator\Makes;
 
 class MakeServiceProvider
 {
-    use MakerTrait;
+    use MakerTraitServices;
 
     private function start()
     {

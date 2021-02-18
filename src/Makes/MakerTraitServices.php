@@ -2,15 +2,15 @@
 
 namespace Delosfei\Generator\Makes;
 
-use Delosfei\Generator\Commands\MakeCodeCommand;
+use Delosfei\Generator\Commands\MakeServicesCommand;
 use Illuminate\Filesystem\Filesystem;
 
-trait MakerTrait
+trait MakerTraitServices
 {
     protected $files;
     protected $scaffoldCommandObj;
 
-    public function __construct(MakeCodeCommand $scaffoldCommand, Filesystem $files)
+    public function __construct(MakeServicesCommand $scaffoldCommand, Filesystem $files)
     {
         $this->files = $files;
         $this->scaffoldCommandObj = $scaffoldCommand;

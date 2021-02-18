@@ -2,7 +2,6 @@
 
 namespace Delosfei\Generator\Makes;
 
-use Delosfei\Generator\Commands\MakeCodeCommand;
 use Illuminate\Filesystem\Filesystem;
 
 trait MakerTrait

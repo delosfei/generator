@@ -10,7 +10,6 @@ class MakeModel
     use MakerTrait;
 
 
-
     private function start()
     {
         $name = $this->scaffoldCommandObj->getObjName('Name');
@@ -18,20 +17,19 @@ class MakeModel
 
         $this->createBaseModelIfNotExists();
 
-        if ($this->files->exists($path))
-        {
+        if ($this->files->exists($path)) {
             return $this->scaffoldCommandObj->comment("x $path");
         }
 
         $this->files->put($path, $this->compileModelStub());
 
-        $this->scaffoldCommandObj->info('+ ' . $path);
+        $this->scaffoldCommandObj->info('+ '.$path);
     }
 
 
     protected function compileModelStub()
     {
-        $stub = $this->files->get(substr(__DIR__,0, -5) . 'Stubs/model.stub');
+        $stub = $this->files->get(substr(__DIR__, 0, -5).'Stubs/model.stub');
 
         $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);
         $this->buildFillable($stub);
@@ -46,11 +44,9 @@ class MakeModel
 
         $schema = $this->scaffoldCommandObj->getMeta()['schema'];
 
-        if ($schema)
-        {
+        if ($schema) {
             $items = (new SchemaParser)->parse($schema);
-            foreach($items as $item)
-            {
+            foreach ($items as $item) {
                 $schemaArray[] = "'{$item['name']}'";
             }
 
@@ -65,19 +61,19 @@ class MakeModel
     protected function createBaseModelIfNotExists()
     {
         $base_model_path = $this->getPath("Model", 'model');
-        if (!$this->files->exists($base_model_path))
-        {
+        if (!$this->files->exists($base_model_path)) {
             $this->makeDirectory($base_model_path);
             $this->files->put($base_model_path, $this->compileBaseModelStub());
-            return $this->scaffoldCommandObj->info("+ $base_model_path". ' (Updated)');
+
+            return $this->scaffoldCommandObj->info("+ $base_model_path".' (Updated)');
         }
 
-        return $this->scaffoldCommandObj->comment("x $base_model_path" . ' (Skipped)');
+        return $this->scaffoldCommandObj->comment("x $base_model_path".' (Skipped)');
     }
 
     protected function compileBaseModelStub()
     {
-        $stub = $this->files->get(substr(__DIR__,0, -5) . 'Stubs/base_model.stub');
+        $stub = $this->files->get(substr(__DIR__, 0, -5).'Stubs/base_model.stub');
 
         $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);
         $this->buildFillable($stub);

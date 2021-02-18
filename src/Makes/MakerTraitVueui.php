@@ -116,9 +116,9 @@ trait MakerTraitVueui
         if ($path == "vue-layout") {
             return 'vue/layouts/'.$file_name.'.vue';
         } elseif ($path == "vue-tabs") {
-            return 'vue/layouts/views/'.$file_name.'.js';
+            return 'vue/views/'.$file_name.'.js';
         }elseif ($path == "vue-edit" || $path == "vue-create" || $path == "vue-form" || $path == "vue-index") {
-            return 'vue/layouts/views/'.$file_name.'.vue';
+            return 'vue/views/'.$file_name.'.vue';
         }
     }
 

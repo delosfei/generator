@@ -9,6 +9,7 @@ trait MakerTrait
 {
     protected $files;
     protected $scaffoldCommandObj;
+
     public function __construct(MakeCodeCommand $scaffoldCommand, Filesystem $files)
     {
         $this->files = $files;
@@ -86,6 +87,7 @@ trait MakerTrait
 
         return $stubs;
     }
+
     protected function getStubViews($ui)
     {
         $viewsPath = $this->getStubPath().join(DIRECTORY_SEPARATOR, ['views', $ui, 'pages', '']);
@@ -98,6 +100,7 @@ trait MakerTrait
 
         return $viewFiles;
     }
+
     protected function buildStub(array $metas, &$template)
     {
         foreach ($metas as $k => $v) {
@@ -117,7 +120,7 @@ trait MakerTrait
 
         if ($path == "controller") {
             return $namespace_app.'Http/Controllers/'.$file_name.'.php';
-        } elseif($path == "controller-api") {
+        } elseif ($path == "controller-api") {
             return $namespace_app.'Api/'.$file_name.'.php';
         } elseif ($path == "request") {
             return $namespace_app.'Http/Requests/'.$file_name.'.php';
@@ -125,7 +128,7 @@ trait MakerTrait
             return $namespace_app.'Observers/'.$file_name.'.php';
         } elseif ($path == "policy") {
             return $namespace_app.'Policies/'.$file_name.'.php';
-        }  elseif ($path == "resource") {
+        } elseif ($path == "resource") {
             return $namespace_app.'Http/Resources/'.$file_name.'.php';
         } elseif ($path == "factory") {
             return $database_path.'factories/'.$file_name.'Factory.php';
@@ -151,6 +154,12 @@ trait MakerTrait
             return $namespace_app.'Http/routes.php';
         } elseif ($path == "route-api") {
             return $namespace_gen.'routes/api.php';
+        } elseif ($path == "facade" || $path == "services" || $path == "service-provider") {
+            return 'App/Services/'.$this->scaffoldCommandObj->getObjName('Name').'/'.$file_name.'.php';
+        } elseif ($path == "vue-layout" || $path == "vue-edit" || $path == "vue-create" || $path == "vue-form" || $path == "vue-index") {
+            return 'vue/layouts/'.$file_name.'.vue';
+        } elseif ($path == "vue-tabs") {
+            return 'vue/layouts/'.$file_name.'.js';
         }
 
     }
@@ -184,5 +193,14 @@ trait MakerTrait
         return $stub;
     }
 
+    protected function compileViewStub($filename)
+    {
+        $stub = $this->files->get(substr(__DIR__, 0, -5).'Stubs/views/vue/'.$filename.'.stub');
+
+        $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);
+
+
+        return $stub;
+    }
 
 }

@@ -17,7 +17,7 @@ class MakeServicesCommand extends Command
 
     // protected $signature = 'ds:code';
     protected $name = 'ds:services';
-    protected $description = '生成结构代码';
+    protected $description = '生成服务提供者代码';
     protected $meta;
     protected $files;
     private $composer;

@@ -9,7 +9,7 @@ class MakeService
     private function start()
     {
         $name = $this->scaffoldCommandObj->getObjName('Name') . 'Service';
-        $path = $this->getPath($name);
+        $path = $this->getPath($name,'services');
         if ($this->files->exists($path))
         {
             return $this->scaffoldCommandObj->comment("x " . $path);

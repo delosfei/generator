@@ -2,14 +2,14 @@
 
 namespace Delosfei\Generator\Makes;
 
-class MakeServiceProvider
+class MakeVueLayout
 {
     use MakerTrait;
 
     private function start()
     {
-        $name = $this->scaffoldCommandObj->getObjName('Name') . 'ServiceProvider';
-        $path = $this->getPath($name,'service-provider');
+        $name = $this->scaffoldCommandObj->getObjName('Name') . 'Layout';
+        $path = $this->getPath($name,'vue-layout');
         if ($this->files->exists($path))
         {
             return $this->scaffoldCommandObj->comment("x " . $path);
@@ -17,7 +17,7 @@ class MakeServiceProvider
 
         $this->makeDirectory($path);
 
-        $this->files->put($path, $this->compileStub('service-provider'));
+        $this->files->put($path, $this->compileViewStub('layout.vue'));
 
         $this->scaffoldCommandObj->info('+ ' . $path);
     }

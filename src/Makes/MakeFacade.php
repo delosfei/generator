@@ -9,7 +9,7 @@ class MakeFacade
     private function start()
     {
         $name = $this->scaffoldCommandObj->getObjName('Name') . 'Facade';
-        $path = $this->getPath($name);
+        $path = $this->getPath($name,'facade');
         if ($this->files->exists($path))
         {
             return $this->scaffoldCommandObj->comment("x " . $path);

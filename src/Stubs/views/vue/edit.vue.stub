@@ -5,7 +5,7 @@
 <script>
 import XForm from './Form.vue'
 export default {
-    route: { path: `{{cname}}/:id/edit` },
+    route: { path: `{{name}}/:id/edit` },
     components: { XForm }
 }
 </script>

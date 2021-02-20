@@ -36,7 +36,7 @@ class MakePolicy
 
     protected function compileStub($filename)
     {
-        $stub = $this->files->get(substr(__DIR__,0, -5) . 'Stubs/'.$filename.'.stub');
+        $stub = $this->files->get($this->getStubPath() .$filename.'.stub');
 
         $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);
         // $this->replaceValidator($stub);

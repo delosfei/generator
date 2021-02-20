@@ -29,7 +29,7 @@ class MakeController
     {
 
 
-        $stub = $this->files->get(substr(__DIR__,0, -5) . 'Stubs/controller-api.stub');
+        $stub = $this->files->get($this->getStubPath() . 'controller-api.stub');
 
 
         $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);

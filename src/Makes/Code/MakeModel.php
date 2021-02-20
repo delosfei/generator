@@ -29,7 +29,7 @@ class MakeModel
 
     protected function compileModelStub()
     {
-        $stub = $this->files->get(substr(__DIR__, 0, -5).'Stubs/model.stub');
+        $stub = $this->files->get($this->getStubPath() . 'model.stub');
 
         $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);
         $this->buildFillable($stub);
@@ -73,7 +73,7 @@ class MakeModel
 
     protected function compileBaseModelStub()
     {
-        $stub = $this->files->get(substr(__DIR__, 0, -5).'Stubs/base_model.stub');
+        $stub = $this->files->get($this->getStubPath() . 'base_model.stub');
 
         $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);
         $this->buildFillable($stub);

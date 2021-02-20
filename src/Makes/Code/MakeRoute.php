@@ -37,7 +37,7 @@ class MakeRoute
 
     protected function compileRouteStub()
     {
-        $stub = $this->files->get(substr(__DIR__,0, -5) . 'Stubs/route-api.stub');
+        $stub = $this->files->get($this->getStubPath() . 'route-api.stub');
 
         $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);
 

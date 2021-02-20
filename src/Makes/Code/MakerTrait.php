@@ -184,7 +184,7 @@ trait MakerTrait
 
     protected function compileStub($filename)
     {
-        $stub = $this->files->get(dirname(dirname(__DIR__)).'/Stubs/'.$filename.'.stub');
+        $stub = $this->files->get($this->getStubPath().$filename.'.stub');
 
         $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);
 
@@ -193,14 +193,6 @@ trait MakerTrait
         return $stub;
     }
 
-    protected function compileViewStub($filename)
-    {
-        $stub = $this->files->get(dirname(dirname(__DIR__)).'/Stubs/views/vue/'.$filename.'.stub');
 
-        $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);
-
-
-        return $stub;
-    }
 
 }

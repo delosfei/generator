@@ -33,7 +33,7 @@ class MakeMigration
 
     protected function compileMigrationStub()
     {
-        $stub = $this->files->get(substr(__DIR__,0, -5) . 'Stubs/migration.stub');
+        $stub = $this->files->get($this->getStubPath() . 'migration.stub');
 
         $this->replaceSchema($stub);
         $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);

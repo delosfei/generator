@@ -40,7 +40,7 @@ class MakeBaseCommand extends Command
      */
     protected function copyFiles()
     {
-        File::copyDirectory(dirname(dirname(__DIR__)).'/Data/Base', $this->path());
+        File::copyDirectory(dirname(__DIR__).'/Data/Base', $this->path());
     }
 
 

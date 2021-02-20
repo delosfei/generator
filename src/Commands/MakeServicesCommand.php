@@ -2,10 +2,11 @@
 
 namespace Delosfei\Generator\Commands;
 
-use Delosfei\Generator\Makes\MakeFacade;
-use Delosfei\Generator\Makes\MakerTrait;
-use Delosfei\Generator\Makes\MakeService;
-use Delosfei\Generator\Makes\MakeServiceProvider;
+
+use Delosfei\Generator\Makes\Services\MakeFacade;
+use Delosfei\Generator\Makes\Services\MakerTraitServices;
+use Delosfei\Generator\Makes\Services\MakeService;
+use Delosfei\Generator\Makes\Services\MakeServiceProvider;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Input;
@@ -13,7 +14,7 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class MakeServicesCommand extends Command
 {
-    use MakerTrait;
+    use MakerTraitServices;
 
     // protected $signature = 'ds:code';
     protected $name = 'ds:services';

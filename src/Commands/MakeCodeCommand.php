@@ -2,22 +2,16 @@
 
 namespace Delosfei\Generator\Commands;
 
-use Delosfei\Generator\Makes\MakeFormRequest;
-use Delosfei\Generator\Makes\MakeLayout;
-use Delosfei\Generator\Makes\MakeMigration;
-use Delosfei\Generator\Makes\MakeModel;
-use Delosfei\Generator\Makes\MakeModelObserver;
-use Delosfei\Generator\Makes\MakeRoute;
-use Delosfei\Generator\Makes\MakerTrait;
-use Delosfei\Generator\Makes\MakeView;
+use Delosfei\Generator\Makes\Code\MakeController;
+use Delosfei\Generator\Makes\Code\MakeFormRequest;
+use Delosfei\Generator\Makes\Code\MakeMigration;
+use Delosfei\Generator\Makes\Code\MakeModel;
+use Delosfei\Generator\Makes\Code\MakerTrait;
+use Delosfei\Generator\Makes\Code\MakeSeed;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Input;
-use Delosfei\Generator\Makes\MakePolicy;
-use Delosfei\Generator\Makes\MakeResource;
-use Delosfei\Generator\Makes\MakeSeed;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Delosfei\Generator\Makes\MakeController;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 

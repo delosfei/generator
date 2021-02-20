@@ -2,13 +2,13 @@
 
 namespace Delosfei\Generator\Commands;
 
-use Delosfei\Generator\Makes\MakerTrait;
-use Delosfei\Generator\Makes\MakeVueCreate;
-use Delosfei\Generator\Makes\MakeVueEdit;
-use Delosfei\Generator\Makes\MakeVueForm;
-use Delosfei\Generator\Makes\MakeVueIndex;
-use Delosfei\Generator\Makes\MakeVueLayout;
-use Delosfei\Generator\Makes\MakeVueTabs;
+use Delosfei\Generator\Makes\Vueui\MakerTraitVueui;
+use Delosfei\Generator\Makes\Vueui\MakeVueCreate;
+use Delosfei\Generator\Makes\Vueui\MakeVueEdit;
+use Delosfei\Generator\Makes\Vueui\MakeVueForm;
+use Delosfei\Generator\Makes\Vueui\MakeVueIndex;
+use Delosfei\Generator\Makes\Vueui\MakeVueLayout;
+use Delosfei\Generator\Makes\Vueui\MakeVueTabs;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Input;
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class MakeVueuiCommand extends Command
 {
-    use MakerTrait;
+    use MakerTraitVueui;
 
     // protected $signature = 'ds:code';
     protected $name = 'ds:vueui';
@@ -64,7 +64,6 @@ class MakeVueuiCommand extends Command
     protected function makeMeta()
     {
         $this->meta['dirname'] = $this->getObjName('dirname');
-
         $this->meta['Name'] = $this->getObjName('Name');
         $this->meta['name'] = $this->getObjName('name');
     }

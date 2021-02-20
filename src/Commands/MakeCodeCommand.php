@@ -6,6 +6,7 @@ use Delosfei\Generator\Makes\Code\MakeController;
 use Delosfei\Generator\Makes\Code\MakeFormRequest;
 use Delosfei\Generator\Makes\Code\MakeMigration;
 use Delosfei\Generator\Makes\Code\MakeModel;
+use Delosfei\Generator\Makes\Code\MakeModelObserver;
 use Delosfei\Generator\Makes\Code\MakerTrait;
 use Delosfei\Generator\Makes\Code\MakeSeed;
 use Illuminate\Support\Facades\Artisan;

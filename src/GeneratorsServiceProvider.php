@@ -50,11 +50,11 @@ class GeneratorsServiceProvider extends ServiceProvider
     }
     private function registerBaseGenerator()
     {
-        $this->app->singleton('command.larascaf.vueui', function ($app) {
+        $this->app->singleton('command.larascaf.base', function ($app) {
             return $app['Delosfei\Generator\Commands\MakeBaseCommand'];
         });
 
-        $this->commands('command.larascaf.vueui');
+        $this->commands('command.larascaf.base');
     }
 
 }

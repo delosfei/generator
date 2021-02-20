@@ -56,4 +56,5 @@ class GeneratorsServiceProvider extends ServiceProvider
 
         $this->commands('command.larascaf.vueui');
     }
+
 }

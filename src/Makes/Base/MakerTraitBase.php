@@ -115,7 +115,7 @@ trait MakerTraitBase
     {
 
 
-        if ($path == "facade" || $path == "services" || $path == "service-provider") {
+        if ($path == "facade" ) {
             return 'App/Services/'.$this->scaffoldCommandObj->getObjName('Name').'/'.$file_name.'.php';
         } elseif ($path == "vue-layout" || $path == "vue-edit" || $path == "vue-create" || $path == "vue-form" || $path == "vue-index") {
             return 'vue/layouts/'.$file_name.'.vue';

@@ -63,7 +63,7 @@ trait MakerTrait
 
     protected function getStubPath()
     {
-        return substr(__DIR__, 0, -5).'Stubs'.DIRECTORY_SEPARATOR;
+        return dirname(dirname(__DIR__)).'/Stubs'.DIRECTORY_SEPARATOR;
     }
 
 
@@ -184,7 +184,7 @@ trait MakerTrait
 
     protected function compileStub($filename)
     {
-        $stub = $this->files->get(substr(__DIR__, 0, -5).'Stubs/'.$filename.'.stub');
+        $stub = $this->files->get(dirname(dirname(__DIR__)).'/Stubs/'.$filename.'.stub');
 
         $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);
 
@@ -195,7 +195,7 @@ trait MakerTrait
 
     protected function compileViewStub($filename)
     {
-        $stub = $this->files->get(substr(__DIR__, 0, -5).'Stubs/views/vue/'.$filename.'.stub');
+        $stub = $this->files->get(dirname(dirname(__DIR__)).'/Stubs/views/vue/'.$filename.'.stub');
 
         $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);
 

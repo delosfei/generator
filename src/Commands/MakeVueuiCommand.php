@@ -75,7 +75,7 @@ class MakeVueuiCommand extends Command
 
         if (strstr($args_name, '/')) {
             $ex = explode('/', $args_name);
-            $names['dirname'] = ucfirst($ex['0']);
+            $names['dirname'] = strtolower($ex['0']);
             $names['Name'] = ucfirst($ex['1']);
             $names['name'] = strtolower($ex['1']);
 

@@ -9,7 +9,7 @@ class MakeVueLayout
 
     private function start()
     {
-        $name = $this->scaffoldCommandObj->getObjName('Name') . 'Layout';
+        $name = $this->scaffoldCommandObj->getObjName('dirname') . 'Layout';
         $path = $this->getPath($name,'vue-layout');
         if ($this->files->exists($path))
         {

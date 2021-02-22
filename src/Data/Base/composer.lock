@@ -136,12 +136,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/delosfei/generator.git",
-                "reference": "7af5c147b846fc5eba2682e7dd50dd555bbb4b95"
+                "reference": "688c0ddcf37d312f77a59bbe4b444ffbf0b61fa7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/delosfei/generator/zipball/7af5c147b846fc5eba2682e7dd50dd555bbb4b95",
-                "reference": "7af5c147b846fc5eba2682e7dd50dd555bbb4b95",
+                "url": "https://api.github.com/repos/delosfei/generator/zipball/688c0ddcf37d312f77a59bbe4b444ffbf0b61fa7",
+                "reference": "688c0ddcf37d312f77a59bbe4b444ffbf0b61fa7",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -186,7 +186,7 @@
                 "issues": "https://github.com/delosfei/generator/issues",
                 "source": "https://github.com/delosfei/generator/tree/main"
             },
-            "time": "2021-02-20T07:46:03+00:00"
+            "time": "2021-02-22T02:54:09+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",

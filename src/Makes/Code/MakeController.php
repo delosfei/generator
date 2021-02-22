@@ -14,6 +14,7 @@ class MakeController
         $path = $this->getPath($name, 'controller-api');
         if ($this->files->exists($path))
         {
+
             return $this->scaffoldCommandObj->comment("x " . $path);
         }
 

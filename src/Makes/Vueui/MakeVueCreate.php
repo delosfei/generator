@@ -10,7 +10,7 @@ class MakeVueCreate
     private function start()
     {
         $dirname = $this->scaffoldCommandObj->getObjName('dirname');
-        $cname = strtolower($this->scaffoldCommandObj->getObjName('Name'));
+        $cname = $this->scaffoldCommandObj->getObjName('name');
         $name = $dirname.'/'.$cname.'/'.'Create';
 
         $path = $this->getPath($name, 'vue-create');

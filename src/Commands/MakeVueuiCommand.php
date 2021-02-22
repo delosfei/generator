@@ -64,6 +64,7 @@ class MakeVueuiCommand extends Command
     protected function makeMeta()
     {
         $this->meta['dirname'] = $this->getObjName('dirname');
+        $this->meta['Dirname'] = $this->getObjName('Dirname');
         $this->meta['Name'] = $this->getObjName('Name');
         $this->meta['name'] = $this->getObjName('name');
     }
@@ -75,12 +76,14 @@ class MakeVueuiCommand extends Command
 
         if (strstr($args_name, '/')) {
             $ex = explode('/', $args_name);
+            $names['Dirname'] = ucfirst($ex['0']);
             $names['dirname'] = strtolower($ex['0']);
             $names['Name'] = ucfirst($ex['1']);
             $names['name'] = strtolower($ex['1']);
 
         }else{
-            $names['dirname'] = 'Default';
+            $names['dirname'] = 'default';
+            $names['Dirname'] = 'Default';
             // Article
             $names['Name'] = ucfirst($args_name);
             $names['name'] = strtolower($args_name);

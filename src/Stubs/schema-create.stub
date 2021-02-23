@@ -1,5 +1,5 @@
 Schema::create('{{models}}', function(Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             {{schema_up}}
             $table->timestamps();
         });

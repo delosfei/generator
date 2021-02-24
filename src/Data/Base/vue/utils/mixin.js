@@ -14,7 +14,7 @@ export default {
             router.push({ name, params });
         },
         logout() {
-            window.localStorage.removeItem("token");
+            window.sessionStorage.removeItem("token");
             location.href = "/";
         }
     }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ddf5c5653aa913f2136c4d39f8ca946",
+    "content-hash": "65e9ee73d86c78378bbb16fa0570a420",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -180,6 +180,64 @@
                 }
             ],
             "time": "2021-01-20T22:51:39+00:00"
+        },
+        {
+            "name": "delosfei/generator",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/delosfei/generator.git",
+                "reference": "ca9843f5755f514216f8c525e42ce2586a375c1c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/delosfei/generator/zipball/ca9843f5755f514216f8c525e42ce2586a375c1c",
+                "reference": "ca9843f5755f514216f8c525e42ce2586a375c1c",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.3.0"
+            },
+            "require-dev": {
+                "laravel/laravel": "8.*",
+                "phpunit/phpunit": "^9.3.3"
+            },
+            "default-branch": true,
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Delosfei\\Generator\\GeneratorsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Delosfei\\Generator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Delosfei",
+                    "email": "9739723@qq.com"
+                }
+            ],
+            "description": "Extend Laravel's generators scaffold.",
+            "support": {
+                "issues": "https://github.com/delosfei/generator/issues",
+                "source": "https://github.com/delosfei/generator/tree/main"
+            },
+            "time": "2021-02-25T04:31:48+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -9906,7 +9964,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "delosfei/generator": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

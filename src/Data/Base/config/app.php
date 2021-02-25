@@ -1,17 +1,6 @@
 <?php
 
-use App\Services\Site\SiteFacade;
-use App\Services\Site\SiteServiceProvider;
-use App\Services\Upload\UploadFacade;
-use App\Services\Upload\UploadServiceProvider;
-use App\Services\Module\ModuleFacade;
-use App\Services\Module\ModuleServiceProvider;
-use App\Services\Permission\PermissionFacade;
-use App\Services\Permission\PermissionServiceProvider;
-use App\Services\Code\CodeServiceProvider;
-use App\Services\Code\CodeFacade;
-use App\Services\Sms\SmsServiceProvider;
-use App\Services\Sms\SmsFacade;
+
 
 
 return [
@@ -191,12 +180,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
         //
-        SiteServiceProvider::class,
-        UploadServiceProvider::class,
-        ModuleServiceProvider::class,
-        PermissionServiceProvider::class,
-        CodeServiceProvider::class,
-        SmsServiceProvider::class,
+
     ],
 
     /*
@@ -211,12 +195,7 @@ return [
     */
 
     'aliases' => [
-        'SiteService' => SiteFacade::class,
-        'UploadService' => UploadFacade::class,
-        'ModuleService' => ModuleFacade::class,
-        'PermissionService' => PermissionFacade::class,
-        'CodeService' => CodeFacade::class,
-        'SmsService' => SmsFacade::class,
+
         //
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,

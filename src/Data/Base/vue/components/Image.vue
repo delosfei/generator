@@ -23,7 +23,10 @@ export default {
     computed: {
         headers() {
             return {
-                Authorization: `Bearer ${window.localStorage.getItem("token")}`
+                Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+                "X-CSRF-TOKEN": document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute("content")
             };
         }
     },

@@ -5,3 +5,7 @@ mix.js("vue/app.js", "public/js")
     .postCss("vue/css/app.css", "public/css", [require("tailwindcss")])
     .webpackConfig(require("./webpack.config"));
 
+mix.browserSync({
+    proxy: "e19.test",
+    files: ["vue/**"]
+});

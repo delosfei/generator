@@ -1,43 +1,36 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import routes from '../router/routes'
-import store from '../store'
-Vue.use(VueRouter)
+import Vue from "vue";
+import VueRouter from "vue-router";
+import routes from "./routes";
+import store from "@/store";
+Vue.use(VueRouter);
 
 const router = new VueRouter({
     routes,
-    mode: 'history'
-})
+    mode: "history"
+});
 
-const isLogin = store.getters.token
+const isLogin = Boolean(localStorage.getItem("token"));
+// const isLogin = Boolean(window.user.id);
 
+//路由拦截（守卫）
 router.beforeEach(async (to, from, next) => {
-    store.commit('setErrors')
-    //用户经常被用到，所以登录用户在这里获取资料
-    if (store.getters.token) {
-        await Promise.all([store.dispatch('getUser')])
+    store.commit("errors");
+    if (isLogin) {
+        await Promise.all([
+            store.dispatch("user"),
+            store.dispatch("systemConfig")
+        ]);
     }
-    //匹配的路由列表中是否有需要验证的
-    if (to.matched.some(route => route.meta.auth)) {
-        if (!isLogin) {
-            next({
-                path: '/login',
-                //登录成功后回跳地址
-                redirect: to.fullPath
-            })
-        } else {
-            next()
-        }
-    } else if (to.matched.some(route => route.meta.guest)) {
-        //页面只能为游客访问时
-        if (isLogin) {
-            location.href = '/'
-        } else {
-            next()
-        }
+    if (to.matched.some(route => route.meta.auth) && !isLogin) {
+        //需要验证但未登录
+        next("/login");
+    } else if (to.matched.some(route => route.meta.guest) && isLogin) {
+        //该页面只能游客访问，但你已经登录了，就跳转到首页
+        location.href = "/";
     } else {
-        next()
+        next();
     }
-})
+    next();
+});
 
-export default router
+export default router;

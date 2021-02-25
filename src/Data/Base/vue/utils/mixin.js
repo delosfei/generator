@@ -1,12 +1,16 @@
 import Auth from "../utils/Auth";
 import router from "../router";
+import store from "../store";
 export default {
     computed: {
         user() {
-            return window.user;
+            return store.state.user;
         },
         Auth() {
             return Auth;
+        },
+        isLogin() {
+            return window.localStorage.getItem("token");
         }
     },
     methods: {
@@ -14,7 +18,7 @@ export default {
             router.push({ name, params });
         },
         logout() {
-            window.sessionStorage.removeItem("token");
+            window.localStorage.removeItem("token");
             location.href = "/";
         }
     }

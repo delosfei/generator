@@ -20,10 +20,10 @@ _axios.interceptors.request.use(
         if (config.url[0] == "/") {
             config.baseURL = "";
         }
-        // const token = store.getters.token;
-        // if (token) {
-        //     config.headers["Authorization"] = `Bearer ${token}`;
-        // }
+        const token = window.localStorage.getItem("token");
+        if (token) {
+            config.headers["Authorization"] = `Bearer ${token}`;
+        }
         return config;
     },
     function(error) {
@@ -53,9 +53,10 @@ _axios.interceptors.response.use(
 
         switch (status) {
             case 422:
-                store.commit("setErrors", errors);
+                store.commit("errors", errors);
                 break;
             case 401:
+                window.localStorage.removeItem("token");
                 location.href = "/login";
                 break;
             default:

@@ -28,7 +28,7 @@ class MakeModelObserver
         if ( ! $this->files->exists($userpath))
         {
             $this->files->put($userpath, $this->compileStub('observer_user'));
-            $this->scaffoldCommandObj->comment("+ $userpath" . ' (Skipped)');
+            $this->scaffoldCommandObj->comment("+ $userpath" );
         }
 
         if ($this->files->exists($path))

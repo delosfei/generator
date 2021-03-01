@@ -31,6 +31,12 @@ class {{Model}}Request extends Request
             }
         }
     }
+    public function attributes()
+    {
+        return [
+            // 'domain' => '站点域名'
+        ];
+    }
 
     public function messages()
     {

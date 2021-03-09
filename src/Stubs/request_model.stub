@@ -4,7 +4,7 @@ namespace {{namespace_path_app}}Http\Requests;
 
 class {{Model}}Request extends Request
 {
-    public function rules()
+    public function rules(): array
     {
         switch($this->method())
         {
@@ -31,14 +31,14 @@ class {{Model}}Request extends Request
             }
         }
     }
-    public function attributes()
+    public function attributes(): array
     {
         return [
             // 'domain' => '站点域名'
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             // Validation messages

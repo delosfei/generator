@@ -35,7 +35,7 @@ class {{Model}}Controller extends Controller
       //  $site->save();
       //  return  $this->message('站点添加成功');
 
-		${{model}} = fill($request->input());
+		${{model}} -> fill($request->input());
 		${{model}}->save();
 		return  $this->message('添加成功');
 	}

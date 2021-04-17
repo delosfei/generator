@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\File;
 
 class MakeBaseCommand extends Command
 {
-    protected $signature = 'ds:base';
+    protected $signature = 'ds:base
+                            {user:The Id of thd user}
+                            {--queue=Where the job should be queued}';
     protected $description = 'test command';
 
     public function __construct()
@@ -26,7 +28,9 @@ class MakeBaseCommand extends Command
 
         $this->line("\n----------- $header -----------\n");
 
-        $this->info('以接口方式完成基础配置，实现前端自动路由，组件自动注册，axious请求等');
+        $this->info('test'.$this->argument('user'));
+
+
         $this->line("\n----------- $footer -----------");
     }
 

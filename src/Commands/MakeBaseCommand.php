@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\File;
 class MakeBaseCommand extends Command
 {
     protected $signature = 'ds:base
-                            {user:The Id of thd user}
-                            {--queue=Where the job should be queued}';
+                        {user : The ID of the user}
+                        {--queue= : Whether the job should be queued}';
     protected $description = 'test command';
 
     public function __construct()

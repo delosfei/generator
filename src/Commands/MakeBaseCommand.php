@@ -3,16 +3,20 @@
 namespace Delosfei\Generator\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\File;
 
 class MakeBaseCommand extends Command
 {
     protected $signature = 'ds:base
-                        {user : The ID of the user}
-                        {man : The ID of the man}
-                        {--queue= : Whether the job should be queued}
-                        {--good= : Whether the job should be queued}';
+    
+                        {name : The name of the model. (Ex: Post)}
+                        {module_name : The name of the module_name. (Ex: Edu)}
+                        {--S|schema= : Schema to generate scaffold files. (Ex: --schema="title:string")}
+                        {--U|ui : UI Framework to generate scaffold. (Default Vue ui)}
+                        {--A|validator : Validators to generate scaffold files. (Ex: --validator="title:required")}
+                        {--L|localization : Localizations to generate scaffold files. (Ex. --localization="key:value")}
+                        {--P|prefix : Generate schema with prefix}';
+
+
     protected $description = 'test command';
 
     public function __construct()
@@ -30,10 +34,10 @@ class MakeBaseCommand extends Command
 
         $this->line("\n----------- $header -----------\n");
 
-        $this->info('test'.$this->argument('user')."\n");
-        $this->comment('option'.$this->option('queue')."\n");
-        $this->info('test'.$this->argument('man')."\n");
-        $this->comment('option'.$this->option('good'));
+        $this->info('name'.$this->argument('name')."\n");
+        $this->comment('schema---'.$this->option('schema')."\n");
+        $this->info('module_name'.$this->argument('module_name')."\n");
+        $this->comment('prefix---'.$this->option('prefix'));
 
         $this->line("\n----------- $footer -----------");
     }

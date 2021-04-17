@@ -10,7 +10,12 @@ class MakeBaseCommand extends Command
 {
     protected $signature = 'ds:base    
                         {name : The name of the model. (Ex: Post)}
-                        {module_name? : The name of the module_name. (Ex: Edu)}';
+                        {module_name? : The name of the module_name. (Ex: Edu)}
+                        {--S|schema= : Schema to generate scaffold files. (Ex: --schema="title:string")}
+                        {--U|ui : UI Framework to generate scaffold. (Default Vue ui)}
+                        {--A|validator : Validators to generate scaffold files. (Ex: --validator="title:required")}
+                        {--L|localization : Localizations to generate scaffold files. (Ex. --localization="key:value")}
+                        {--P|prefix : Generate schema with prefix}';
 
 
     protected $description = 'test command';
@@ -55,7 +60,7 @@ class MakeBaseCommand extends Command
                     'ui',
                     'ui',
                     InputOption::VALUE_OPTIONAL,
-                    'UI Framework to generate scaffold. (default bs4 - bootstrap 4)',
+                    'UI Framework to generate scaffold. (Default bs4 - bootstrap 4)',
                     'bs4',
                 ],
                 [
@@ -83,7 +88,7 @@ class MakeBaseCommand extends Command
                     'form',
                     'f',
                     InputOption::VALUE_OPTIONAL,
-                    'use Illumintate/Html Form facade to generate input fields',
+                    'Use Illumintate/Html Form facade to generate input fields',
                     false,
                 ],
                 [

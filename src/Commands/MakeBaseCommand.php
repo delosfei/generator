@@ -10,7 +10,9 @@ class MakeBaseCommand extends Command
 {
     protected $signature = 'ds:base
                         {user : The ID of the user}
-                        {--queue= : Whether the job should be queued}';
+                        {man : The ID of the man}
+                        {--queue= : Whether the job should be queued}
+                        {--good= : Whether the job should be queued}';
     protected $description = 'test command';
 
     public function __construct()
@@ -29,7 +31,9 @@ class MakeBaseCommand extends Command
         $this->line("\n----------- $header -----------\n");
 
         $this->info('test'.$this->argument('user')."\n");
-        $this->comment('option'.$this->option('queue'));
+        $this->comment('option'.$this->option('queue')."\n");
+        $this->info('test'.$this->argument('man')."\n");
+        $this->comment('option'.$this->option('good'));
 
         $this->line("\n----------- $footer -----------");
     }

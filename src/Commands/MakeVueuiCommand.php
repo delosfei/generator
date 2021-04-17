@@ -25,6 +25,7 @@ class MakeVueuiCommand extends Command
     protected $files;
     private $composer;
 
+    
     public function __construct(Filesystem $files)
     {
         parent::__construct();
@@ -81,7 +82,7 @@ class MakeVueuiCommand extends Command
             $names['Name'] = ucfirst($ex['1']);
             $names['name'] = strtolower($ex['1']);
 
-        }else{
+        } else {
             $names['dirname'] = 'default';
             $names['Dirname'] = 'Default';
             // Article
@@ -89,11 +90,11 @@ class MakeVueuiCommand extends Command
             $names['name'] = strtolower($args_name);
         }
 
-            if (!isset($names[$config])) {
-                throw new \Exception("Position name is not found");
-            };
+        if (!isset($names[$config])) {
+            throw new \Exception("Position name is not found");
+        };
 
-            return $names[$config];
+        return $names[$config];
 
     }
 

@@ -28,8 +28,8 @@ class MakeBaseCommand extends Command
 
         $this->line("\n----------- $header -----------\n");
 
-        $this->info('test'.$this->argument('user'));
-
+        $this->info('test'.$this->argument('user')."\n");
+        $this->comment('option'.$this->option('queue'));
 
         $this->line("\n----------- $footer -----------");
     }

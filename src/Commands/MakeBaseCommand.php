@@ -6,8 +6,7 @@ use Illuminate\Console\Command;
 
 class MakeBaseCommand extends Command
 {
-    protected $signature = 'ds:base
-    
+    protected $signature = 'ds:base    
                         {name : The name of the model. (Ex: Post)}
                         {module_name : The name of the module_name. (Ex: Edu)}
                         {--S|schema= : Schema to generate scaffold files. (Ex: --schema="title:string")}
@@ -33,13 +32,13 @@ class MakeBaseCommand extends Command
         $footer = str_pad('', strlen($header), '-');
 
         $this->line("\n----------- $header -----------\n");
-
+        $this->info(dd($this->option('schema'))."\n");
         $this->info('name'.$this->argument('name')."\n");
         $this->comment('schema---'.$this->option('schema')."\n");
         $this->info('module_name'.$this->argument('module_name')."\n");
         $this->comment('prefix---'.$this->option('prefix'));
 
-        $this->line("\n----------- $footer -----------");
+        $this->line("\n----------- $footer-----------");
     }
 
 

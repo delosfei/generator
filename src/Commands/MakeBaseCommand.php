@@ -2,28 +2,77 @@
 
 namespace Delosfei\Generator\Commands;
 
+use Delosfei\Generator\Makes\Code\MakeController;
+use Delosfei\Generator\Makes\Code\MakeFormRequest;
+use Delosfei\Generator\Makes\Code\MakeMigration;
+use Delosfei\Generator\Makes\Code\MakeModel;
+use Delosfei\Generator\Makes\Code\MakeModelObserver;
+use Delosfei\Generator\Makes\Code\MakePolicy;
+use Delosfei\Generator\Makes\Code\MakeResource;
+use Delosfei\Generator\Makes\Code\MakeRoute;
+use Delosfei\Generator\Makes\Code\MakerTrait;
+use Delosfei\Generator\Makes\Code\MakeSeed;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputArgument;
+use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
 
-class MakeBaseCommand extends Command
+class MakeCodeCommand extends Command
 {
-    protected $signature = 'ds:base    
-                        {name : The name of the model. (Ex: Post)}
-                        {module_name? : The name of the module_name. (Ex: Edu)}
-                        {--S|schema= : Schema to generate scaffold files. (Ex: --schema="title:string")}
-                        {--U|ui : UI Framework to generate scaffold. (Default Vue ui)}
-                        {--A|validator : Validators to generate scaffold files. (Ex: --validator="title:required")}
-                        {--L|localization : Localizations to generate scaffold files. (Ex. --localization="key:value")}
-                        {--P|prefix : Generate schema with prefix}';
+    use MakerTrait;
+
+    // protected $signature = 'ds:code';
+    protected $name = 'ds:code';
+    protected $description = '生成结构代码';
+    protected $meta;
+    protected $files;
+    private $composer;
+    private $nameModel = "";
 
 
-    protected $description = 'test command';
-
-    public function __construct()
+    public function __construct(Filesystem $files)
     {
         parent::__construct();
 
+        $this->files = $files;
+        $this->composer = app()['composer'];
+    }
+
+
+    public function handle()
+    {
+        $header = "scaffolding: {$this->getObjName("Name")}";
+        $footer = str_pad('', strlen($header), '-');
+        $dump = str_pad('>DUMP AUTOLOAD<', strlen($header), ' ', STR_PAD_BOTH);
+
+        $this->line("\n----------- $header -----------\n");
+
+
+        $this->info($this->argument('name')."---name\n");
+        $this->info($this->argument('module')."---module_name\n");
+        $this->info($this->option('schema')."---schema\n");
+        $this->info($this->option('prefix')."---prefix\n");
+//        $this->makeMeta();
+//        $this->makeMigration();
+//        $this->makeSeed();
+//        $this->makeModel();
+//        $this->makeController();
+//        $this->makeFormRequest();
+//        $this->makeModelObserver();
+//        $this->makePolicy();
+//        $this->makeResource();
+//        $this->makeRoute();
+
+
+        // $this->call('migrate');
+        Artisan::call("migrate");
+
+        $this->line("\n----------- $footer -----------");
+        $this->comment("----------- $dump -----------");
+
+        $this->composer->dumpAutoloads();
 
     }
 
@@ -34,10 +83,10 @@ class MakeBaseCommand extends Command
      */
     protected function getArguments()
     {
-        return
-            [
-                ['name', InputArgument::REQUIRED, 'The name of the model. (Ex: Post)'],
-            ];
+        return [
+            ['name', InputArgument::REQUIRED, 'The name of the command.'],
+            ['module', InputArgument::OPTIONAL, 'The name of module will be used.'],
+        ];
     }
 
     /**
@@ -101,21 +150,160 @@ class MakeBaseCommand extends Command
             ];
     }
 
-
-    public function handle()
+    protected function makeMeta()
     {
-        $header = "scaffolding: BaseCode";
-        $footer = str_pad('', strlen($header), '-');
+        $this->meta['action'] = 'create';
+        $this->meta['var_name'] = $this->getObjName("name");
+        $this->meta['table'] = $this->getObjName("table");//obsole to
+        $this->meta['namespace_name_app'] = $this->getObjName('namespace_name_app');
+        $this->meta['namespace_name_gen'] = $this->getObjName('namespace_name_gen');
+        $this->meta['namespace_path_app'] = $this->getObjName('namespace_path_app');
+        $this->meta['namespace_database'] = $this->getObjName('namespace_database');
+        $this->meta['Model'] = $this->getObjName('Name');
+        $this->meta['Models'] = $this->getObjName('Names');
+        $this->meta['model'] = $this->getObjName('name');
+        $this->meta['models'] = $this->getObjName('names');
+        $this->meta['ModelMigration'] = $this->getObjName('ModelMigration');
+        $this->meta['database_path'] = $this->getObjName('database_path');
 
-        $this->line("\n----------- $header -----------\n");
+        $this->meta['ui'] = $this->option('ui');
+        $this->meta['schema'] = $this->option('schema');
+        $this->meta['prefix'] = ($prefix = $this->option('prefix')) ? "$prefix." : "";
+        $this->meta['seeder_name'] = $this->getObjName('seeder_name');
+    }
 
-        $this->info('name'.$this->argument('name')."\n");
-        $this->comment('schema---'.$this->option('schema')."\n");
-        $this->info('module_name'.$this->argument('module_name')."\n");
-        $this->comment('prefix---'.$this->option('prefix'));
-
-        $this->line("\n----------- $footer-----------");
+    protected function makeMigration()
+    {
+        new MakeMigration($this, $this->files);
     }
 
 
+    private function makeSeed()
+    {
+        new MakeSeed($this, $this->files);
+    }
+
+    protected function makeModel()
+    {
+        new MakeModel($this, $this->files);
+    }
+
+
+    private function makeController()
+    {
+        new MakeController($this, $this->files);
+    }
+
+    private function makeFormRequest()
+    {
+        new MakeFormRequest($this, $this->files);
+    }
+
+
+    private function makeModelObserver()
+    {
+        new MakeModelObserver($this, $this->files);
+    }
+
+
+    private function makePolicy()
+    {
+        new MakePolicy($this, $this->files);
+    }
+
+    private function makeResource()
+    {
+        new MakeResource($this, $this->files);
+    }
+
+
+    private function makeRoute()
+    {
+        new MakeRoute($this, $this->files);
+    }
+
+    private function makeViews()
+    {
+        new MakeView($this, $this->files);
+    }
+
+    private function makeViewLayout()
+    {
+        new MakeLayout($this, $this->files);
+    }
+
+    public function getMeta()
+    {
+        return $this->meta;
+    }
+
+    public function getObjName($config = 'Name')
+    {
+        $names = [];
+        $args_name = $this->argument('name');
+        // 如果有'/'，代表是模块化内部模型
+        if (strstr($args_name, '/')) {
+            $ex = explode('/', $args_name);
+            //模块名称
+            $Module_name = $ex['0'];
+            //Edu
+            $names['Module'] = \Str::singular(ucfirst($Module_name));
+            //edu
+            $names['module'] = \Str::singular(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $Module_name)));
+            //得模型名称
+            $args_name = $ex[count($ex) - 1];
+            // Article
+            $names['Name'] = \Str::singular(ucfirst($args_name));
+            // Articles
+            $names['Names'] = \Str::plural(ucfirst($args_name));
+            // articles
+            $names['names'] = \Str::plural(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
+            // article
+            $names['name'] = \Str::singular(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
+            //命名空间
+            // Modules/Edu/
+            $names['namespace_name_app'] = "Modules/".$names['Module']."/";
+            $names['namespace_name_gen'] = "Modules/".$names['Module']."/";
+            // Modules\Edu\
+            $names['namespace_path_app'] = "Modules\\".$names['Module']."\\";
+
+            $names['views_path_gen'] = $names['namespace_name_gen']."vue/views/";
+
+            $names['table'] = $names['module'].'_'.$names['names'];
+
+            $names['ModelMigration'] = "Create{$names['module']}.'_'.{$names['Names']}Table";
+
+            $names['database_path'] = $names['namespace_name_gen'].'Database/';
+        } else {
+            $names['Module'] = '';
+            //edu
+            $names['module'] = '';
+            // Article
+            $names['Name'] = \Str::singular(ucfirst($args_name));
+            // Articles
+            $names['Names'] = \Str::plural(ucfirst($args_name));
+            // articles
+            $names['names'] = \Str::plural(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
+            // article
+            $names['name'] = \Str::singular(strtolower(preg_replace('/(?<!^)([A-Z])/', '_$1', $args_name)));
+
+            $names['namespace_name_app'] = './app/';
+            $names['namespace_name_gen'] = './';
+            $names['namespace_path_app'] = 'App\\';
+            $names['namespace_database'] = 'Database\\';
+            $names['views_path_gen'] = $names['namespace_name_gen'].'resources/views/';
+            $names['table'] = $names['names'];
+            $names['ModelMigration'] = "Create{$names['Names']}Table";
+            $names['database_path'] = $names['namespace_name_gen'].'database/';
+        }
+        $names['views_path'] = $names['views_path_gen'].$names['name'].'/';
+
+        $names['seeder_name'] = $names['Module'].'DatabaseSeeder.php';
+
+        if (!isset($names[$config])) {
+            throw new \Exception("Position name is not found");
+        };
+
+        return $names[$config];
+    }
 }

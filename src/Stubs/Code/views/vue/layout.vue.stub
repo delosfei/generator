@@ -1,0 +1,20 @@
+<template>
+    <div>
+        <div class="bg-white mx-3 px-5 py-4 shadow-md rounded-sm">
+            <router-view />
+        </div>
+    </div>
+</template>
+<script>
+export default {
+    route: { meta: { auth: true } },
+    components: {
+
+     },
+    created() {
+
+    }
+}
+</script>
+
+<style></style>

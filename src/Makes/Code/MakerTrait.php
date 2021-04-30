@@ -1,8 +1,10 @@
 <?php
 
-namespace Delosfei\Generator\Makes\Code;
+namespace App\Console\Makes\Code;
 
-use Delosfei\Generator\Commands\MakeCodeCommand;
+use App\Console\Commands\MakeCodeCommand;
+use App\Console\Migrations\SchemaParser;
+use Illuminate\Container\Container;
 use Illuminate\Filesystem\Filesystem;
 
 trait MakerTrait
@@ -15,25 +17,8 @@ trait MakerTrait
         $this->files = $files;
         $this->scaffoldCommandObj = $scaffoldCommand;
         $this->start();
-    }
 
-    protected function getArrayRecursive(array $array, $parent = '')
-    {
-        $data = [];
 
-        foreach ($array as $key => $value) {
-            if (gettype($value) == 'array') {
-                array_merge(
-                    $data,
-                    $this->getArrayRecursive($value, "$parent")
-                );
-                continue;
-            }
-
-            $data["$parent.$key"] = $value;
-        }
-
-        return $data;
     }
 
 
@@ -63,7 +48,7 @@ trait MakerTrait
 
     protected function getStubPath()
     {
-        return dirname(dirname(__DIR__)).'/Stubs'.DIRECTORY_SEPARATOR;
+        return dirname(__DIR__, 2).'/Stubs/Code'.DIRECTORY_SEPARATOR;
     }
 
 
@@ -115,6 +100,7 @@ trait MakerTrait
     {
         $namespace_app = $this->scaffoldCommandObj->getObjName('namespace_name_app');
         $namespace_gen = $this->scaffoldCommandObj->getObjName('namespace_name_gen');
+        $namespace_name_model = $this->scaffoldCommandObj->getObjName('namespace_name_model');
         $database_path = $this->scaffoldCommandObj->getObjName('database_path');
 
 
@@ -133,9 +119,9 @@ trait MakerTrait
         } elseif ($path == "factory") {
             return $database_path.'factories/'.$file_name.'Factory.php';
         } elseif ($path == "model") {
-            return $namespace_app.'Models/'.$file_name.'.php';
+            return $namespace_name_model.$file_name.'.php';
         } elseif ($path == "model-trait") {
-            return $namespace_app.'Models/Traits/'.$file_name.'Operation.php';
+            return $namespace_name_model.'Traits/'.$file_name.'Operation.php';
         } elseif ($path == "seed") {
             return $database_path.'seeders/'.$file_name.'.php';
         } elseif ($path == "view-index") {
@@ -156,10 +142,12 @@ trait MakerTrait
             return $namespace_gen.'routes/api.php';
         } elseif ($path == "facade" || $path == "services" || $path == "service-provider") {
             return 'App/Services/'.$this->scaffoldCommandObj->getObjName('Name').'/'.$file_name.'.php';
-        } elseif ($path == "vue-layout" || $path == "vue-edit" || $path == "vue-create" || $path == "vue-form" || $path == "vue-index") {
-            return 'vue/layouts/'.$file_name.'.vue';
+        } elseif ($path == "vue-layout") {
+            return $namespace_gen.'vue/layouts/'.$file_name.'.vue';
         } elseif ($path == "vue-tabs") {
-            return 'vue/layouts/'.$file_name.'.js';
+            return $namespace_gen.'vue/views/'.$file_name.'.js';
+        } elseif ($path == "vue-edit" || $path == "vue-create" || $path == "vue-form" || $path == "vue-index") {
+            return $namespace_gen.'vue/views/'.$file_name.'.vue';
         }
 
     }
@@ -173,7 +161,6 @@ trait MakerTrait
     {
         return !$this->files->isDirectory($path);
     }
-
 
     protected function makeDirectory($path)
     {
@@ -193,6 +180,31 @@ trait MakerTrait
         return $stub;
     }
 
+    protected function compileViewStub($filename)
+    {
+        $stub = $this->files->get($this->getStubPath().'Views/vue/'.$filename.'.stub');
 
+        $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);
+
+
+        return $stub;
+    }
+
+    protected function getAppNamespace()
+    {
+        return Container::getInstance()->getNamespace();
+    }
+
+    protected function getSchemaArray()
+    {
+
+        if ($this->scaffoldCommandObj->option('schema') != null) {
+            if ($schema = $this->scaffoldCommandObj->option('schema')) {
+                return (new SchemaParser)->parse($schema);
+            }
+        }
+
+        return [];
+    }
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Delosfei\Generator\Migrations;
+namespace App\Console\Migrations;
 
 
 class SchemaParser
@@ -13,7 +13,7 @@ class SchemaParser
      * Parse the command line migration schema.
      * Ex: name:string, age:integer:nullable
      *
-     * @param  string $schema
+     * @param string $schema
      * @return array
      */
     public function parse($schema)
@@ -25,7 +25,7 @@ class SchemaParser
 
             if ($this->fieldNeedsForeignConstraint($segments)) {
                 unset($segments['options']['foreign']);
-
+          
                 // If the user wants a foreign constraint, then
                 // we'll first add the regular field.
                 $this->addField($segments);
@@ -59,7 +59,7 @@ class SchemaParser
     /**
      * Get the segments of the schema field.
      *
-     * @param  string $field
+     * @param string $field
      * @return array
      */
     private function parseSegments($field)
@@ -84,12 +84,14 @@ class SchemaParser
     /**
      * Parse any given options into something usable.
      *
-     * @param  array $options
+     * @param array $options
      * @return array
      */
     private function parseOptions($options)
     {
-        if (empty($options)) return [];
+        if (empty($options)) {
+            return [];
+        }
 
         foreach ($options as $option) {
             if (\Str::contains($option, '(')) {
@@ -124,7 +126,7 @@ class SchemaParser
      * Try to figure out the name of a table from a foreign key.
      * Ex: user_id => users
      *
-     * @param  string $key
+     * @param string $key
      * @return string
      */
     private function getTableNameFromForeignKey($key)

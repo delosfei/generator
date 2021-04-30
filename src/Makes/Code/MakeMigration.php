@@ -1,28 +1,30 @@
 <?php
 
 
-namespace Delosfei\Generator\Makes\Code;
+namespace App\Console\Makes\Code;
 
-use Delosfei\Generator\Migrations\SchemaParser;
-use Delosfei\Generator\Migrations\SyntaxBuilder;
+use App\Console\Migrations\SchemaParser;
+use App\Console\Migrations\SyntaxBuilder;
 
 class MakeMigration
 {
     use MakerTrait;
-    protected function start(){
+
+    protected function start()
+    {
         $name = 'create_'.$this->scaffoldCommandObj->getObjName('table').'_table';
         $path = $this->getPath($name);
 
 
-        if ( ! $this->classExists($name))
-        {
+        if (!$this->classExists($name)) {
             $this->makeDirectory($path);
             $this->files->put($path, $this->compileMigrationStub());
-            return $this->scaffoldCommandObj->info('+ ' . $path);
-        }
-        return $this->scaffoldCommandObj->comment('x ' . $path);
-    }
 
+            return $this->scaffoldCommandObj->info('+ '.$path);
+        }
+
+        return $this->scaffoldCommandObj->comment('x '.$path);
+    }
 
 
     protected function getPath($name)
@@ -33,7 +35,7 @@ class MakeMigration
 
     protected function compileMigrationStub()
     {
-        $stub = $this->files->get($this->getStubPath() . 'migration.stub');
+        $stub = $this->files->get($this->getStubPath().'migration.stub');
 
         $this->replaceSchema($stub);
         $this->buildStub($this->scaffoldCommandObj->getMeta(), $stub);
@@ -44,9 +46,9 @@ class MakeMigration
 
     protected function replaceSchema(&$stub)
     {
-        if ($schema = $this->scaffoldCommandObj->getMeta()['schema'])
-        {
+        if ($schema = $this->scaffoldCommandObj->getMeta()['schema']) {
             $schema = (new SchemaParser())->parse($schema);
+
         }
 
         $schema = (new SyntaxBuilder())->create($schema, $this->scaffoldCommandObj->getMeta());
@@ -57,7 +59,7 @@ class MakeMigration
 
     public function classExists($name)
     {
-        $files = $this->files->allFiles('./database/migrations/');
+        $files = $this->files->allFiles($this->scaffoldCommandObj->getObjName('database_path').'migrations/');
         foreach ($files as $file) {
             if (strpos($file->getFilename(), $name) !== false) {
                 return true;

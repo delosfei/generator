@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Delosfei\Generator\Makes\Code;
+namespace App\Console\Makes\Code;
 
 class MakePolicy
 {

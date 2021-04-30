@@ -8,53 +8,54 @@ class GeneratorsServiceProvider extends ServiceProvider
 {
 
 
-	public function boot()
-	{
+    public function boot()
+    {
         $this->registerScaffoldGenerator();
         $this->registerServicesGenerator();
-        $this->registerVueuiGenerator();
         $this->registerBaseGenerator();
-	}
+    }
 
 
-	public function register()
-	{
+    public function register()
+    {
 
-	}
+    }
 
 
-	private function registerScaffoldGenerator()
-	{
-		$this->app->singleton('command.larascaf.scaffold', function ($app) {
-			return $app['Delosfei\Generator\Commands\MakeCodeCommand'];
-		});
+    private function registerScaffoldGenerator()
+    {
+        $this->app->singleton(
+            'command.larascaf.scaffold',
+            function ($app) {
+                return $app['App\Console\Commands\MakeCodeCommand'];
+            }
+        );
 
-		$this->commands('command.larascaf.scaffold');
-	}
+        $this->commands('command.larascaf.scaffold');
+    }
 
     private function registerServicesGenerator()
     {
-        $this->app->singleton('command.larascaf.services', function ($app) {
-            return $app['Delosfei\Generator\Commands\MakeServicesCommand'];
-        });
+        $this->app->singleton(
+            'command.larascaf.services',
+            function ($app) {
+                return $app['App\Console\Commands\MakeServicesCommand'];
+            }
+        );
 
         $this->commands('command.larascaf.services');
     }
-    private function registerVueuiGenerator()
-    {
-        $this->app->singleton('command.larascaf.vueui', function ($app) {
-            return $app['Delosfei\Generator\Commands\MakeVueuiCommand'];
-        });
 
-        $this->commands('command.larascaf.vueui');
-    }
     private function registerBaseGenerator()
     {
-        $this->app->singleton('command.larascaf.base', function ($app) {
-            return $app['Delosfei\Generator\Commands\MakeBaseCommand'];
-        });
+        $this->app->singleton(
+            'command.larascaf.module',
+            function ($app) {
+                return $app['App\Console\Commands\MakeModule'];
+            }
+        );
 
-        $this->commands('command.larascaf.base');
+        $this->commands('command.larascaf.module');
     }
 
 }

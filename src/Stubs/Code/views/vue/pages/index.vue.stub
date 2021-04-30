@@ -1,0 +1,63 @@
+<template>
+    <div>
+        <hd-tab :tabs="tabs"/>
+        <el-table :data="{{model}}" style="width: 100%" border class="mt-3" v-loading="loading">
+            <el-table-column v-for="col in columns" :prop="col.id" :key="col.id" :label="col.label" :width="col.width" #default="{row:{{model}}}">
+                <span v-if="col.id == 'created_at' || col.id == 'updated_at'">
+                    {{ {{model}}[col.id] | dateFormat }}
+                </span>
+                <span v-else>
+                    {{ {{model}}[col.id] }}
+                </span>
+            </el-table-column>
+            <el-table-column width="250" align="center" v-slot="{ row: {{model}} }">
+                <el-button-group class="text-white">
+                    <el-button type="success" size="mini" @click="$router.push({ name: '{{dirname}}.{{model}}.edit', params: { sid, id: {{model}}.id } })">编辑</el-button>
+                    <el-button type="danger" size="mini" @click="del({{model}})">删除</el-button>
+                </el-button-group>
+            </el-table-column>
+        </el-table>
+        <el-pagination hide-on-single-page class="mt-3" :current-page="{{model}}.current_page" @current-change="load"
+                       :total="{{model}}.total" background>
+        </el-pagination>
+    </div>
+</template>
+
+<script>
+import tabs from './tabs'
+
+const columns = [
+    {id: 'id', label: '编号', width: 100},
+    {{columns_fields_data}}
+]
+
+export default {
+    route: {path: `:sid/{{model}}`},
+    data() {
+        return {
+            tabs,
+            columns,
+            {{model}}: { data: [] },
+            loading: true
+        }
+    },
+    async created() {
+        await this.load()
+    },
+    methods: {
+        async load(page = 1) {
+            this.loading = true
+            this.{{models}} = await axios.get(`{{model}}?page=${page}`)
+            this.loading = false
+            document.documentElement.scroll({ top: 0, behavior: 'smooth' })
+        },
+        async del({{model}}) {
+            await this.$confirm('确定删除【{{cname}}】吗', '温馨提示')
+            await this.axios.delete(`${this.sid}/{{model}}/${{{model}}.id}`)
+            this.{{models}}.splice(this.{{models}}.indexOf({{model}}), 1)
+        }
+    }
+}
+</script>
+
+<style></style>

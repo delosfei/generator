@@ -1,6 +1,6 @@
 <?php
 
-namespace Delosfei\Generator\Migrations;
+namespace App\Console\Migrations;
 
 
 class NameParser

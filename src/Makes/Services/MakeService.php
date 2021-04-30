@@ -1,6 +1,6 @@
 <?php
 
-namespace Delosfei\Generator\Makes\Services;
+namespace App\Console\Makes\Services;
 
 class MakeService
 {

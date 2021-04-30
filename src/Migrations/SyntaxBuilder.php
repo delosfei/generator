@@ -1,8 +1,8 @@
 <?php
 
-namespace Delosfei\Generator\Migrations;
+namespace App\Console\Migrations;
 
-use Delosfei\Generator\GeneratorException;
+use App\Console\GeneratorException;
 
 
 class SyntaxBuilder
@@ -25,17 +25,18 @@ class SyntaxBuilder
      *
      * @param $value
      */
-    public function setIllumination($value) {
+    public function setIllumination($value)
+    {
         $this->illuminate = $value;
     }
 
     /**
      * Create the PHP syntax for the given schema.
      *
-     * @param  array $schema
-     * @param  array $meta
-     * @param  string $type
-     * @param  bool $illuminate
+     * @param array $schema
+     * @param array $meta
+     * @param string $type
+     * @param bool $illuminate
      * @return string
      * @throws GeneratorException
      * @throws \Exception
@@ -48,56 +49,76 @@ class SyntaxBuilder
 
             $up = $this->createSchemaForUpMethod($schema, $meta);
             $down = $this->createSchemaForDownMethod($schema, $meta);
+
             return compact('up', 'down');
 
 
-        } else if ($type == "controller") {
-
-            $fieldsc = $this->createSchemaForControllerMethod($schema, $meta);
-            return $fieldsc;
-
-
-        } else if ($type == "view-index-header") {
-
-            $fieldsc = $this->createSchemaForViewMethod($schema, $meta, 'index-header');
-            return $fieldsc;
-
-        } else if ($type == "view-index-content") {
-
-            $fieldsc = $this->createSchemaForViewMethod($schema, $meta, 'index-content');
-            return $fieldsc;
-
-        } else if ($type == "view-show-content") {
-
-            $fieldsc = $this->createSchemaForViewMethod($schema, $meta, 'show-content');
-            return $fieldsc;
-
-        } else if ($type == "view-edit-content") {
-
-            $fieldsc = $this->createSchemaForViewMethod($schema, $meta, 'edit-content');
-            return $fieldsc;
-
-        } else if ($type == "view-create-content") {
-
-            $fieldsc = $this->createSchemaForViewMethod($schema, $meta, 'create-content');
-            return $fieldsc;
-
         } else {
-            throw new \Exception("Type not found in syntaxBuilder");
+            if ($type == "controller") {
+
+                $fieldsc = $this->createSchemaForControllerMethod($schema, $meta);
+
+                return $fieldsc;
+
+
+            } else {
+                if ($type == "view-index-header") {
+
+                    $fieldsc = $this->createSchemaForViewMethod($schema, $meta, 'index-header');
+
+                    return $fieldsc;
+
+                } else {
+                    if ($type == "view-index-content") {
+
+                        $fieldsc = $this->createSchemaForViewMethod($schema, $meta, 'index-content');
+
+                        return $fieldsc;
+
+                    } else {
+                        if ($type == "view-show-content") {
+
+                            $fieldsc = $this->createSchemaForViewMethod($schema, $meta, 'show-content');
+
+                            return $fieldsc;
+
+                        } else {
+                            if ($type == "view-edit-content") {
+
+                                $fieldsc = $this->createSchemaForViewMethod($schema, $meta, 'edit-content');
+
+                                return $fieldsc;
+
+                            } else {
+                                if ($type == "view-create-content") {
+
+                                    $fieldsc = $this->createSchemaForViewMethod($schema, $meta, 'create-content');
+
+                                    return $fieldsc;
+
+                                } else {
+                                    throw new \Exception("Type not found in syntaxBuilder");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
     /**
      * Create the schema for the "up" method.
      *
-     * @param  string $schema
-     * @param  array $meta
+     * @param string $schema
+     * @param array $meta
      * @return string
      * @throws GeneratorException
      */
     private function createSchemaForUpMethod($schema, $meta)
     {
-        //dd($schema);
+//        dd($schema);
+//        print_r($schema);
         $fields = $this->constructSchema($schema);
 
 
@@ -123,8 +144,8 @@ class SyntaxBuilder
     /**
      * Construct the syntax for a down field.
      *
-     * @param  array $schema
-     * @param  array $meta
+     * @param array $schema
+     * @param array $meta
      * @return string
      * @throws GeneratorException
      */
@@ -159,7 +180,7 @@ class SyntaxBuilder
     /**
      * Store the given template, to be inserted somewhere.
      *
-     * @param  string $template
+     * @param string $template
      * @return $this
      */
     private function insert($template)
@@ -172,13 +193,13 @@ class SyntaxBuilder
     /**
      * Get the stored template, and insert into the given wrapper.
      *
-     * @param  string $wrapper
-     * @param  string $placeholder
+     * @param string $wrapper
+     * @param string $placeholder
      * @return mixed
      */
     private function into($wrapper, $placeholder = 'schema_up')
     {
-        return str_replace('{{' . $placeholder . '}}', $this->template, $wrapper);
+        return str_replace('{{'.$placeholder.'}}', $this->template, $wrapper);
     }
 
     /**
@@ -188,7 +209,7 @@ class SyntaxBuilder
      */
     private function getCreateSchemaWrapper()
     {
-        return file_get_contents(__DIR__.'/../Stubs/schema-create.stub');
+        return file_get_contents(__DIR__.'/../Stubs/Code/schema-create.stub');
     }
 
     /**
@@ -198,34 +219,40 @@ class SyntaxBuilder
      */
     private function getChangeSchemaWrapper()
     {
-        return file_get_contents(__DIR__.'/../Stubs/schema-change.stub');
+        return file_get_contents(__DIR__.'/../Stubs/Code/schema-change.stub');
     }
 
     /**
      * Construct the schema fields.
      *
-     * @param  array $schema
-     * @param  string $direction
+     * @param array $schema
+     * @param string $direction
      * @return array
      */
     private function constructSchema($schema, $direction = 'Add')
     {
-        if (!$schema) return '';
+        if (!$schema) {
+            return '';
+        }
 
-        $fields = array_map(function ($field) use ($direction) {
-            $method = "{$direction}Column";
-            return $this->$method($field);
-        }, $schema);
+        $fields = array_map(
+            function ($field) use ($direction) {
+                $method = "{$direction}Column";
+
+                return $this->$method($field);
+            },
+            $schema
+        );
 
 
-        return implode("\n" . str_repeat(' ', 12), $fields);
+        return implode("\n".str_repeat(' ', 12), $fields);
     }
 
 
     /**
      * Construct the syntax to add a column.
      *
-     * @param  string $field
+     * @param string $field
      * @param string $type
      * @param $meta
      * @return string
@@ -241,9 +268,9 @@ class SyntaxBuilder
             // If there are arguments for the schema type, like decimal('amount', 5, 2)
             // then we have to remember to work those in.
             if ($field['arguments']) {
-                $syntax = substr($syntax, 0, -1) . ', ';
+                $syntax = substr($syntax, 0, -1).', ';
 
-                $syntax .= implode(', ', $field['arguments']) . ')';
+                $syntax .= implode(', ', $field['arguments']).')';
             }
 
             foreach ($field['options'] as $method => $value) {
@@ -268,10 +295,16 @@ class SyntaxBuilder
         } elseif ($type == 'view-show-content') {
 
             // Fields to show view
-            $syntax = sprintf("<div class=\"form-group\">\n" .
-                str_repeat(' ', 21) . "<label for=\"%s\">%s</label>\n" .
-                str_repeat(' ', 21) . "<p class=\"form-control-static\">{{\$%s->%s}}</p>\n" .
-                str_repeat(' ', 16) . "</div>", strtolower($field['name']), strtoupper($field['name']), $meta['var_name'], strtolower($field['name']));
+            $syntax = sprintf(
+                "<div class=\"form-group\">\n".
+                str_repeat(' ', 21)."<label for=\"%s\">%s</label>\n".
+                str_repeat(' ', 21)."<p class=\"form-control-static\">{{\$%s->%s}}</p>\n".
+                str_repeat(' ', 16)."</div>",
+                strtolower($field['name']),
+                strtoupper($field['name']),
+                $meta['var_name'],
+                strtolower($field['name'])
+            );
 
 
         } elseif ($type == 'view-edit-content') {
@@ -302,14 +335,14 @@ class SyntaxBuilder
         $title = ucfirst($field['name']);
 
         if ($value === true) {
-            $value = '$' . $variable . '->' . $column;
+            $value = '$'.$variable.'->'.$column;
         } else {
             $value = 'old("'.$column.'")';
         }
 
         $syntax = [];
 
-        switch($type) {
+        switch ($type) {
             case 'string':
             default:
                 $input = 'text';
@@ -319,17 +352,17 @@ class SyntaxBuilder
                 break;
         }
 
-        $syntax[] = '<div class="form-group @if($errors->has('."'". $column . "'".')) has-error @endif">';
-        $syntax[] = '   <label for="' . $column . '-field">' . $title . '</label>';
+        $syntax[] = '<div class="form-group @if($errors->has('."'".$column."'".')) has-error @endif">';
+        $syntax[] = '   <label for="'.$column.'-field">'.$title.'</label>';
 
-        if($this->illuminate) {
-            $syntax[] = '   {!! Form::' . $input . '("' . $column . '", ' . $value . ', array("class" => "form-control", "id" => "' . $column . '-field")) !!}';
+        if ($this->illuminate) {
+            $syntax[] = '   {!! Form::'.$input.'("'.$column.'", '.$value.', array("class" => "form-control", "id" => "'.$column.'-field")) !!}';
         } else {
             $syntax[] = $this->htmlField($column, $variable, $field, $type);
         }
 
-        $syntax[] = '   @if($errors->has("' . $column . '"))';
-        $syntax[] = '    <span class="help-block">{{ $errors->first("' . $column . '") }}</span>';
+        $syntax[] = '   @if($errors->has("'.$column.'"))';
+        $syntax[] = '    <span class="help-block">{{ $errors->first("'.$column.'") }}</span>';
         $syntax[] = '   @endif';
         $syntax[] = '</div>';
 
@@ -340,7 +373,7 @@ class SyntaxBuilder
     /**
      * Construct the syntax to drop a column.
      *
-     * @param  string $field
+     * @param string $field
      * @return string
      */
     private function dropColumn($field)
@@ -360,14 +393,19 @@ class SyntaxBuilder
     {
 
 
-        if (!$schema) return '';
+        if (!$schema) {
+            return '';
+        }
 
-        $fields = array_map(function ($field) use ($meta) {
-            return $this->AddColumn($field, 'controller', $meta);
-        }, $schema);
+        $fields = array_map(
+            function ($field) use ($meta) {
+                return $this->AddColumn($field, 'controller', $meta);
+            },
+            $schema
+        );
 
 
-        return implode("\n" . str_repeat(' ', 8), $fields);
+        return implode("\n".str_repeat(' ', 8), $fields);
     }
 
 
@@ -383,19 +421,24 @@ class SyntaxBuilder
     {
 
 
-        if (!$schema) return '';
+        if (!$schema) {
+            return '';
+        }
 
-        $fields = array_map(function ($field) use ($meta, $type) {
-            return $this->AddColumn($field, 'view-' . $type, $meta);
-        }, $schema);
+        $fields = array_map(
+            function ($field) use ($meta, $type) {
+                return $this->AddColumn($field, 'view-'.$type, $meta);
+            },
+            $schema
+        );
 
 
         // Format code
         if ($type == 'index-header') {
-            return implode("\n" . str_repeat(' ', 24), $fields);
+            return implode("\n".str_repeat(' ', 24), $fields);
         } else {
             // index-content
-            return implode("\n" . str_repeat(' ', 20), $fields);
+            return implode("\n".str_repeat(' ', 20), $fields);
         }
 
     }
@@ -405,8 +448,7 @@ class SyntaxBuilder
 
         $value = '{{ old("'.$column.'") }}';
 
-        if($type == 'view-edit-content')
-        {
+        if ($type == 'view-edit-content') {
             $value = '{{ is_null(old("'.$column.'")) ? $'.$variable.'->'.$column.' : old("'.$column.'") }}';
         }
 

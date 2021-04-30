@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Delosfei\Generator\Makes\Code;
+namespace App\Console\Makes\Code;
 
-use Delosfei\Generator\Migrations\SchemaParser;
+use App\Console\Migrations\SchemaParser;
 
 class MakeModel
 {

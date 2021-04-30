@@ -1,47 +1,41 @@
 <?php
 
+namespace App\Console\Makes\Code;
 
-namespace Delosfei\Generator\Makes\Code;
-
-use Delosfei\Generator\Migrations\SchemaParser;
 
 class MakeView
 {
     use MakerTrait;
 
-    protected function getSchemaArray()
-    {
-        // ToDo - schema is required?
-        if ($this->scaffoldCommandObj->option('schema') != null) {
-            if ($schema = $this->scaffoldCommandObj->option('schema')) {
-                return (new SchemaParser)->parse($schema);
-            }
-        }
-
-        return [];
-    }
-
-
     private function start()
     {
         $this->scaffoldCommandObj->line("\n--- Views ---");
 
+        $dirname = $this->scaffoldCommandObj->getObjName('dirname');
+        $name = strtolower($this->scaffoldCommandObj->getObjName('name'));
+        $name = $dirname.'/'.$name.'/'.'Index';
+        $path = $this->getPath($name, 'vue-index');
+
         $viewsFiles = $this->getStubViews($this->scaffoldCommandObj->getMeta()['ui']);
-        $destination = $this->scaffoldCommandObj->getObjName('views_path');
+        $destination = dirname($path)."/";
         $metas = $this->scaffoldCommandObj->getMeta();
 
         $metas = array_merge_recursive
         (
             $metas,
             [
+                'columns_fields_data' => $this->getFields($metas['ui'], 'data'),
+                'form_fields_data' => $this->getFields($metas['ui'], 'form_data'),
                 'form_fields_fillable' => $this->getFields($metas['ui'], 'fillable'),
-                'form_fields_empty' => $this->getFields($metas['ui'], 'fillable'),
-                'form_fields_show' => $this->getFields($metas['ui'], 'show'),
-                'table_fields_header' => $this->getFields($metas['ui'], 'header'),
-                'table_fields_content' => $this->getFields($metas['ui'], 'content'),
+
+//                'form_fields_show' => $this->getFields($metas['ui'], 'show'),
+//                'table_fields_header' => $this->getFields($metas['ui'], 'header'),
+//
+//                'table_fields_content' => $this->getFields($metas['ui'], 'content'),
             ]
         );
 
+        print_r($metas);
         foreach ($viewsFiles as $viewFileBaseName => $viewFile) {
             $viewFileName = str_replace('.stub', '', $viewFileBaseName);
             $viewDestination = $destination.$viewFileName;
@@ -63,8 +57,12 @@ class MakeView
     protected function getFields($ui, $type)
     {
         $stubsFields = $this->getStubFields($ui, $type);
+
+        //print_r($stubsFields);
+
         $stubsFieldsAllow = array_keys($stubsFields);
         $schemas = $this->getSchemaArray();
+
         $metas = $this->scaffoldCommandObj->getMeta();
 
         $stubs = [];
@@ -82,9 +80,10 @@ class MakeView
             $stub = $this->buildStub($metas, $stub);
 
             $stubs[] = $stub;
+
         }
 
-        return join(' ', $stubs);
+        return join('    ', $stubs);
     }
 
     private function getVariablesFromField($options)
@@ -94,8 +93,10 @@ class MakeView
         $data['field.name'] = $options['name'];
         $data['field.Name'] = ucwords($options['name']);
         $data['field.type'] = @$options['type'];
+        $data['field.options.comment'] = @$options['options']['comment'];
         $data['field.value.default'] = @$options['options']['default'];
 
         return $data;
     }
+
 }

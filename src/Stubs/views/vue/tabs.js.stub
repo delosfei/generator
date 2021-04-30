@@ -1,5 +1,0 @@
-export default [
-    { title: '{{name}}组列表', name: '{{dirname}}.{{name}}.index' },
-    { title: '添加{{name}}', name: '{{dirname}}.{{name}}.create' },
-    { title: '修改{{name}}', name: '{{dirname}}.{{name}}.edit', current: true }
-]

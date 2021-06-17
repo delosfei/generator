@@ -1,4 +1,0 @@
-   <el-form-item label="{{field.options.comment}}">
-            <el-input v-model="form.{{field.name}}"></el-input>
-            <hd-form-error name="{{field.name}}" />
-        </el-form-item>

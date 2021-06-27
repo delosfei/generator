@@ -19,13 +19,13 @@ class RepositoryTestGenerator extends BaseGenerator
     public function __construct($commandData)
     {
         $this->commandData = $commandData;
-        $this->path = config('delos.laravel_generator.path.repository_test', base_path('tests/Repositories/'));
+        $this->path = config('delosfei.generator.path.repository_test', base_path('tests/Repositories/'));
         $this->fileName = $this->commandData->modelName.'RepositoryTest.php';
     }
 
     public function generate()
     {
-        $templateData = get_template('test.repository_test', 'generator');
+        $templateData = get_template('test.repository_test', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 

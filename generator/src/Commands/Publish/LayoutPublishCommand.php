@@ -13,7 +13,7 @@ class LayoutPublishCommand extends PublishBaseCommand
      *
      * @var string
      */
-    protected $name = 'delos.publish:layout';
+    protected $name = 'infyom.publish:layout';
 
     /**
      * The console command description.
@@ -35,8 +35,8 @@ class LayoutPublishCommand extends PublishBaseCommand
 
     private function copyView()
     {
-        $viewsPath = config('delos.laravel_generator.path.views', resource_path('views/'));
-        $templateType = config('delos.laravel_generator.templates', 'adminlte-templates');
+        $viewsPath = config('delosfei.generator.path.views', resource_path('views/'));
+        $templateType = config('delosfei.generator.templates', 'adminlte-templates');
 
         $this->createDirectories($viewsPath);
 
@@ -114,11 +114,11 @@ class LayoutPublishCommand extends PublishBaseCommand
 
     private function publishHomeController()
     {
-        $templateData = get_template('home_controller', 'generator');
+        $templateData = get_template('home_controller', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
-        $controllerPath = config('delos.laravel_generator.path.controller', app_path('Http/Controllers/'));
+        $controllerPath = config('delosfei.generator.path.controller', app_path('Http/Controllers/'));
 
         $fileName = 'HomeController.php';
 
@@ -142,13 +142,13 @@ class LayoutPublishCommand extends PublishBaseCommand
     {
         $templateData = str_replace(
             '$NAMESPACE_CONTROLLER$',
-            config('delos.laravel_generator.namespace.controller'),
+            config('delosfei.generator.namespace.controller'),
             $templateData
         );
 
         $templateData = str_replace(
             '$NAMESPACE_REQUEST$',
-            config('delos.laravel_generator.namespace.request'),
+            config('delosfei.generator.namespace.request'),
             $templateData
         );
 

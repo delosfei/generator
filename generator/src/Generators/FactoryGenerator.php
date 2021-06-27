@@ -32,7 +32,7 @@ class FactoryGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('factories.model_factory', 'generator');
+        $templateData = get_template('factories.model_factory', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 

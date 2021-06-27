@@ -182,7 +182,7 @@ class CommandData
             }
         }
 
-        if (config('delos.laravel_generator.timestamps.enabled', true)) {
+        if (config('delosfei.generator.timestamps.enabled', true)) {
             $this->addTimestamps();
         }
     }
@@ -228,7 +228,7 @@ class CommandData
                     $filePath = base_path($fieldsFileValue);
                 } else {
                     $schemaFileDirector = config(
-                        'delos.laravel_generator.path.schema_files',
+                        'delosfei.generator.path.schema_files',
                         resource_path('model_schemas/')
                     );
                     $filePath = $schemaFileDirector.$fieldsFileValue;

@@ -14,7 +14,7 @@ class TestsGeneratorCommand extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'delos.api:tests';
+    protected $name = 'infyom.api:tests';
 
     /**
      * The console command description.

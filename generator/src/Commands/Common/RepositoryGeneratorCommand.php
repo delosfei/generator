@@ -13,7 +13,7 @@ class RepositoryGeneratorCommand extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'delos:repository';
+    protected $name = 'ds:repository';
 
     /**
      * The console command description.

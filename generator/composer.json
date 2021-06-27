@@ -1,7 +1,7 @@
 {
   "name": "delosfei/generator",
   "type": "library",
-  "description": "Delosfei Generator",
+  "description": "Delosfei Laravel Generator",
   "keywords": [
     "laravel",
     "api",
@@ -13,19 +13,22 @@
     "repository",
     "view",
     "test",
-    "generator"
+    "generator",
+    "swagger"
   ],
   "license": "MIT",
   "authors": [
     {
-      "name": "delosfei",
+      "name": "Delosfei",
       "email": "9739723@qq.com"
     }
   ],
   "require": {
     "php": "^7.3|^8.0",
     "illuminate/support": "^8.0",
-    "laracasts/flash": "^3.2"
+    "laracasts/flash": "^3.2",
+    "delosfei/dsvue2-templates": "dev-main",
+    "doctrine/dbal": "^3.1"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0|^9.3.3",
@@ -49,6 +52,12 @@
       "providers": [
         "\\Delosfei\\Generator\\DelosfeiGeneratorServiceProvider"
       ]
+    }
+  },
+  "repositories": {
+    "dsvue2-templates": {
+      "type": "path",
+      "url": "../dsvue2-templates"
     }
   }
 }

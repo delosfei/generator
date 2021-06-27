@@ -12,7 +12,7 @@ class APIGeneratorCommand extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'delos:api';
+    protected $name = 'ds:api';
 
     /**
      * The console command description.

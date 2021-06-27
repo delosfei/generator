@@ -44,7 +44,7 @@ class ModelGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('model.model', 'generator');
+        $templateData = get_template('model.model', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
@@ -120,7 +120,7 @@ class ModelGenerator extends BaseGenerator
                 $templateData
             );
             $templateData = str_replace('$SOFT_DELETE$', infy_tab()."use SoftDeletes;\n", $templateData);
-            $deletedAtTimestamp = config('delos.laravel_generator.timestamps.deleted_at', 'deleted_at');
+            $deletedAtTimestamp = config('delosfei.generator.timestamps.deleted_at', 'deleted_at');
             $templateData = str_replace(
                 '$SOFT_DELETE_DATES$',
                 infy_nl_tab()."protected \$dates = ['".$deletedAtTimestamp."'];\n",
@@ -154,7 +154,7 @@ class ModelGenerator extends BaseGenerator
             $templateData = $this->generateSwagger($templateData);
         }
 
-        $docsTemplate = get_template('docs.model', 'generator');
+        $docsTemplate = get_template('docs.model', 'laravel-generator');
         $docsTemplate = fill_template($this->commandData->dynamicVars, $docsTemplate);
 
         $fillables = '';
@@ -285,8 +285,8 @@ class ModelGenerator extends BaseGenerator
 
     private function generateRules()
     {
-        $dont_require_fields = config('delos.laravel_generator.options.hidden_fields', [])
-                + config('delos.laravel_generator.options.excluded_fields', $this->excluded_fields);
+        $dont_require_fields = config('delosfei.generator.options.hidden_fields', [])
+                + config('delosfei.generator.options.excluded_fields', $this->excluded_fields);
 
         $rules = [];
 

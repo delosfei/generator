@@ -13,7 +13,7 @@ class MigrationGeneratorCommand extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'delos:migration';
+    protected $name = 'ds:migration';
 
     /**
      * The console command description.

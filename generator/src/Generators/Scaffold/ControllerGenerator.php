@@ -24,7 +24,7 @@ class ControllerGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathController;
-        $this->templateType = config('delos.laravel_generator.templates', 'adminlte-templates');
+        $this->templateType = config('delosfei.generator.templates', 'adminlte-templates');
         $this->fileName = $this->commandData->modelName.'Controller.php';
     }
 
@@ -41,12 +41,12 @@ class ControllerGenerator extends BaseGenerator
                 $templateName .= '_locale';
             }
 
-            $templateData = get_template("scaffold.controller.$templateName", 'generator');
+            $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
 
             $this->generateDataTable();
         } elseif ($this->commandData->jqueryDT()) {
             $templateName = 'jquery_datatable_controller';
-            $templateData = get_template("scaffold.controller.$templateName", 'generator');
+            $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
 
             $this->generateDataTable();
         } else {
@@ -59,7 +59,7 @@ class ControllerGenerator extends BaseGenerator
                 $templateName .= '_locale';
             }
 
-            $templateData = get_template("scaffold.controller.$templateName", 'generator');
+            $templateData = get_template("scaffold.controller.$templateName", 'laravel-generator');
 
             $paginate = $this->commandData->getOption('paginate');
 
@@ -85,7 +85,7 @@ class ControllerGenerator extends BaseGenerator
             $templateName .= '_locale';
         }
 
-        $templateData = get_template('scaffold.'.$templateName, 'generator');
+        $templateData = get_template('scaffold.'.$templateName, 'laravel-generator');
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 

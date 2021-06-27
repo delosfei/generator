@@ -13,7 +13,7 @@ class ControllerGeneratorCommand extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'delos.scaffold:controller';
+    protected $name = 'infyom.scaffold:controller';
 
     /**
      * The console command description.

@@ -9,7 +9,7 @@ class PublishTemplateCommand extends PublishBaseCommand
      *
      * @var string
      */
-    protected $name = 'delos.publish:templates';
+    protected $name = 'infyom.publish:templates';
 
     /**
      * The console command description.
@@ -28,8 +28,8 @@ class PublishTemplateCommand extends PublishBaseCommand
     public function handle()
     {
         $this->templatesDir = config(
-            'delos.laravel_generator.path.templates_dir',
-            resource_path('delos/delos-generator-templates/')
+            'delosfei.generator.path.templates_dir',
+            resource_path('infyom/infyom-generator-templates/')
         );
 
         if ($this->publishGeneratorTemplates()) {
@@ -45,7 +45,7 @@ class PublishTemplateCommand extends PublishBaseCommand
     {
         $templatesPath = __DIR__.'/../../../templates';
 
-        return $this->publishDirectory($templatesPath, $this->templatesDir, 'delos-generator-templates');
+        return $this->publishDirectory($templatesPath, $this->templatesDir, 'infyom-generator-templates');
     }
 
     /**
@@ -53,11 +53,11 @@ class PublishTemplateCommand extends PublishBaseCommand
      */
     public function publishScaffoldTemplates()
     {
-        $templateType = config('delos.laravel_generator.templates', 'adminlte-templates');
+        $templateType = config('delosfei.generator.templates', 'adminlte-templates');
 
         $templatesPath = get_templates_package_path($templateType).'/templates/scaffold';
 
-        return $this->publishDirectory($templatesPath, $this->templatesDir.'scaffold', 'delos-generator-templates/scaffold', true);
+        return $this->publishDirectory($templatesPath, $this->templatesDir.'scaffold', 'infyom-generator-templates/scaffold', true);
     }
 
     /**
@@ -65,7 +65,7 @@ class PublishTemplateCommand extends PublishBaseCommand
      */
     public function publishSwaggerTemplates()
     {
-        $templatesPath = base_path('vendor/delosfei/swagger-generator/templates');
+        $templatesPath = base_path('vendor/infyomlabs/swagger-generator/templates');
 
         return $this->publishDirectory($templatesPath, $this->templatesDir, 'swagger-generator', true);
     }

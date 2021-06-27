@@ -11,7 +11,7 @@ class APIScaffoldGeneratorCommand extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'delos:api_scaffold';
+    protected $name = 'ds:api_scaffold';
 
     /**
      * The console command description.

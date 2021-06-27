@@ -34,7 +34,7 @@ class RollbackGeneratorCommand extends Command
      *
      * @var string
      */
-    protected $name = 'delos:rollback';
+    protected $name = 'ds:rollback';
     /**
      * The console command description.
      *

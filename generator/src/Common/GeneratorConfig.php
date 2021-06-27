@@ -142,37 +142,37 @@ class GeneratorConfig
 
         $this->nsApp = $commandData->commandObj->getLaravel()->getNamespace();
         $this->nsApp = substr($this->nsApp, 0, strlen($this->nsApp) - 1);
-        $this->nsRepository = config('delos.laravel_generator.namespace.repository', 'App\Repositories').$prefix;
-        $this->nsModel = config('delos.laravel_generator.namespace.model', 'App\Models').$prefix;
-        if (config('delos.laravel_generator.ignore_model_prefix', false)) {
-            $this->nsModel = config('delos.laravel_generator.namespace.model', 'App\Models');
+        $this->nsRepository = config('delosfei.generator.namespace.repository', 'App\Repositories').$prefix;
+        $this->nsModel = config('delosfei.generator.namespace.model', 'App\Models').$prefix;
+        if (config('delosfei.generator.ignore_model_prefix', false)) {
+            $this->nsModel = config('delosfei.generator.namespace.model', 'App\Models');
         }
-        $this->nsSeeder = config('delos.laravel_generator.namespace.seeder', 'Database\Seeders').$prefix;
-        $this->nsFactory = config('delos.laravel_generator.namespace.factory', 'Database\Factories').$prefix;
-        $this->nsDataTables = config('delos.laravel_generator.namespace.datatables', 'App\DataTables').$prefix;
+        $this->nsSeeder = config('delosfei.generator.namespace.seeder', 'Database\Seeders').$prefix;
+        $this->nsFactory = config('delosfei.generator.namespace.factory', 'Database\Factories').$prefix;
+        $this->nsDataTables = config('delosfei.generator.namespace.datatables', 'App\DataTables').$prefix;
         $this->nsModelExtend = config(
-            'delos.laravel_generator.model_extend_class',
+            'delosfei.generator.model_extend_class',
             'Illuminate\Database\Eloquent\Model'
         );
 
         $this->nsApiController = config(
-            'delos.laravel_generator.namespace.api_controller',
+            'delosfei.generator.namespace.api_controller',
             'App\Http\Controllers\API'
         ).$prefix;
         $this->nsApiResource = config(
-            'delos.laravel_generator.namespace.api_resource',
+            'delosfei.generator.namespace.api_resource',
             'App\Http\Resources'
         ).$prefix;
-        $this->nsApiRequest = config('delos.laravel_generator.namespace.api_request', 'App\Http\Requests\API').$prefix;
+        $this->nsApiRequest = config('delosfei.generator.namespace.api_request', 'App\Http\Requests\API').$prefix;
 
-        $this->nsRequest = config('delos.laravel_generator.namespace.request', 'App\Http\Requests').$prefix;
-        $this->nsRequestBase = config('delos.laravel_generator.namespace.request', 'App\Http\Requests');
-        $this->nsBaseController = config('delos.laravel_generator.namespace.controller', 'App\Http\Controllers');
-        $this->nsController = config('delos.laravel_generator.namespace.controller', 'App\Http\Controllers').$prefix;
+        $this->nsRequest = config('delosfei.generator.namespace.request', 'App\Http\Requests').$prefix;
+        $this->nsRequestBase = config('delosfei.generator.namespace.request', 'App\Http\Requests');
+        $this->nsBaseController = config('delosfei.generator.namespace.controller', 'App\Http\Controllers');
+        $this->nsController = config('delosfei.generator.namespace.controller', 'App\Http\Controllers').$prefix;
 
-        $this->nsApiTests = config('delos.laravel_generator.namespace.api_test', 'Tests\APIs');
-        $this->nsRepositoryTests = config('delos.laravel_generator.namespace.repository_test', 'Tests\Repositories');
-        $this->nsTests = config('delos.laravel_generator.namespace.tests', 'Tests');
+        $this->nsApiTests = config('delosfei.generator.namespace.api_test', 'Tests\APIs');
+        $this->nsRepositoryTests = config('delosfei.generator.namespace.repository_test', 'Tests\Repositories');
+        $this->nsTests = config('delosfei.generator.namespace.tests', 'Tests');
     }
 
     public function loadPaths()
@@ -190,65 +190,65 @@ class GeneratorConfig
         }
 
         $this->pathRepository = config(
-            'delos.laravel_generator.path.repository',
+            'delosfei.generator.path.repository',
             app_path('Repositories/')
         ).$prefix;
 
-        $this->pathModel = config('delos.laravel_generator.path.model', app_path('Models/')).$prefix;
-        if (config('delos.laravel_generator.ignore_model_prefix', false)) {
-            $this->pathModel = config('delos.laravel_generator.path.model', app_path('Models/'));
+        $this->pathModel = config('delosfei.generator.path.model', app_path('Models/')).$prefix;
+        if (config('delosfei.generator.ignore_model_prefix', false)) {
+            $this->pathModel = config('delosfei.generator.path.model', app_path('Models/'));
         }
 
-        $this->pathDataTables = config('delos.laravel_generator.path.datatables', app_path('DataTables/')).$prefix;
+        $this->pathDataTables = config('delosfei.generator.path.datatables', app_path('DataTables/')).$prefix;
 
         $this->pathApiController = config(
-            'delos.laravel_generator.path.api_controller',
+            'delosfei.generator.path.api_controller',
             app_path('Http/Controllers/API/')
         ).$prefix;
 
         $this->pathApiResource = config(
-            'delos.laravel_generator.path.api_resource',
+            'delosfei.generator.path.api_resource',
             app_path('Http/Resources/')
         ).$prefix;
 
         $this->pathApiRequest = config(
-            'delos.laravel_generator.path.api_request',
+            'delosfei.generator.path.api_request',
             app_path('Http/Requests/API/')
         ).$prefix;
 
-        $this->pathApiRoutes = config('delos.laravel_generator.path.api_routes', base_path('routes/api.php'));
+        $this->pathApiRoutes = config('delosfei.generator.path.api_routes', base_path('routes/api.php'));
 
-        $this->pathApiTests = config('delos.laravel_generator.path.api_test', base_path('tests/APIs/'));
+        $this->pathApiTests = config('delosfei.generator.path.api_test', base_path('tests/APIs/'));
 
         $this->pathController = config(
-            'delos.laravel_generator.path.controller',
+            'delosfei.generator.path.controller',
             app_path('Http/Controllers/')
         ).$prefix;
 
-        $this->pathRequest = config('delos.laravel_generator.path.request', app_path('Http/Requests/')).$prefix;
+        $this->pathRequest = config('delosfei.generator.path.request', app_path('Http/Requests/')).$prefix;
 
-        $this->pathRoutes = config('delos.laravel_generator.path.routes', base_path('routes/web.php'));
-        $this->pathFactory = config('delos.laravel_generator.path.factory', database_path('factories/'));
+        $this->pathRoutes = config('delosfei.generator.path.routes', base_path('routes/web.php'));
+        $this->pathFactory = config('delosfei.generator.path.factory', database_path('factories/'));
 
         $this->pathViews = config(
-            'delos.laravel_generator.path.views',
+            'delosfei.generator.path.views',
             resource_path('views/')
         ).$viewPrefix.$this->mSnakePlural.'/';
 
         $this->pathAssets = config(
-            'delos.laravel_generator.path.assets',
+            'delosfei.generator.path.assets',
             resource_path('assets/')
         );
 
-        $this->pathSeeder = config('delos.laravel_generator.path.seeder', database_path('seeders/'));
-        $this->pathDatabaseSeeder = config('delos.laravel_generator.path.database_seeder', database_path('seeders/DatabaseSeeder.php'));
+        $this->pathSeeder = config('delosfei.generator.path.seeder', database_path('seeders/'));
+        $this->pathDatabaseSeeder = config('delosfei.generator.path.database_seeder', database_path('seeders/DatabaseSeeder.php'));
         $this->pathViewProvider = config(
-            'delos.laravel_generator.path.view_provider',
+            'delosfei.generator.path.view_provider',
             app_path('Providers/ViewServiceProvider.php')
         );
 
         $this->modelJsPath = config(
-            'delos.laravel_generator.path.modelsJs',
+            'delosfei.generator.path.modelsJs',
             resource_path('assets/js/models/')
         );
     }
@@ -331,12 +331,12 @@ class GeneratorConfig
 
         $commandData->addDynamicVariable(
             '$API_PREFIX$',
-            config('delos.laravel_generator.api_prefix', 'api')
+            config('delosfei.generator.api_prefix', 'api')
         );
 
         $commandData->addDynamicVariable(
             '$API_VERSION$',
-            config('delos.laravel_generator.api_version', 'v1')
+            config('delosfei.generator.api_version', 'v1')
         );
 
         $commandData->addDynamicVariable('$SEARCHABLE$', '');
@@ -395,20 +395,20 @@ class GeneratorConfig
         }
 
         if (empty($this->options['save'])) {
-            $this->options['save'] = config('delos.laravel_generator.options.save_schema_file', true);
+            $this->options['save'] = config('delosfei.generator.options.save_schema_file', true);
         }
 
         if (empty($this->options['localized'])) {
-            $this->options['localized'] = config('delos.laravel_generator.options.localized', false);
+            $this->options['localized'] = config('delosfei.generator.options.localized', false);
         }
 
         if ($this->options['localized']) {
             $commandData->getTemplatesManager()->setUseLocale(true);
         }
 
-        $this->options['softDelete'] = config('delos.laravel_generator.options.softDelete', false);
-        $this->options['repositoryPattern'] = config('delos.laravel_generator.options.repository_pattern', true);
-        $this->options['resources'] = config('delos.laravel_generator.options.resources', true);
+        $this->options['softDelete'] = config('delosfei.generator.options.softDelete', false);
+        $this->options['repositoryPattern'] = config('delosfei.generator.options.repository_pattern', true);
+        $this->options['resources'] = config('delosfei.generator.options.resources', true);
         if (!empty($this->options['skip'])) {
             $this->options['skip'] = array_map('trim', explode(',', $this->options['skip']));
         }
@@ -424,10 +424,10 @@ class GeneratorConfig
 
     public function preparePrefixes()
     {
-        $this->prefixes['route'] = explode('/', config('delos.laravel_generator.prefixes.route', ''));
-        $this->prefixes['path'] = explode('/', config('delos.laravel_generator.prefixes.path', ''));
-        $this->prefixes['view'] = explode('.', config('delos.laravel_generator.prefixes.view', ''));
-        $this->prefixes['public'] = explode('/', config('delos.laravel_generator.prefixes.public', ''));
+        $this->prefixes['route'] = explode('/', config('delosfei.generator.prefixes.route', ''));
+        $this->prefixes['path'] = explode('/', config('delosfei.generator.prefixes.path', ''));
+        $this->prefixes['view'] = explode('.', config('delosfei.generator.prefixes.view', ''));
+        $this->prefixes['public'] = explode('/', config('delosfei.generator.prefixes.public', ''));
 
         if ($this->getOption('prefix')) {
             $multiplePrefixes = explode('/', $this->getOption('prefix'));
@@ -556,10 +556,10 @@ class GeneratorConfig
 
     public function prepareAddOns()
     {
-        $this->addOns['swagger'] = config('delos.laravel_generator.add_on.swagger', false);
-        $this->addOns['tests'] = config('delos.laravel_generator.add_on.tests', false);
-        $this->addOns['datatables'] = config('delos.laravel_generator.add_on.datatables', false);
-        $this->addOns['menu.enabled'] = config('delos.laravel_generator.add_on.menu.enabled', false);
-        $this->addOns['menu.menu_file'] = config('delos.laravel_generator.add_on.menu.menu_file', 'layouts.menu');
+        $this->addOns['swagger'] = config('delosfei.generator.add_on.swagger', false);
+        $this->addOns['tests'] = config('delosfei.generator.add_on.tests', false);
+        $this->addOns['datatables'] = config('delosfei.generator.add_on.datatables', false);
+        $this->addOns['menu.enabled'] = config('delosfei.generator.add_on.menu.enabled', false);
+        $this->addOns['menu.menu_file'] = config('delosfei.generator.add_on.menu.menu_file', 'layouts.menu');
     }
 }

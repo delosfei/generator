@@ -13,7 +13,7 @@ class APIRequestsGeneratorCommand extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'delos.api:requests';
+    protected $name = 'infyom.api:requests';
 
     /**
      * The console command description.

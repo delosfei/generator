@@ -19,12 +19,12 @@ class MigrationGenerator extends BaseGenerator
     public function __construct($commandData)
     {
         $this->commandData = $commandData;
-        $this->path = config('delos.laravel_generator.path.migration', database_path('migrations/'));
+        $this->path = config('delosfei.generator.path.migration', database_path('migrations/'));
     }
 
     public function generate()
     {
-        $templateData = get_template('migration', 'generator');
+        $templateData = get_template('migration', 'laravel-generator');
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 

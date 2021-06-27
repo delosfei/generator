@@ -12,7 +12,7 @@ class ScaffoldGeneratorCommand extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'delos:scaffold';
+    protected $name = 'ds:scaffold';
 
     /**
      * The console command description.

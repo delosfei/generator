@@ -11,7 +11,7 @@ class PublishUserCommand extends PublishBaseCommand
      *
      * @var string
      */
-    protected $name = 'delos.publish:user';
+    protected $name = 'infyom.publish:user';
 
     /**
      * The console command description.
@@ -31,7 +31,7 @@ class PublishUserCommand extends PublishBaseCommand
         $this->updateRoutes();
         $this->updateMenu();
         $this->publishUserController();
-        if (config('delos.laravel_generator.options.repository_pattern')) {
+        if (config('delosfei.generator.options.repository_pattern')) {
             $this->publishUserRepository();
         }
         $this->publishCreateUserRequest();
@@ -40,8 +40,8 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function copyViews()
     {
-        $viewsPath = config('delos.laravel_generator.path.views', resource_path('views/'));
-        $templateType = config('delos.laravel_generator.templates', 'adminlte-templates');
+        $viewsPath = config('delosfei.generator.path.views', resource_path('views/'));
+        $templateType = config('delosfei.generator.templates', 'adminlte-templates');
 
         $this->createDirectories($viewsPath.'users');
 
@@ -74,11 +74,11 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function updateRoutes()
     {
-        $path = config('delos.laravel_generator.path.routes', base_path('routes/web.php'));
+        $path = config('delosfei.generator.path.routes', base_path('routes/web.php'));
 
         $routeContents = file_get_contents($path);
 
-        $routesTemplate = get_template('routes.user', 'generator');
+        $routesTemplate = get_template('routes.user', 'laravel-generator');
 
         $routeContents .= "\n\n".$routesTemplate;
 
@@ -88,8 +88,8 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function updateMenu()
     {
-        $viewsPath = config('delos.laravel_generator.path.views', resource_path('views/'));
-        $templateType = config('delos.laravel_generator.templates', 'adminlte-templates');
+        $viewsPath = config('delosfei.generator.path.views', resource_path('views/'));
+        $templateType = config('delosfei.generator.templates', 'adminlte-templates');
         $path = $viewsPath.'layouts/menu.blade.php';
         $menuContents = file_get_contents($path);
         $sourceFile = file_get_contents(get_template_file_path('scaffold/users/menu', $templateType));
@@ -101,15 +101,15 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function publishUserController()
     {
-        $templateData = get_template('user/user_controller', 'generator');
-        if (!config('delos.laravel_generator.options.repository_pattern')) {
-            $templateData = get_template('user/user_controller_without_repository', 'generator');
+        $templateData = get_template('user/user_controller', 'laravel-generator');
+        if (!config('delosfei.generator.options.repository_pattern')) {
+            $templateData = get_template('user/user_controller_without_repository', 'laravel-generator');
             $templateData = $this->fillTemplate($templateData);
         }
 
         $templateData = $this->fillTemplate($templateData);
 
-        $controllerPath = config('delos.laravel_generator.path.controller', app_path('Http/Controllers/'));
+        $controllerPath = config('delosfei.generator.path.controller', app_path('Http/Controllers/'));
 
         $fileName = 'UserController.php';
 
@@ -124,11 +124,11 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function publishUserRepository()
     {
-        $templateData = get_template('user/user_repository', 'generator');
+        $templateData = get_template('user/user_repository', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
-        $repositoryPath = config('delos.laravel_generator.path.repository', app_path('Repositories/'));
+        $repositoryPath = config('delosfei.generator.path.repository', app_path('Repositories/'));
 
         $fileName = 'UserRepository.php';
 
@@ -145,11 +145,11 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function publishCreateUserRequest()
     {
-        $templateData = get_template('user/create_user_request', 'generator');
+        $templateData = get_template('user/create_user_request', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
-        $requestPath = config('delos.laravel_generator.path.request', app_path('Http/Requests/'));
+        $requestPath = config('delosfei.generator.path.request', app_path('Http/Requests/'));
 
         $fileName = 'CreateUserRequest.php';
 
@@ -166,11 +166,11 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function publishUpdateUserRequest()
     {
-        $templateData = get_template('user/update_user_request', 'generator');
+        $templateData = get_template('user/update_user_request', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
-        $requestPath = config('delos.laravel_generator.path.request', app_path('Http/Requests/'));
+        $requestPath = config('delosfei.generator.path.request', app_path('Http/Requests/'));
 
         $fileName = 'UpdateUserRequest.php';
         if (file_exists($requestPath.$fileName) && !$this->confirmOverwrite($fileName)) {
@@ -191,11 +191,11 @@ class PublishUserCommand extends PublishBaseCommand
      */
     private function fillTemplate($templateData)
     {
-        $templateData = str_replace('$NAMESPACE_CONTROLLER$', config('delos.laravel_generator.namespace.controller'), $templateData);
+        $templateData = str_replace('$NAMESPACE_CONTROLLER$', config('delosfei.generator.namespace.controller'), $templateData);
 
-        $templateData = str_replace('$NAMESPACE_REQUEST$', config('delos.laravel_generator.namespace.request'), $templateData);
+        $templateData = str_replace('$NAMESPACE_REQUEST$', config('delosfei.generator.namespace.request'), $templateData);
 
-        $templateData = str_replace('$NAMESPACE_REPOSITORY$', config('delos.laravel_generator.namespace.repository'), $templateData);
+        $templateData = str_replace('$NAMESPACE_REPOSITORY$', config('delosfei.generator.namespace.repository'), $templateData);
         $templateData = str_replace('$NAMESPACE_USER$', config('auth.providers.users.model'), $templateData);
 
         return $templateData;

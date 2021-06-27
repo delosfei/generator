@@ -28,7 +28,7 @@ class ViewGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathViews;
-        $this->templateType = config('delos.laravel_generator.templates', 'adminlte-templates');
+        $this->templateType = config('delosfei.generator.templates', 'adminlte-templates');
     }
 
     public function generate()
@@ -202,7 +202,7 @@ class ViewGenerator extends BaseGenerator
                  * We could need 'raw' field name in header for example for sorting.
                  * We still have $FIELD_NAME_TITLE$ replaced with @lang('models/$modelName.fields.$value').
                  *
-                 * @see issue https://github.com/delosfei/generator/issues/887
+                 * @see issue https://github.com/InfyOmLabs/laravel-generator/issues/887
                  */
                 $preFilledHeaderFieldTemplate = str_replace('$FIELD_NAME$', $field->name, $headerFieldTemplate);
 

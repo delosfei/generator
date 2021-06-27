@@ -13,7 +13,7 @@ class RequestsGeneratorCommand extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'delos.scaffold:requests';
+    protected $name = 'infyom.scaffold:requests';
 
     /**
      * The console command description.

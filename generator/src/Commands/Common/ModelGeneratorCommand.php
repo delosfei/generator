@@ -13,7 +13,7 @@ class ModelGeneratorCommand extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'delos:model';
+    protected $name = 'ds:model';
 
     /**
      * The console command description.

@@ -90,8 +90,8 @@ if (!function_exists('get_template_file_path')) {
         $templateName = str_replace('.', '/', $templateName);
 
         $templatesPath = config(
-            'delos.laravel_generator.path.templates_dir',
-            resource_path('delos/delos-generator-templates/')
+            'delosfei.generator.path.templates_dir',
+            resource_path('infyom/infyom-generator-templates/')
         );
 
         $path = $templatesPath.$templateName.'.stub';
@@ -115,7 +115,7 @@ if (!function_exists('get_templates_package_path')) {
     function get_templates_package_path($templateType)
     {
         if (strpos($templateType, '/') === false) {
-            $templateType = base_path('vendor/delosfei/').$templateType;
+            $templateType = base_path('vendor/infyomlabs/').$templateType;
         }
 
         return $templateType;

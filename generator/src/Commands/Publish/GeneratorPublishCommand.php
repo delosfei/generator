@@ -12,7 +12,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
      *
      * @var string
      */
-    protected $name = 'delos:publish';
+    protected $name = 'ds:publish';
 
     /**
      * The console command description.
@@ -30,7 +30,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
     {
         $this->publishTestCases();
         $this->publishBaseController();
-        $repositoryPattern = config('delos.laravel_generator.options.repository_pattern', true);
+        $repositoryPattern = config('delosfei.generator.options.repository_pattern', true);
         if ($repositoryPattern) {
             $this->publishBaseRepository();
         }
@@ -48,8 +48,8 @@ class GeneratorPublishCommand extends PublishBaseCommand
      */
     private function fillTemplate($templateData)
     {
-        $apiVersion = config('delos.laravel_generator.api_version', 'v1');
-        $apiPrefix = config('delos.laravel_generator.api_prefix', 'api');
+        $apiVersion = config('delosfei.generator.api_version', 'v1');
+        $apiPrefix = config('delosfei.generator.api_prefix', 'api');
 
         $templateData = str_replace('$API_VERSION$', $apiVersion, $templateData);
         $templateData = str_replace('$API_PREFIX$', $apiPrefix, $templateData);
@@ -62,12 +62,12 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     private function publishTestCases()
     {
-        $testsPath = config('delos.laravel_generator.path.tests', base_path('tests/'));
-        $testsNameSpace = config('delos.laravel_generator.namespace.tests', 'Tests');
-        $createdAtField = config('delos.laravel_generator.timestamps.created_at', 'created_at');
-        $updatedAtField = config('delos.laravel_generator.timestamps.updated_at', 'updated_at');
+        $testsPath = config('delosfei.generator.path.tests', base_path('tests/'));
+        $testsNameSpace = config('delosfei.generator.namespace.tests', 'Tests');
+        $createdAtField = config('delosfei.generator.timestamps.created_at', 'created_at');
+        $updatedAtField = config('delosfei.generator.timestamps.updated_at', 'updated_at');
 
-        $templateData = get_template('test.api_test_trait', 'generator');
+        $templateData = get_template('test.api_test_trait', 'laravel-generator');
 
         $templateData = str_replace('$NAMESPACE_TESTS$', $testsNameSpace, $templateData);
         $templateData = str_replace('$TIMESTAMPS$', "['$createdAtField', '$updatedAtField']", $templateData);
@@ -81,13 +81,13 @@ class GeneratorPublishCommand extends PublishBaseCommand
         FileUtil::createFile($testsPath, $fileName, $templateData);
         $this->info('ApiTestTrait created');
 
-        $testAPIsPath = config('delos.laravel_generator.path.api_test', base_path('tests/APIs/'));
+        $testAPIsPath = config('delosfei.generator.path.api_test', base_path('tests/APIs/'));
         if (!file_exists($testAPIsPath)) {
             FileUtil::createDirectoryIfNotExist($testAPIsPath);
             $this->info('APIs Tests directory created');
         }
 
-        $testRepositoriesPath = config('delos.laravel_generator.path.repository_test', base_path('tests/Repositories/'));
+        $testRepositoriesPath = config('delosfei.generator.path.repository_test', base_path('tests/Repositories/'));
         if (!file_exists($testRepositoriesPath)) {
             FileUtil::createDirectoryIfNotExist($testRepositoriesPath);
             $this->info('Repositories Tests directory created');
@@ -96,7 +96,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     private function publishBaseController()
     {
-        $templateData = get_template('app_base_controller', 'generator');
+        $templateData = get_template('app_base_controller', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 
@@ -115,7 +115,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     private function publishBaseRepository()
     {
-        $templateData = get_template('base_repository', 'generator');
+        $templateData = get_template('base_repository', 'laravel-generator');
 
         $templateData = $this->fillTemplate($templateData);
 

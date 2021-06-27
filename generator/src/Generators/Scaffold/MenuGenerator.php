@@ -27,12 +27,12 @@ class MenuGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = config(
-            'delos.laravel_generator.path.views',
+            'delosfei.generator.path.views',
             resource_path(
                 'views/'
             )
         ).$commandData->getAddOn('menu.menu_file');
-        $this->templateType = config('delos.laravel_generator.templates', 'adminlte-templates');
+        $this->templateType = config('delosfei.generator.templates', 'adminlte-templates');
 
         $this->menuContents = file_get_contents($this->path);
 

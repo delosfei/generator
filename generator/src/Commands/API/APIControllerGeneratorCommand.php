@@ -13,7 +13,7 @@ class APIControllerGeneratorCommand extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'delos.api:controller';
+    protected $name = 'infyom.api:controller';
 
     /**
      * The console command description.

@@ -52,7 +52,7 @@ class BaseCommand extends Command
 
     public function handle()
     {
-        $this->commandData->modelName = $this->argument('model');
+        $this->commandData->modelName = ucfirst($this->argument('model'));
 
         $this->commandData->initCommandData();
         $this->commandData->getFields();
@@ -76,8 +76,8 @@ class BaseCommand extends Command
         }
 
         if ($this->commandData->getOption('factory') || (
-            !$this->isSkip('tests') and $this->commandData->getAddOn('tests')
-        )) {
+                !$this->isSkip('tests') and $this->commandData->getAddOn('tests')
+            )) {
             $factoryGenerator = new FactoryGenerator($this->commandData);
             $factoryGenerator->generate();
         }
@@ -194,7 +194,7 @@ class BaseCommand extends Command
     public function isSkip($skip)
     {
         if ($this->commandData->getOption('skip')) {
-            return in_array($skip, (array) $this->commandData->getOption('skip'));
+            return in_array($skip, (array)$this->commandData->getOption('skip'));
         }
 
         return false;
@@ -211,22 +211,22 @@ class BaseCommand extends Command
 
         foreach ($this->commandData->fields as $field) {
             $fileFields[] = [
-                'name'        => $field->name,
-                'dbType'      => $field->dbInput,
-                'htmlType'    => $field->htmlInput,
+                'name' => $field->name,
+                'dbType' => $field->dbInput,
+                'htmlType' => $field->htmlInput,
                 'validations' => $field->validations,
-                'searchable'  => $field->isSearchable,
-                'fillable'    => $field->isFillable,
-                'primary'     => $field->isPrimary,
-                'inForm'      => $field->inForm,
-                'inIndex'     => $field->inIndex,
-                'inView'      => $field->inView,
+                'searchable' => $field->isSearchable,
+                'fillable' => $field->isFillable,
+                'primary' => $field->isPrimary,
+                'inForm' => $field->inForm,
+                'inIndex' => $field->inIndex,
+                'inView' => $field->inView,
             ];
         }
 
         foreach ($this->commandData->relations as $relation) {
             $fileFields[] = [
-                'type'     => 'relation',
+                'type' => 'relation',
                 'relation' => $relation->type.','.implode(',', $relation->inputs),
             ];
         }
@@ -247,8 +247,8 @@ class BaseCommand extends Command
     {
         $locales = [
             'singular' => $this->commandData->modelName,
-            'plural'   => $this->commandData->config->mPlural,
-            'fields'   => [],
+            'plural' => $this->commandData->config->mPlural,
+            'fields' => [],
         ];
 
         foreach ($this->commandData->fields as $field) {
@@ -301,7 +301,12 @@ class BaseCommand extends Command
             ['primary', null, InputOption::VALUE_REQUIRED, 'Custom primary key'],
             ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
             ['paginate', null, InputOption::VALUE_REQUIRED, 'Pagination for index.blade.php'],
-            ['skip', null, InputOption::VALUE_REQUIRED, 'Skip Specific Items to Generate (migration,model,controllers,api_controller,scaffold_controller,repository,requests,api_requests,scaffold_requests,routes,api_routes,scaffold_routes,views,tests,menu,dump-autoload)'],
+            [
+                'skip',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Skip Specific Items to Generate (migration,model,controllers,api_controller,scaffold_controller,repository,requests,api_requests,scaffold_requests,routes,api_routes,scaffold_routes,views,tests,menu,dump-autoload)',
+            ],
             ['datatables', null, InputOption::VALUE_REQUIRED, 'Override datatables settings'],
             ['views', null, InputOption::VALUE_REQUIRED, 'Specify only the views you want generated: index,create,edit,show'],
             ['relations', null, InputOption::VALUE_NONE, 'Specify if you want to pass relationships for fields'],

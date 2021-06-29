@@ -6,14 +6,14 @@ use Illuminate\Support\Str;
 use Delosfei\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputOption;
 
-class LayoutPublishCommand extends PublishBaseCommand
+class PublishLayoutCommand extends PublishBaseCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'infyom.publish:layout';
+    protected $name = 'ds.publish:layout';
 
     /**
      * The console command description.
@@ -65,18 +65,18 @@ class LayoutPublishCommand extends PublishBaseCommand
     private function getViews()
     {
         $views = [
-            'layouts/app'               => 'layouts/app.blade.php',
-            'layouts/sidebar'           => 'layouts/sidebar.blade.php',
-            'layouts/datatables_css'    => 'layouts/datatables_css.blade.php',
-            'layouts/datatables_js'     => 'layouts/datatables_js.blade.php',
-            'layouts/menu'              => 'layouts/menu.blade.php',
-            'layouts/home'              => 'home.blade.php',
-            'auth/login'                => 'auth/login.blade.php',
-            'auth/register'             => 'auth/register.blade.php',
-            'auth/passwords/confirm'    => 'auth/passwords/confirm.blade.php',
-            'auth/passwords/email'      => 'auth/passwords/email.blade.php',
-            'auth/passwords/reset'      => 'auth/passwords/reset.blade.php',
-            'auth/emails/password'      => 'auth/emails/password.blade.php',
+            'layouts/app' => 'layouts/app.blade.php',
+            'layouts/sidebar' => 'layouts/sidebar.blade.php',
+            'layouts/datatables_css' => 'layouts/datatables_css.blade.php',
+            'layouts/datatables_js' => 'layouts/datatables_js.blade.php',
+            'layouts/menu' => 'layouts/menu.blade.php',
+            'layouts/home' => 'home.blade.php',
+            'auth/login' => 'auth/login.blade.php',
+            'auth/register' => 'auth/register.blade.php',
+            'auth/passwords/confirm' => 'auth/passwords/confirm.blade.php',
+            'auth/passwords/email' => 'auth/passwords/email.blade.php',
+            'auth/passwords/reset' => 'auth/passwords/reset.blade.php',
+            'auth/emails/password' => 'auth/emails/password.blade.php',
         ];
 
         $version = $this->getApplication()->getVersion();
@@ -98,23 +98,23 @@ class LayoutPublishCommand extends PublishBaseCommand
     private function getLocaleViews()
     {
         return [
-            'layouts/app_locale'           => 'layouts/app.blade.php',
-            'layouts/sidebar_locale'       => 'layouts/sidebar.blade.php',
-            'layouts/datatables_css'       => 'layouts/datatables_css.blade.php',
-            'layouts/datatables_js'        => 'layouts/datatables_js.blade.php',
-            'layouts/menu'                 => 'layouts/menu.blade.php',
-            'layouts/home'                 => 'home.blade.php',
-            'auth/login_locale'            => 'auth/login.blade.php',
-            'auth/register_locale'         => 'auth/register.blade.php',
-            'auth/passwords/email_locale'  => 'auth/passwords/email.blade.php',
-            'auth/passwords/reset_locale'  => 'auth/passwords/reset.blade.php',
-            'auth/emails/password_locale'  => 'auth/emails/password.blade.php',
+            'layouts/app_locale' => 'layouts/app.blade.php',
+            'layouts/sidebar_locale' => 'layouts/sidebar.blade.php',
+            'layouts/datatables_css' => 'layouts/datatables_css.blade.php',
+            'layouts/datatables_js' => 'layouts/datatables_js.blade.php',
+            'layouts/menu' => 'layouts/menu.blade.php',
+            'layouts/home' => 'home.blade.php',
+            'auth/login_locale' => 'auth/login.blade.php',
+            'auth/register_locale' => 'auth/register.blade.php',
+            'auth/passwords/email_locale' => 'auth/passwords/email.blade.php',
+            'auth/passwords/reset_locale' => 'auth/passwords/reset.blade.php',
+            'auth/emails/password_locale' => 'auth/emails/password.blade.php',
         ];
     }
 
     private function publishHomeController()
     {
-        $templateData = get_template('home_controller', 'laravel-generator');
+        $templateData = get_template('home_controller', 'generator');
 
         $templateData = $this->fillTemplate($templateData);
 

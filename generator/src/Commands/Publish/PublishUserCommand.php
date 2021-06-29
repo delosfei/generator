@@ -11,7 +11,7 @@ class PublishUserCommand extends PublishBaseCommand
      *
      * @var string
      */
-    protected $name = 'infyom.publish:user';
+    protected $name = 'ds.publish:user';
 
     /**
      * The console command description.
@@ -62,13 +62,13 @@ class PublishUserCommand extends PublishBaseCommand
     private function getViews()
     {
         return [
-            'users/create'      => 'users/create.blade.php',
-            'users/edit'        => 'users/edit.blade.php',
-            'users/fields'      => 'users/fields.blade.php',
-            'users/index'       => 'users/index.blade.php',
-            'users/show'        => 'users/show.blade.php',
+            'users/create' => 'users/create.blade.php',
+            'users/edit' => 'users/edit.blade.php',
+            'users/fields' => 'users/fields.blade.php',
+            'users/index' => 'users/index.blade.php',
+            'users/show' => 'users/show.blade.php',
             'users/show_fields' => 'users/show_fields.blade.php',
-            'users/table'       => 'users/table.blade.php',
+            'users/table' => 'users/table.blade.php',
         ];
     }
 
@@ -78,7 +78,7 @@ class PublishUserCommand extends PublishBaseCommand
 
         $routeContents = file_get_contents($path);
 
-        $routesTemplate = get_template('routes.user', 'laravel-generator');
+        $routesTemplate = get_template('routes.user', 'generator');
 
         $routeContents .= "\n\n".$routesTemplate;
 
@@ -101,9 +101,9 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function publishUserController()
     {
-        $templateData = get_template('user/user_controller', 'laravel-generator');
+        $templateData = get_template('user/user_controller', 'generator');
         if (!config('delosfei.generator.options.repository_pattern')) {
-            $templateData = get_template('user/user_controller_without_repository', 'laravel-generator');
+            $templateData = get_template('user/user_controller_without_repository', 'generator');
             $templateData = $this->fillTemplate($templateData);
         }
 
@@ -124,7 +124,7 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function publishUserRepository()
     {
-        $templateData = get_template('user/user_repository', 'laravel-generator');
+        $templateData = get_template('user/user_repository', 'generator');
 
         $templateData = $this->fillTemplate($templateData);
 
@@ -145,7 +145,7 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function publishCreateUserRequest()
     {
-        $templateData = get_template('user/create_user_request', 'laravel-generator');
+        $templateData = get_template('user/create_user_request', 'generator');
 
         $templateData = $this->fillTemplate($templateData);
 
@@ -166,7 +166,7 @@ class PublishUserCommand extends PublishBaseCommand
 
     private function publishUpdateUserRequest()
     {
-        $templateData = get_template('user/update_user_request', 'laravel-generator');
+        $templateData = get_template('user/update_user_request', 'generator');
 
         $templateData = $this->fillTemplate($templateData);
 

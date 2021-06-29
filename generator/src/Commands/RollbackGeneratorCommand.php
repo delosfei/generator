@@ -2,6 +2,7 @@
 
 namespace Delosfei\Generator\Commands;
 
+use Delosfei\Generator\Generators\SeederGenerator;
 use Illuminate\Console\Command;
 use Delosfei\Generator\Common\CommandData;
 use Delosfei\Generator\Generators\API\APIControllerGenerator;
@@ -64,11 +65,14 @@ class RollbackGeneratorCommand extends Command
      */
     public function handle()
     {
-        if (!in_array($this->argument('type'), [
-            CommandData::$COMMAND_TYPE_API,
-            CommandData::$COMMAND_TYPE_SCAFFOLD,
-            CommandData::$COMMAND_TYPE_API_SCAFFOLD,
-        ])) {
+        if (!in_array(
+            $this->argument('type'),
+            [
+                CommandData::$COMMAND_TYPE_API,
+                CommandData::$COMMAND_TYPE_SCAFFOLD,
+                CommandData::$COMMAND_TYPE_API_SCAFFOLD,
+            ]
+        )) {
             $this->error('invalid rollback type');
         }
 
@@ -129,6 +133,9 @@ class RollbackGeneratorCommand extends Command
 
         $factoryGenerator = new FactoryGenerator($this->commandData);
         $factoryGenerator->rollback();
+        
+        $seederGenerator = new SeederGenerator($this->commandData);
+        $seederGenerator->rollback();
 
         if ($this->commandData->config->getAddOn('menu.enabled')) {
             $menuGenerator = new MenuGenerator($this->commandData);

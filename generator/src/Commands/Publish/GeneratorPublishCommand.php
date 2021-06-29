@@ -3,6 +3,7 @@
 namespace Delosfei\Generator\Commands\Publish;
 
 use Delosfei\Generator\Utils\FileUtil;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\Console\Input\InputOption;
 
 class GeneratorPublishCommand extends PublishBaseCommand
@@ -28,6 +29,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
      */
     public function handle()
     {
+        $this->copyFiles();
         $this->publishTestCases();
         $this->publishBaseController();
         $repositoryPattern = config('delosfei.generator.options.repository_pattern', true);
@@ -38,6 +40,24 @@ class GeneratorPublishCommand extends PublishBaseCommand
             $this->publishLocaleFiles();
         }
     }
+    private function copyFiles()
+    {
+        $destinationDir = config('delosfei.generator.path.system', base_path());
+
+        $templateType = config('delosfei.generator.templates', 'dsvue2-templates');
+
+        $sourceDir = get_templates_package_path($templateType).'/templates/vue2';
+        if (File::copyDirectory($sourceDir, $destinationDir)) {
+
+            $this->info('Published system base files');
+        }
+
+
+    }
+
+
+
+
 
     /**
      * Replaces dynamic variables of template.
@@ -67,7 +87,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
         $createdAtField = config('delosfei.generator.timestamps.created_at', 'created_at');
         $updatedAtField = config('delosfei.generator.timestamps.updated_at', 'updated_at');
 
-        $templateData = get_template('test.api_test_trait', 'laravel-generator');
+        $templateData = get_template('test.api_test_trait', 'generator');
 
         $templateData = str_replace('$NAMESPACE_TESTS$', $testsNameSpace, $templateData);
         $templateData = str_replace('$TIMESTAMPS$', "['$createdAtField', '$updatedAtField']", $templateData);
@@ -96,7 +116,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     private function publishBaseController()
     {
-        $templateData = get_template('app_base_controller', 'laravel-generator');
+        $templateData = get_template('app_base_controller', 'generator');
 
         $templateData = $this->fillTemplate($templateData);
 
@@ -115,7 +135,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     private function publishBaseRepository()
     {
-        $templateData = get_template('base_repository', 'laravel-generator');
+        $templateData = get_template('base_repository', 'generator');
 
         $templateData = $this->fillTemplate($templateData);
 

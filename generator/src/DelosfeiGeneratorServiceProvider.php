@@ -2,7 +2,6 @@
 
 namespace Delosfei\Generator;
 
-use Delosfei\Generator\Commands\Publish\PublishSystemCommand;
 use Illuminate\Support\ServiceProvider;
 use Delosfei\Generator\Commands\API\APIControllerGeneratorCommand;
 use Delosfei\Generator\Commands\API\APIGeneratorCommand;
@@ -165,12 +164,6 @@ class DelosfeiGeneratorServiceProvider extends ServiceProvider
                 return new PublishUserCommand();
             }
         );
-        $this->app->singleton(
-            'delosfei.publish.system',
-            function ($app) {
-                return new PublishSystemCommand();
-            }
-        );
 
 
         $this->commands(
@@ -192,7 +185,7 @@ class DelosfeiGeneratorServiceProvider extends ServiceProvider
                 'delosfei.scaffold.views',
                 'delosfei.rollback',
                 'delosfei.publish.user',
-                'delosfei.publish.system',
+
             ]
         );
     }

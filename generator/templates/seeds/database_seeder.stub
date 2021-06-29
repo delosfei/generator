@@ -1,0 +1,1 @@
+ $this->call($MODEL_NAME_PLURAL_HUMAN$TableSeeder::class);

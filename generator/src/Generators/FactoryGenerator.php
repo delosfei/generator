@@ -32,7 +32,7 @@ class FactoryGenerator extends BaseGenerator
 
     public function generate()
     {
-        $templateData = get_template('factories.model_factory', 'laravel-generator');
+        $templateData = get_template('factories.model_factory', 'generator');
 
         $templateData = $this->fillTemplate($templateData);
 
@@ -77,6 +77,8 @@ class FactoryGenerator extends BaseGenerator
             switch ($field->fieldType) {
                 case 'integer':
                 case 'float':
+                case 'unsignedInteger':
+                case 'bigInteger':
                     $fakerData = 'randomDigitNotNull';
                     break;
                 case 'string':
@@ -93,6 +95,9 @@ class FactoryGenerator extends BaseGenerator
                     $fakerData = 'randomElement('.
                         GeneratorFieldsInputUtil::prepareValuesArrayStr($field->htmlValues).
                         ')';
+                    break;
+                case 'boolean':
+                    $fakerData = 'randomElement(['."'0','1'".'])';
                     break;
                 default:
                     $fakerData = 'word';

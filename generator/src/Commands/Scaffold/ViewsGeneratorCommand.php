@@ -13,7 +13,7 @@ class ViewsGeneratorCommand extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'infyom.scaffold:views';
+    protected $name = 'ds.scaffold:views';
 
     /**
      * The console command description.

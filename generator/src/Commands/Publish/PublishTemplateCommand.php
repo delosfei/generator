@@ -9,7 +9,7 @@ class PublishTemplateCommand extends PublishBaseCommand
      *
      * @var string
      */
-    protected $name = 'infyom.publish:templates';
+    protected $name = 'ds.publish:templates';
 
     /**
      * The console command description.
@@ -65,7 +65,7 @@ class PublishTemplateCommand extends PublishBaseCommand
      */
     public function publishSwaggerTemplates()
     {
-        $templatesPath = base_path('vendor/infyomlabs/swagger-generator/templates');
+        $templatesPath = base_path('vendor/delosfei/swagger-generator/templates');
 
         return $this->publishDirectory($templatesPath, $this->templatesDir, 'swagger-generator', true);
     }

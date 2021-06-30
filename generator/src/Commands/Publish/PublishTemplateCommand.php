@@ -29,7 +29,7 @@ class PublishTemplateCommand extends PublishBaseCommand
     {
         $this->templatesDir = config(
             'delosfei.generator.path.templates_dir',
-            resource_path('infyom/infyom-generator-templates/')
+            resource_path('delosfei/delosfei-generator-templates/')
         );
 
         if ($this->publishGeneratorTemplates()) {
@@ -45,7 +45,7 @@ class PublishTemplateCommand extends PublishBaseCommand
     {
         $templatesPath = __DIR__.'/../../../templates';
 
-        return $this->publishDirectory($templatesPath, $this->templatesDir, 'infyom-generator-templates');
+        return $this->publishDirectory($templatesPath, $this->templatesDir, 'delosfei-generator-templates');
     }
 
     /**
@@ -57,7 +57,7 @@ class PublishTemplateCommand extends PublishBaseCommand
 
         $templatesPath = get_templates_package_path($templateType).'/templates/scaffold';
 
-        return $this->publishDirectory($templatesPath, $this->templatesDir.'scaffold', 'infyom-generator-templates/scaffold', true);
+        return $this->publishDirectory($templatesPath, $this->templatesDir.'scaffold', 'delosfei-generator-templates/scaffold', true);
     }
 
     /**

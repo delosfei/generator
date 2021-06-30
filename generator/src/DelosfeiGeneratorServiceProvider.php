@@ -2,6 +2,7 @@
 
 namespace Delosfei\Generator;
 
+use Delosfei\Generator\Commands\Service\ServiceGeneratorCommand;
 use Illuminate\Support\ServiceProvider;
 use Delosfei\Generator\Commands\API\APIControllerGeneratorCommand;
 use Delosfei\Generator\Commands\API\APIGeneratorCommand;
@@ -17,7 +18,6 @@ use Delosfei\Generator\Commands\Publish\PublishTemplateCommand;
 use Delosfei\Generator\Commands\Publish\PublishUserCommand;
 use Delosfei\Generator\Commands\RollbackGeneratorCommand;
 use Delosfei\Generator\Commands\Scaffold\ControllerGeneratorCommand;
-use Delosfei\Generator\Commands\Scaffold\RequestsGeneratorCommand;
 use Delosfei\Generator\Commands\Scaffold\ScaffoldGeneratorCommand;
 use Delosfei\Generator\Commands\Scaffold\ViewsGeneratorCommand;
 
@@ -140,7 +140,7 @@ class DelosfeiGeneratorServiceProvider extends ServiceProvider
         $this->app->singleton(
             'delosfei.scaffold.requests',
             function ($app) {
-                return new RequestsGeneratorCommand();
+                return new ServiceGeneratorCommand();
             }
         );
 
@@ -165,6 +165,13 @@ class DelosfeiGeneratorServiceProvider extends ServiceProvider
             }
         );
 
+        $this->app->singleton(
+            'delosfei.service',
+            function ($app) {
+                return new ServiceGeneratorCommand();
+            }
+        );
+
 
         $this->commands(
             [
@@ -185,6 +192,7 @@ class DelosfeiGeneratorServiceProvider extends ServiceProvider
                 'delosfei.scaffold.views',
                 'delosfei.rollback',
                 'delosfei.publish.user',
+                'delosfei.service',
 
             ]
         );

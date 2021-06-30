@@ -43,7 +43,7 @@ return [
 
         'schema_files' => resource_path('model_schemas/'),
 
-        'templates_dir' => resource_path('infyom/infyom-generator-templates/'),
+        'templates_dir' => resource_path('delosfei/delosfei-generator-templates/'),
 
         'seeder' => database_path('seeders/'),
 
@@ -54,6 +54,8 @@ return [
         'view_provider' => app_path('Providers/ViewServiceProvider.php'),
 
         'system' => base_path(),
+
+        'service' => app_path('Services/'),
     ],
 
     /*
@@ -90,6 +92,8 @@ return [
         'api_test' => 'Tests\APIs',
 
         'tests' => 'Tests',
+
+        'service' => 'App\Services',
     ],
 
     /*

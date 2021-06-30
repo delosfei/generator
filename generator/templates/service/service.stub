@@ -1,0 +1,10 @@
+<?php
+
+namespace $NAMESPACE_SERVICE$\$SERVICE_NAME$;
+
+
+
+class $SERVICE_NAME$Service
+{
+
+}

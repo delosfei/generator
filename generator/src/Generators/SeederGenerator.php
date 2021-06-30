@@ -34,21 +34,15 @@ class SeederGenerator extends BaseGenerator
 
         $this->database_seeder_file_path = $this->path.'DatabaseSeeder.php';
         $this->existingDatabaseSeederContents = file_get_contents($this->database_seeder_file_path);
-
         $database_seeder_templateData = get_template('seeds.database_seeder', 'generator');
-
         $this->model_seederData = fill_template($this->commandData->dynamicVars, $database_seeder_templateData);
-
     }
 
     public function generate()
     {
         $templateData = get_template('seeds.model_seeder', 'generator');
-
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
-
         FileUtil::createFile($this->path, $this->fileName, $templateData);
-
         $this->commandData->commandComment("\nSeeder created: ");
         $this->commandData->commandInfo($this->fileName);
         $this->addSeederToDatabase();
@@ -56,17 +50,14 @@ class SeederGenerator extends BaseGenerator
 
     public function addSeederToDatabase()
     {
-
-
         if (Str::contains($this->existingDatabaseSeederContents, $this->model_seederData)) {
-
             $this->commandData->commandObj->info(substr($this->fileName, 0, -4).' is already exists in DatabaseSeeder.php, Skipping Adjustment.');
 
             return;
         }
         $this->existingDatabaseSeederContents = str_replace(
-            infy_nl().infy_nl_tab().'}'.infy_nl().'}',
-            infy_nl_tab(1, 2).$this->model_seederData.infy_nl().infy_nl_tab().'}'.infy_nl().'}',
+            infy_nl_tab().'}'.infy_nl().'}',
+            infy_nl_tab(1, 2).$this->model_seederData.infy_nl_tab().'}'.infy_nl().'}',
             $this->existingDatabaseSeederContents
         );
         file_put_contents($this->database_seeder_file_path, $this->existingDatabaseSeederContents);
@@ -79,8 +70,8 @@ class SeederGenerator extends BaseGenerator
     {
         if (Str::contains($this->existingDatabaseSeederContents, $this->model_seederData)) {
             $this->existingDatabaseSeederContents = str_replace(
-                infy_nl_tab(1, 2).$this->model_seederData.infy_nl().infy_nl_tab().'}'.infy_nl().'}',
-                infy_nl().infy_nl_tab().'}'.infy_nl().'}',
+                infy_nl_tab(1, 2).$this->model_seederData.infy_nl_tab().'}'.infy_nl().'}',
+                infy_nl_tab().'}'.infy_nl().'}',
                 $this->existingDatabaseSeederContents
             );
             file_put_contents($this->database_seeder_file_path, $this->existingDatabaseSeederContents);

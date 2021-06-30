@@ -210,9 +210,13 @@ class BaseCommand extends Command
         $fileFields = [];
 
         foreach ($this->commandData->fields as $field) {
+
+            $field->validations = implode("|", array_unique(explode("|", $field->validations)));
+            $comment = (is_null($field->description) ? '' : ":comment,'".$field->description."'");
+
             $fileFields[] = [
                 'name' => $field->name,
-                'dbType' => $field->dbInput,
+                'dbType' => $field->dbInput.$comment,
                 'htmlType' => $field->htmlInput,
                 'validations' => $field->validations,
                 'searchable' => $field->isSearchable,
@@ -238,7 +242,7 @@ class BaseCommand extends Command
         if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
             return;
         }
-        FileUtil::createFile($path, $fileName, json_encode($fileFields, JSON_PRETTY_PRINT));
+        FileUtil::createFile($path, $fileName, json_encode($fileFields, JSON_UNESCAPED_UNICODE));
         $this->commandData->commandComment("\nSchema File saved: ");
         $this->commandData->commandInfo($fileName);
     }

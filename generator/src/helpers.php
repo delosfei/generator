@@ -91,7 +91,7 @@ if (!function_exists('get_template_file_path')) {
 
         $templatesPath = config(
             'delosfei.generator.path.templates_dir',
-            resource_path('infyom/infyom-generator-templates/')
+            resource_path('delosfei/delosfei-generator-templates/')
         );
 
         $path = $templatesPath.$templateName.'.stub';

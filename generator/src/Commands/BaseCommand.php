@@ -56,6 +56,8 @@ class BaseCommand extends Command
 
         $this->commandData->initCommandData();
         $this->commandData->getFields();
+
+
     }
 
     public function generateCommonItems()
@@ -212,11 +214,11 @@ class BaseCommand extends Command
         foreach ($this->commandData->fields as $field) {
 
             $field->validations = implode("|", array_unique(explode("|", $field->validations)));
-            $comment = (is_null($field->description) ? '' : ":comment,'".$field->description."'");
 
             $fileFields[] = [
                 'name' => $field->name,
-                'dbType' => $field->dbInput.$comment,
+                'title' => $field->title,
+                'dbType' => $field->dbInput,
                 'htmlType' => $field->htmlInput,
                 'validations' => $field->validations,
                 'searchable' => $field->isSearchable,
@@ -243,8 +245,7 @@ class BaseCommand extends Command
             return;
         }
         FileUtil::createFile($path, $fileName, json_encode($fileFields, JSON_UNESCAPED_UNICODE));
-        $this->commandData->commandComment("\nSchema File saved: ");
-        $this->commandData->commandInfo($fileName);
+        $this->commandData->commandInfo('+ '.$path.$fileName);
     }
 
     private function saveLocaleFile()
@@ -268,8 +269,7 @@ class BaseCommand extends Command
         }
         $content = "<?php\n\nreturn ".var_export($locales, true).';'.\PHP_EOL;
         FileUtil::createFile($path, $fileName, $content);
-        $this->commandData->commandComment("\nModel Locale File saved: ");
-        $this->commandData->commandInfo($fileName);
+        $this->commandData->commandInfo('+ '.$path.$fileName);
     }
 
     /**
@@ -278,7 +278,7 @@ class BaseCommand extends Command
      *
      * @return bool
      */
-    protected function confirmOverwrite($fileName, $prompt = '')
+    public function confirmOverwrite($fileName, $prompt = '')
     {
         $prompt = (empty($prompt))
             ? $fileName.' already exists. Do you want to overwrite it? [y|N]'

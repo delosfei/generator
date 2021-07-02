@@ -2,6 +2,7 @@
 
 namespace Delosfei\Generator\Commands;
 
+use Delosfei\Generator\Generators\API\APIResourceGenerator;
 use Delosfei\Generator\Generators\SeederGenerator;
 use Illuminate\Console\Command;
 use Delosfei\Generator\Common\CommandData;
@@ -131,9 +132,12 @@ class RollbackGeneratorCommand extends Command
             $apiTestGenerator->rollback();
         }
 
+        $resourceGenerator = new APIResourceGenerator($this->commandData);
+        $resourceGenerator->rollback();
+
         $factoryGenerator = new FactoryGenerator($this->commandData);
         $factoryGenerator->rollback();
-        
+
         $seederGenerator = new SeederGenerator($this->commandData);
         $seederGenerator->rollback();
 

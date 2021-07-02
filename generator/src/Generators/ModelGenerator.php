@@ -47,11 +47,14 @@ class ModelGenerator extends BaseGenerator
         $templateData = get_template('model.model', 'generator');
 
         $templateData = $this->fillTemplate($templateData);
+        if (file_exists($this->path.$this->fileName) && !$this->commandData->commandObj->confirmOverwrite($this->fileName)) {
+            return;
+        }
+
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->commandData->commandComment("\nModel created: ");
-        $this->commandData->commandInfo($this->fileName);
+        $this->commandData->commandInfo('+ '.$this->path.$this->fileName);
     }
 
     private function fillTemplate($templateData)
@@ -187,7 +190,7 @@ class ModelGenerator extends BaseGenerator
     /**
      * @param $db_type
      * @param GeneratorFieldRelation|null $relation
-     * @param string|null                 $relationText
+     * @param string|null $relationText
      *
      * @return string
      */
@@ -272,9 +275,11 @@ class ModelGenerator extends BaseGenerator
         }
 
         if ($this->commandData->getOption('fromTable') && !empty($timestamps)) {
-            list($created_at, $updated_at) = collect($timestamps)->map(function ($field) {
-                return !empty($field) ? "'$field'" : 'null';
-            });
+            list($created_at, $updated_at) = collect($timestamps)->map(
+                function ($field) {
+                    return !empty($field) ? "'$field'" : 'null';
+                }
+            );
 
             $replace .= infy_nl_tab()."const CREATED_AT = $created_at;";
             $replace .= infy_nl_tab()."const UPDATED_AT = $updated_at;\n";
@@ -286,7 +291,7 @@ class ModelGenerator extends BaseGenerator
     private function generateRules()
     {
         $dont_require_fields = config('delosfei.generator.options.hidden_fields', [])
-                + config('delosfei.generator.options.excluded_fields', $this->excluded_fields);
+            + config('delosfei.generator.options.excluded_fields', $this->excluded_fields);
 
         $rules = [];
 
@@ -342,9 +347,12 @@ class ModelGenerator extends BaseGenerator
                 if (Str::contains($field->validations, 'unique:')) {
                     $rule = explode('|', $field->validations);
                     // move unique rule to last
-                    usort($rule, function ($record) {
-                        return (Str::contains($record, 'unique:')) ? 1 : 0;
-                    });
+                    usort(
+                        $rule,
+                        function ($record) {
+                            return (Str::contains($record, 'unique:')) ? 1 : 0;
+                        }
+                    );
                     $field->validations = implode('|', $rule);
                 }
                 $rule = "'".$field->name."' => '".$field->validations."'";
@@ -458,7 +466,7 @@ class ModelGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Model file deleted: '.$this->fileName);
+            $this->commandData->commandInfo('- '.$this->path.$this->fileName);
         }
     }
 }

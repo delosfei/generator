@@ -29,10 +29,15 @@ class RepositoryTestGenerator extends BaseGenerator
 
         $templateData = $this->fillTemplate($templateData);
 
+        if (file_exists($this->path.$this->fileName) && !$this->commandData->commandObj->confirmOverwrite($this->fileName)) {
+            return;
+        }
+
+
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->commandData->commandObj->comment("\nRepositoryTest created: ");
-        $this->commandData->commandObj->info($this->fileName);
+        $this->commandData->commandInfo('+ '.$this->path.$this->fileName);
+
     }
 
     private function fillTemplate($templateData)
@@ -45,7 +50,7 @@ class RepositoryTestGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Repository Test file deleted: '.$this->fileName);
+            $this->commandData->commandInfo('- '.$this->path.$this->fileName);
         }
     }
 }

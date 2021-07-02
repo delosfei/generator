@@ -30,16 +30,19 @@ class APITestGenerator extends BaseGenerator
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
+        if (file_exists($this->path.$this->fileName) && !$this->commandData->commandObj->confirmOverwrite($this->fileName)) {
+            return;
+        }
+
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->commandData->commandObj->comment("\nApiTest created: ");
-        $this->commandData->commandObj->info($this->fileName);
+        $this->commandData->commandInfo('+ '.$this->path.$this->fileName);
     }
 
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('API Test file deleted: '.$this->fileName);
+            $this->commandData->commandInfo('- '.$this->path.$this->fileName);
         }
     }
 }

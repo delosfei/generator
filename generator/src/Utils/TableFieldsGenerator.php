@@ -71,7 +71,7 @@ class TableFieldsGenerator
         $defaultMappings = [
             'enum' => 'string',
             'json' => 'text',
-            'bit'  => 'boolean',
+            'bit' => 'boolean',
         ];
 
         $mappings = config('delosfei.generator.from_table.doctrine_mappings', []);
@@ -156,8 +156,10 @@ class TableFieldsGenerator
                 $field->inIndex = false;
                 $field->inView = false;
             }
-            $field->isNotNull = (bool) $column->getNotNull();
+            $field->isNotNull = (bool)$column->getNotNull();
             $field->description = $column->getComment(); // get comments from table
+            $field->title = $column->getComment();
+            $field->default = $column->getDefault(); // get comments from table
 
             $this->fields[] = $field;
         }
@@ -220,6 +222,10 @@ class TableFieldsGenerator
             $field->dbInput .= ',true';
         }
 
+        if ($column->getDefault()) {
+            $field->dbInput .= ':default,'."'".$column->getDefault()."'";
+        }
+
         return $this->checkForPrimary($field);
     }
 
@@ -260,6 +266,10 @@ class TableFieldsGenerator
         $field->parseDBType($dbType, $column);
         $field->parseHtmlInput($htmlType);
 
+        if ($column->getDefault()) {
+            $field->dbInput .= ':default,'."'".$column->getDefault()."'";
+        }
+
         return $this->checkForPrimary($field);
     }
 
@@ -280,6 +290,10 @@ class TableFieldsGenerator
 
         if ($dbType === 'decimal') {
             $field->numberDecimalPoints = $column->getScale();
+        }
+
+        if ($column->getDefault()) {
+            $field->dbInput .= ':default,'."'".$column->getDefault()."'";
         }
 
         return $this->checkForPrimary($field);
@@ -402,9 +416,9 @@ class TableFieldsGenerator
      * Also one is from model table and one is from diff table.
      *
      * @param GeneratorTable[] $tables
-     * @param string           $tableName
-     * @param GeneratorTable   $modelTable
-     * @param string           $modelTableName
+     * @param string $tableName
+     * @param GeneratorTable $modelTable
+     * @param string $modelTableName
      *
      * @return bool|GeneratorFieldRelation
      */
@@ -474,9 +488,9 @@ class TableFieldsGenerator
      * If foreign key of table is primary key of foreign table
      * Also foreign key field is primary key of this table.
      *
-     * @param string              $primaryKey
+     * @param string $primaryKey
      * @param GeneratorForeignKey $foreignKey
-     * @param string              $modelTablePrimary
+     * @param string $modelTablePrimary
      *
      * @return bool
      */
@@ -496,9 +510,9 @@ class TableFieldsGenerator
      * If foreign key of table is primary key of foreign table
      * Also foreign key field is not primary key of this table.
      *
-     * @param string              $primaryKey
+     * @param string $primaryKey
      * @param GeneratorForeignKey $foreignKey
-     * @param string              $modelTablePrimary
+     * @param string $modelTablePrimary
      *
      * @return bool
      */
@@ -518,7 +532,7 @@ class TableFieldsGenerator
      * If foreign key of model table is primary key of foreign table.
      *
      * @param GeneratorTable[] $tables
-     * @param GeneratorTable   $modelTable
+     * @param GeneratorTable $modelTable
      *
      * @return array
      */

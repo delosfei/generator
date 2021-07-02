@@ -44,11 +44,12 @@ class APIControllerGenerator extends BaseGenerator
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
         $templateData = $this->fillDocs($templateData);
-
+        if (file_exists($this->path.$this->fileName) && !$this->commandData->commandObj->confirmOverwrite($this->fileName)) {
+            return;
+        }
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->commandData->commandComment("\nAPI Controller created: ");
-        $this->commandData->commandInfo($this->fileName);
+        $this->commandData->commandInfo('+ '.$this->path.$this->fileName);
     }
 
     private function fillDocs($templateData)
@@ -76,7 +77,7 @@ class APIControllerGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('API Controller file deleted: '.$this->fileName);
+            $this->commandData->commandInfo('- '.$this->path.$this->fileName);
         }
     }
 }

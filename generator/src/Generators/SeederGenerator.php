@@ -42,16 +42,20 @@ class SeederGenerator extends BaseGenerator
     {
         $templateData = get_template('seeds.model_seeder', 'generator');
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+        if (file_exists($this->path.$this->fileName) && !$this->commandData->commandObj->confirmOverwrite($this->fileName)) {
+            return;
+        }
+
         FileUtil::createFile($this->path, $this->fileName, $templateData);
-        $this->commandData->commandComment("\nSeeder created: ");
-        $this->commandData->commandInfo($this->fileName);
+        $this->commandData->commandInfo('+ '.$this->path.$this->fileName);
         $this->addSeederToDatabase();
     }
 
     public function addSeederToDatabase()
     {
         if (Str::contains($this->existingDatabaseSeederContents, $this->model_seederData)) {
-            $this->commandData->commandObj->info(substr($this->fileName, 0, -4).' is already exists in DatabaseSeeder.php, Skipping Adjustment.');
+            $this->commandData->commandInfo('+ '.$this->database_seeder_file_path.'(Skipping)');
 
             return;
         }
@@ -62,8 +66,7 @@ class SeederGenerator extends BaseGenerator
         );
         file_put_contents($this->database_seeder_file_path, $this->existingDatabaseSeederContents);
 
-        $this->commandData->commandComment("\n".$this->fileName.'Seeder is added to DatabaseSeeder');
-
+        $this->commandData->commandInfo('+ '.$this->database_seeder_file_path.'(updated)');
     }
 
     public function rollback()
@@ -75,10 +78,10 @@ class SeederGenerator extends BaseGenerator
                 $this->existingDatabaseSeederContents
             );
             file_put_contents($this->database_seeder_file_path, $this->existingDatabaseSeederContents);
-            $this->commandData->commandComment(substr($this->fileName, 0, -4).'info deleted from DatabaseSeeder.php');
+            $this->commandData->commandInfo('- '.$this->database_seeder_file_path.'(updated)');
         }
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Seeder file deleted: '.$this->fileName);
+            $this->commandData->commandInfo('- '.$this->path.$this->fileName);
         }
     }
 

@@ -71,11 +71,13 @@ class ControllerGenerator extends BaseGenerator
         }
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        if (file_exists($this->path.$this->fileName) && !$this->commandData->commandObj->confirmOverwrite($this->fileName)) {
+            return;
+        }
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->commandData->commandComment("\nController created: ");
-        $this->commandData->commandInfo($this->fileName);
+        $this->commandData->commandInfo('+ '.$this->path.$this->fileName);
     }
 
     private function generateDataTable()
@@ -99,10 +101,13 @@ class ControllerGenerator extends BaseGenerator
 
         $fileName = $this->commandData->modelName.'DataTable.php';
 
+        if (file_exists($this->path.$this->fileName) && !$this->commandData->commandObj->confirmOverwrite($this->fileName)) {
+            return;
+        }
+
         FileUtil::createFile($path, $fileName, $templateData);
 
-        $this->commandData->commandComment("\nDataTable created: ");
-        $this->commandData->commandInfo($fileName);
+        $this->commandData->commandInfo('+ '.$this->path.$this->fileName);
     }
 
     private function generateDataTableColumns()
@@ -147,7 +152,7 @@ class ControllerGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Controller file deleted: '.$this->fileName);
+            $this->commandData->commandInfo('- '.$this->path.$this->fileName);
         }
 
         if ($this->commandData->getAddOn('datatables')) {
@@ -155,7 +160,7 @@ class ControllerGenerator extends BaseGenerator
                 $this->commandData->config->pathDataTables,
                 $this->commandData->modelName.'DataTable.php'
             )) {
-                $this->commandData->commandComment('DataTable file deleted: '.$this->fileName);
+                $this->commandData->commandInfo('- '.$this->path.$this->fileName);
             }
         }
     }

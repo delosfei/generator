@@ -45,16 +45,20 @@ class RepositoryGenerator extends BaseGenerator
 
         $templateData = str_replace('$DOCS$', $docsTemplate, $templateData);
 
+        if (file_exists($this->path.$this->fileName) && !$this->commandData->commandObj->confirmOverwrite($this->fileName)) {
+            return;
+        }
+
+
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->commandData->commandComment("\nRepository created: ");
-        $this->commandData->commandInfo($this->fileName);
+        $this->commandData->commandInfo('+ '.$this->path.$this->fileName);
     }
 
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Repository file deleted: '.$this->fileName);
+            $this->commandData->commandInfo('- '.$this->path.$this->fileName);
         }
     }
 }

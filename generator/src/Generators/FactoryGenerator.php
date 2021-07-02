@@ -35,11 +35,14 @@ class FactoryGenerator extends BaseGenerator
         $templateData = get_template('factories.model_factory', 'generator');
 
         $templateData = $this->fillTemplate($templateData);
+        if (file_exists($this->path.$this->fileName) && !$this->commandData->commandObj->confirmOverwrite($this->fileName)) {
+            return;
+        }
+
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->commandData->commandObj->comment("\nFactory created: ");
-        $this->commandData->commandObj->info($this->fileName);
+        $this->commandData->commandInfo('+ '.$this->path.$this->fileName);
     }
 
     /**
@@ -114,7 +117,7 @@ class FactoryGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandComment('Factory file deleted: '.$this->fileName);
+            $this->commandData->commandInfo('- '.$this->path.$this->fileName);
         }
     }
 }

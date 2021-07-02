@@ -40,11 +40,13 @@ class RequestGenerator extends BaseGenerator
         $templateData = get_template('scaffold.request.create_request', 'generator');
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        if (file_exists($this->path.$this->createFileName) && !$this->commandData->commandObj->confirmOverwrite($this->createFileName)) {
+            return;
+        }
 
         FileUtil::createFile($this->path, $this->createFileName, $templateData);
 
-        $this->commandData->commandComment("\nCreate Request created: ");
-        $this->commandData->commandInfo($this->createFileName);
+        $this->commandData->commandInfo('+ '.$this->path.$this->createFileName);
     }
 
     private function generateUpdateRequest()
@@ -57,20 +59,23 @@ class RequestGenerator extends BaseGenerator
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
+        if (file_exists($this->path.$this->updateFileName) && !$this->commandData->commandObj->confirmOverwrite($this->updateFileName)) {
+            return;
+        }
         FileUtil::createFile($this->path, $this->updateFileName, $templateData);
 
-        $this->commandData->commandComment("\nUpdate Request created: ");
-        $this->commandData->commandInfo($this->updateFileName);
+        $this->commandData->commandInfo('+ '.$this->path.$this->updateFileName);
+
     }
 
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->createFileName)) {
-            $this->commandData->commandComment('Create API Request file deleted: '.$this->createFileName);
+            $this->commandData->commandInfo('- '.$this->path.$this->createFileName);
         }
 
         if ($this->rollbackFile($this->path, $this->updateFileName)) {
-            $this->commandData->commandComment('Update API Request file deleted: '.$this->updateFileName);
+            $this->commandData->commandInfo('- '.$this->path.$this->updateFileName);
         }
     }
 }

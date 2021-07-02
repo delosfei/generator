@@ -33,11 +33,16 @@ class MigrationGenerator extends BaseGenerator
         $tableName = $this->commandData->dynamicVars['$TABLE_NAME$'];
 
         $fileName = date('Y_m_d_His').'_'.'create_'.strtolower($tableName).'_table.php';
+        $migrate_file = 'create_'.strtolower($tableName).'_table.php';
+
+
+        if ($this->migrate_file_is_exist($this->path, $migrate_file) && !$this->commandData->commandObj->confirmOverwrite($migrate_file)) {
+            return;
+        }
 
         FileUtil::createFile($this->path, $fileName, $templateData);
 
-        $this->commandData->commandComment("\nMigration created: ");
-        $this->commandData->commandInfo($fileName);
+        $this->commandData->commandInfo('+ '.$this->path.$fileName);
     }
 
     private function generateFields()
@@ -84,10 +89,20 @@ class MigrationGenerator extends BaseGenerator
 
     public function rollback()
     {
-        $fileName = 'create_'.$this->commandData->config->tableName.'_table.php';
+        $migrate_file = 'create_'.$this->commandData->config->tableName.'_table.php';
+        $file = $this->migrate_file_is_exist($this->path, $migrate_file);
+        if ($file) {
+            if ($this->rollbackFile($this->path, $file)) {
+                $this->commandData->commandInfo('- '.$this->path.$file);
 
-        /** @var SplFileInfo $allFiles */
-        $allFiles = File::allFiles($this->path);
+            }
+        }
+    }
+
+    public function migrate_file_is_exist($path, $migrate_file)
+    {
+
+        $allFiles = File::allFiles($path);
 
         $files = [];
 
@@ -98,12 +113,10 @@ class MigrationGenerator extends BaseGenerator
         $files = array_reverse($files);
 
         foreach ($files as $file) {
-            if (Str::contains($file, $fileName)) {
-                if ($this->rollbackFile($this->path, $file)) {
-                    $this->commandData->commandComment('Migration file deleted: '.$file);
-                }
-                break;
+            if (Str::contains($file, $migrate_file)) {
+                return $file;
             }
         }
     }
+
 }

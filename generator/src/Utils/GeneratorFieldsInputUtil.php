@@ -6,7 +6,7 @@ use Delosfei\Generator\Common\GeneratorField;
 
 class GeneratorFieldsInputUtil
 {
-    public static function validateFieldInput($fieldInputStr)
+    public static function validateFieldInput($fieldInputStr): bool
     {
         $fieldInputs = explode(' ', $fieldInputStr);
 

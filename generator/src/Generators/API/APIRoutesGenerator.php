@@ -38,25 +38,26 @@ class APIRoutesGenerator extends BaseGenerator
 
     public function generate()
     {
-        $this->routeContents .= "\n\n".$this->routesTemplate;
+        $this->routeContents .= infy_nl(1).$this->routesTemplate;
         $existingRouteContents = file_get_contents($this->path);
         if (Str::contains($existingRouteContents, "Route::resource('".$this->commandData->config->mSnakePlural."',")) {
-            $this->commandData->commandObj->info('Menu '.$this->commandData->config->mPlural.'is already exists, Skipping Adjustment.');
+            $this->commandData->commandInfo('+ '.$this->path.' (Skipping)');
 
             return;
         }
 
         file_put_contents($this->path, $this->routeContents);
-
-        $this->commandData->commandComment("\n".$this->commandData->config->mCamelPlural.' api routes added.');
+        $this->path = Str::after($this->path, base_path());
+        $this->commandData->commandInfo('+ '.$this->path.' (updated)');
     }
 
     public function rollback()
     {
         if (Str::contains($this->routeContents, $this->routesTemplate)) {
-            $this->routeContents = str_replace($this->routesTemplate, '', $this->routeContents);
+            $this->routeContents = str_replace($this->routesTemplate, infy_nl(1), $this->routeContents);
             file_put_contents($this->path, $this->routeContents);
-            $this->commandData->commandComment('api routes deleted');
+            $this->path = Str::after($this->path, base_path());
+            $this->commandData->commandInfo('- '.$this->path.' (updated)');
         }
     }
 }

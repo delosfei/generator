@@ -41,6 +41,8 @@ return [
 
         'views' => resource_path('views/'),
 
+        'vue_views' => base_path('vue/'),
+
         'schema_files' => resource_path('model_schemas/'),
 
         'templates_dir' => resource_path('delosfei/delosfei-generator-templates/'),
@@ -56,6 +58,8 @@ return [
         'system' => base_path(),
 
         'service' => app_path('Services/'),
+
+        'policy' => app_path('Policies'),
     ],
 
     /*
@@ -94,6 +98,8 @@ return [
         'tests' => 'Tests',
 
         'service' => 'App\Services',
+
+        'policy' => 'App\Policies',
     ],
 
     /*

@@ -4,7 +4,6 @@ namespace Delosfei\Generator\Generators\API;
 
 use Delosfei\Generator\Common\CommandData;
 use Delosfei\Generator\Generators\BaseGenerator;
-use Delosfei\Generator\Utils\FileUtil;
 
 class APIControllerGenerator extends BaseGenerator
 {
@@ -21,7 +20,7 @@ class APIControllerGenerator extends BaseGenerator
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathApiController;
-        $this->fileName = $this->commandData->modelName.'APIController.php';
+        $this->fileName = $this->commandData->modelName.'Controller.php';
     }
 
     public function generate()
@@ -32,9 +31,6 @@ class APIControllerGenerator extends BaseGenerator
             $templateName = 'model_api_controller';
         }
 
-        if ($this->commandData->isLocalizedTemplates()) {
-            $templateName .= '_locale';
-        }
 
         if ($this->commandData->getOption('resources')) {
             $templateName .= '_resource';
@@ -43,41 +39,14 @@ class APIControllerGenerator extends BaseGenerator
         $templateData = get_template("api.controller.$templateName", 'generator');
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
-        $templateData = $this->fillDocs($templateData);
         if (file_exists($this->path.$this->fileName) && !$this->commandData->commandObj->confirmOverwrite($this->fileName)) {
             return;
         }
-        FileUtil::createFile($this->path, $this->fileName, $templateData);
-
-        $this->commandData->commandInfo('+ '.$this->path.$this->fileName);
-    }
-
-    private function fillDocs($templateData)
-    {
-        $methods = ['controller', 'index', 'store', 'show', 'update', 'destroy'];
-
-        if ($this->commandData->getAddOn('swagger')) {
-            $templatePrefix = 'controller_docs';
-            $templateType = 'swagger-generator';
-        } else {
-            $templatePrefix = 'api.docs.controller';
-            $templateType = 'generator';
-        }
-
-        foreach ($methods as $method) {
-            $key = '$DOC_'.strtoupper($method).'$';
-            $docTemplate = get_template($templatePrefix.'.'.$method, $templateType);
-            $docTemplate = fill_template($this->commandData->dynamicVars, $docTemplate);
-            $templateData = str_replace($key, $docTemplate, $templateData);
-        }
-
-        return $templateData;
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->path, $this->fileName, $templateData));
     }
 
     public function rollback()
     {
-        if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandInfo('- '.$this->path.$this->fileName);
-        }
+        ($del_path = $this->rollbackFile($this->path, $this->fileName)) ? $this->commandData->commandComment($del_path) : false;
     }
 }

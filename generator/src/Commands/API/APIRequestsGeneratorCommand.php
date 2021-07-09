@@ -41,8 +41,8 @@ class APIRequestsGeneratorCommand extends BaseCommand
     {
         parent::handle();
 
-        $controllerGenerator = new APIRequestGenerator($this->commandData);
-        $controllerGenerator->generate();
+        $requestGenerator = new APIRequestGenerator($this->commandData);
+        $requestGenerator->generate();
 
         $this->performPostActions();
     }
@@ -52,7 +52,7 @@ class APIRequestsGeneratorCommand extends BaseCommand
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return array_merge(parent::getOptions(), []);
     }
@@ -62,7 +62,7 @@ class APIRequestsGeneratorCommand extends BaseCommand
      *
      * @return array
      */
-    protected function getArguments()
+    protected function getArguments(): array
     {
         return array_merge(parent::getArguments(), []);
     }

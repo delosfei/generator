@@ -47,8 +47,8 @@ class SeederGenerator extends BaseGenerator
             return;
         }
 
-        FileUtil::createFile($this->path, $this->fileName, $templateData);
-        $this->commandData->commandInfo('+ '.$this->path.$this->fileName);
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->path, $this->fileName, $templateData));
+
         $this->addSeederToDatabase();
     }
 
@@ -65,7 +65,7 @@ class SeederGenerator extends BaseGenerator
             $this->existingDatabaseSeederContents
         );
         file_put_contents($this->database_seeder_file_path, $this->existingDatabaseSeederContents);
-
+        $this->database_seeder_file_path = Str::after($this->database_seeder_file_path, base_path());
         $this->commandData->commandInfo('+ '.$this->database_seeder_file_path.'(updated)');
     }
 
@@ -78,11 +78,11 @@ class SeederGenerator extends BaseGenerator
                 $this->existingDatabaseSeederContents
             );
             file_put_contents($this->database_seeder_file_path, $this->existingDatabaseSeederContents);
+            $this->database_seeder_file_path = Str::after($this->database_seeder_file_path, base_path());
+
             $this->commandData->commandInfo('- '.$this->database_seeder_file_path.'(updated)');
         }
-        if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandInfo('- '.$this->path.$this->fileName);
-        }
+        ($del_path = $this->rollbackFile($this->path, $this->fileName)) ? $this->commandData->commandComment($del_path) : false;
     }
 
 

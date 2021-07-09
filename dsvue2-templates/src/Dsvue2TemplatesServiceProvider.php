@@ -1,11 +1,11 @@
 <?php
 
-namespace InfyOm\AdminLTETemplates;
+namespace Delosfei\Dsvue2Templates;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
-class AdminLTETemplatesServiceProvider extends ServiceProvider
+class Dsvue2TemplatesServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -14,13 +14,16 @@ class AdminLTETemplatesServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/../views', 'adminlte-templates');
-        $this->publishes([
-            __DIR__ . '/../views' => base_path('resources/views/vendor/adminlte-templates')
-        ]);
+        $this->loadViewsFrom(__DIR__.'/../views', 'dsvue2-templates');
+        $this->publishes(
+            [
+                __DIR__.'/../vue2' => base_path(),
 
-        Paginator::defaultView('adminlte-templates::common.paginator');
-        Paginator::defaultSimpleView('adminlte-templates::common.simple_paginator');
+            ]
+        );
+//
+//        Paginator::defaultView('dsvue2-templates::common.paginator');
+//        Paginator::defaultSimpleView('dsvue2-templates::common.simple_paginator');
     }
 
     /**

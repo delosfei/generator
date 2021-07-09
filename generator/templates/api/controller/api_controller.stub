@@ -2,89 +2,73 @@
 
 namespace $NAMESPACE_API_CONTROLLER$;
 
-use $NAMESPACE_API_REQUEST$\Create$MODEL_NAME$APIRequest;
-use $NAMESPACE_API_REQUEST$\Update$MODEL_NAME$APIRequest;
+use $NAMESPACE_APP$\Http\Controllers\Controller;
+use $NAMESPACE_API_REQUEST$\$MODEL_NAME$Request;
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
-use $NAMESPACE_REPOSITORY$\$MODEL_NAME$Repository;
+use $NAMESPACE_API_RESOURCE$\$MODEL_NAME$Resource;
 use Illuminate\Http\Request;
-use $NAMESPACE_APP$\Http\Controllers\AppBaseController;
-use Response;
+use Auth;
 
-$DOC_CONTROLLER$
-class $MODEL_NAME$APIController extends AppBaseController
+
+class $MODEL_NAME$Controller extends Controller
 {
-    /** @var  $MODEL_NAME$Repository */
-    private $$MODEL_NAME_CAMEL$Repository;
-
-    public function __construct($MODEL_NAME$Repository $$MODEL_NAME_CAMEL$Repo)
+    public function __construct()
     {
-        $this->$MODEL_NAME_CAMEL$Repository = $$MODEL_NAME_CAMEL$Repo;
+        $this->middleware(['auth:sanctum']);
     }
 
-    $DOC_INDEX$
-    public function index(Request $request)
+    /**
+     * 列表
+     * @return void
+     */
+    public function index()
     {
-        $$MODEL_NAME_PLURAL_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
-
-        return $this->sendResponse($$MODEL_NAME_PLURAL_CAMEL$->toArray(), '$MODEL_NAME_PLURAL_HUMAN$ retrieved successfully');
+        $$MODEL_NAME_PLURAL_CAMEL$ = $MODEL_NAME_CAMEL$::paginate(10);
+        return  $MODEL_NAME_CAMEL$Resource::collection($$MODEL_NAME_PLURAL_CAMEL$);
     }
 
-    $DOC_STORE$
-    public function store(Create$MODEL_NAME$APIRequest $request)
+    /**
+     * 获取单条数据
+     * @param $MODEL_NAME$ $$MODEL_NAME_CAMEL$
+     * @return void
+     */
+    public function show($MODEL_NAME$ $$MODEL_NAME_CAMEL$)
     {
-        $input = $request->all();
-
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->create($input);
-
-        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME_HUMAN$ saved successfully');
+        return new $MODEL_NAME$Resource($$$MODEL_NAME_CAMEL$);
     }
 
-    $DOC_SHOW$
-    public function show($id)
+    /**
+     * 保存
+     * @param $MODEL_NAME$Request $request
+     * @return void
+     */
+    public function store($MODEL_NAME$Request $request)
     {
-        /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
-
-        if (empty($$MODEL_NAME_CAMEL$)) {
-            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
-        }
-
-        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME_HUMAN$ retrieved successfully');
+        $$MODEL_NAME_CAMEL$ = $MODEL_NAME$::create($request->input());
+        return $this->message('会员组添加成功', $$MODEL_NAME_CAMEL$);
     }
 
-    $DOC_UPDATE$
-    public function update($id, Update$MODEL_NAME$APIRequest $request)
+    /**
+     * 更新
+     * @param Request $request
+     * @param $MODEL_NAME$ $$MODEL_NAME_CAMEL$
+     * @return void
+     */
+    public function update(Request $request, $MODEL_NAME$ $$MODEL_NAME_CAMEL$)
     {
-        $input = $request->all();
-
-        /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
-
-        if (empty($$MODEL_NAME_CAMEL$)) {
-            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
-        }
-
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->update($input, $id);
-
-        return $this->sendResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_NAME$ updated successfully');
+        $$MODEL_NAME_CAMEL$->fill($request->input())->save();
+        return $this->message('会员组修改成功');
     }
 
-    $DOC_DESTROY$
-    public function destroy($id)
+    /**
+     * 删除会员组
+     * @param $MODEL_NAME$ $$MODEL_NAME_CAMEL$
+     * @return void
+     */
+    public function destroy($MODEL_NAME$ $$MODEL_NAME_CAMEL$)
     {
-        /** @var $MODEL_NAME$ $$MODEL_NAME_CAMEL$ */
-        $$MODEL_NAME_CAMEL$ = $this->$MODEL_NAME_CAMEL$Repository->find($id);
-
-        if (empty($$MODEL_NAME_CAMEL$)) {
-            return $this->sendError('$MODEL_NAME_HUMAN$ not found');
-        }
-
         $$MODEL_NAME_CAMEL$->delete();
-
-        return $this->sendSuccess('$MODEL_NAME_HUMAN$ deleted successfully');
+        return ['message' => '套餐删除成功'];
     }
+
 }

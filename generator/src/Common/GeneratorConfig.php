@@ -20,18 +20,15 @@ class GeneratorConfig
     public $nsApiResource;
     public $nsApiRequest;
 
+    public $nsPolicy;
+    public $nsPolicyBase;
     public $nsRequest;
     public $nsRequestBase;
     public $nsController;
     public $nsBaseController;
 
-    public $nsApiTests;
-    public $nsRepositoryTests;
-    public $nsTestTraits;
-    public $nsTests;
 
     /* Path variables */
-    public $pathRepository;
     public $pathModel;
     public $pathDataTables;
     public $pathFactory;
@@ -43,14 +40,13 @@ class GeneratorConfig
     public $pathApiResource;
     public $pathApiRequest;
     public $pathApiRoutes;
-    public $pathApiTests;
 
     public $pathController;
     public $pathRequest;
+    public $pathPolicy;
     public $pathRoutes;
     public $pathViews;
     public $pathAssets;
-    public $modelJsPath;
 
     /* Model Names */
     public $mName;
@@ -97,11 +93,8 @@ class GeneratorConfig
         'forceMigrate',
         'factory',
         'seeder',
-        'repositoryPattern',
         'resources',
-        'localized',
         'connection',
-        'jqueryDT',
     ];
 
     public $tableName;
@@ -111,6 +104,7 @@ class GeneratorConfig
 
     /* Generator AddOns */
     public $addOns;
+
 
     public function init(CommandData &$commandData, $options = null)
     {
@@ -142,7 +136,6 @@ class GeneratorConfig
 
         $this->nsApp = $commandData->commandObj->getLaravel()->getNamespace();
         $this->nsApp = substr($this->nsApp, 0, strlen($this->nsApp) - 1);
-        $this->nsRepository = config('delosfei.generator.namespace.repository', 'App\Repositories').$prefix;
         $this->nsModel = config('delosfei.generator.namespace.model', 'App\Models').$prefix;
         if (config('delosfei.generator.ignore_model_prefix', false)) {
             $this->nsModel = config('delosfei.generator.namespace.model', 'App\Models');
@@ -156,23 +149,23 @@ class GeneratorConfig
         );
 
         $this->nsApiController = config(
-            'delosfei.generator.namespace.api_controller',
-            'App\Http\Controllers\API'
-        ).$prefix;
+                'delosfei.generator.namespace.api_controller',
+                'App\Http\Controllers\API'
+            ).$prefix;
         $this->nsApiResource = config(
-            'delosfei.generator.namespace.api_resource',
-            'App\Http\Resources'
-        ).$prefix;
+                'delosfei.generator.namespace.api_resource',
+                'App\Http\Resources'
+            ).$prefix;
         $this->nsApiRequest = config('delosfei.generator.namespace.api_request', 'App\Http\Requests\API').$prefix;
+
+        $this->nsPolicy = config('delosfei.generator.namespace.policy', 'App\Policies').$prefix;
+        $this->nsPolicyBase = config('delosfei.generator.namespace.policy', 'App\Policies');
 
         $this->nsRequest = config('delosfei.generator.namespace.request', 'App\Http\Requests').$prefix;
         $this->nsRequestBase = config('delosfei.generator.namespace.request', 'App\Http\Requests');
         $this->nsBaseController = config('delosfei.generator.namespace.controller', 'App\Http\Controllers');
         $this->nsController = config('delosfei.generator.namespace.controller', 'App\Http\Controllers').$prefix;
 
-        $this->nsApiTests = config('delosfei.generator.namespace.api_test', 'Tests\APIs');
-        $this->nsRepositoryTests = config('delosfei.generator.namespace.repository_test', 'Tests\Repositories');
-        $this->nsTests = config('delosfei.generator.namespace.tests', 'Tests');
     }
 
     public function loadPaths()
@@ -189,11 +182,6 @@ class GeneratorConfig
             $viewPrefix .= '/';
         }
 
-        $this->pathRepository = config(
-            'delosfei.generator.path.repository',
-            app_path('Repositories/')
-        ).$prefix;
-
         $this->pathModel = config('delosfei.generator.path.model', app_path('Models/')).$prefix;
         if (config('delosfei.generator.ignore_model_prefix', false)) {
             $this->pathModel = config('delosfei.generator.path.model', app_path('Models/'));
@@ -202,28 +190,27 @@ class GeneratorConfig
         $this->pathDataTables = config('delosfei.generator.path.datatables', app_path('DataTables/')).$prefix;
 
         $this->pathApiController = config(
-            'delosfei.generator.path.api_controller',
-            app_path('Http/Controllers/API/')
-        ).$prefix;
+                'delosfei.generator.path.api_controller',
+                app_path('Http/Controllers/API/')
+            ).$prefix;
 
         $this->pathApiResource = config(
-            'delosfei.generator.path.api_resource',
-            app_path('Http/Resources/')
-        ).$prefix;
+                'delosfei.generator.path.api_resource',
+                app_path('Http/Resources/')
+            ).$prefix;
 
         $this->pathApiRequest = config(
-            'delosfei.generator.path.api_request',
-            app_path('Http/Requests/API/')
-        ).$prefix;
+                'delosfei.generator.path.api_request',
+                app_path('Http/Requests/API/')
+            ).$prefix;
 
         $this->pathApiRoutes = config('delosfei.generator.path.api_routes', base_path('routes/api.php'));
 
-        $this->pathApiTests = config('delosfei.generator.path.api_test', base_path('tests/APIs/'));
 
         $this->pathController = config(
-            'delosfei.generator.path.controller',
-            app_path('Http/Controllers/')
-        ).$prefix;
+                'delosfei.generator.path.controller',
+                app_path('Http/Controllers/')
+            ).$prefix;
 
         $this->pathRequest = config('delosfei.generator.path.request', app_path('Http/Requests/')).$prefix;
 
@@ -231,9 +218,9 @@ class GeneratorConfig
         $this->pathFactory = config('delosfei.generator.path.factory', database_path('factories/'));
 
         $this->pathViews = config(
-            'delosfei.generator.path.views',
-            resource_path('views/')
-        ).$viewPrefix.$this->mSnakePlural.'/';
+                'delosfei.generator.path.views',
+                resource_path('views/')
+            ).$viewPrefix.$this->mSnakePlural.'/';
 
         $this->pathAssets = config(
             'delosfei.generator.path.assets',
@@ -247,10 +234,6 @@ class GeneratorConfig
             app_path('Providers/ViewServiceProvider.php')
         );
 
-        $this->modelJsPath = config(
-            'delosfei.generator.path.modelsJs',
-            resource_path('assets/js/models/')
-        );
     }
 
     public function loadDynamicVariables(CommandData &$commandData)
@@ -272,10 +255,6 @@ class GeneratorConfig
         $commandData->addDynamicVariable('$NAMESPACE_CONTROLLER$', $this->nsController);
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST$', $this->nsRequest);
         $commandData->addDynamicVariable('$NAMESPACE_REQUEST_BASE$', $this->nsRequestBase);
-
-        $commandData->addDynamicVariable('$NAMESPACE_API_TESTS$', $this->nsApiTests);
-        $commandData->addDynamicVariable('$NAMESPACE_REPOSITORIES_TESTS$', $this->nsRepositoryTests);
-        $commandData->addDynamicVariable('$NAMESPACE_TESTS$', $this->nsTests);
 
         $commandData->addDynamicVariable('$TABLE_NAME$', $this->tableName);
         $commandData->addDynamicVariable('$TABLE_NAME_TITLE$', Str::studly($this->tableName));
@@ -312,9 +291,9 @@ class GeneratorConfig
         }
 
         if (!empty($this->prefixes['ns'])) {
-            $commandData->addDynamicVariable('$PATH_PREFIX$', $this->prefixes['ns'].'\\');
+            $commandData->addDynamicVariable('$path_PREFIX$', $this->prefixes['ns'].'\\');
         } else {
-            $commandData->addDynamicVariable('$PATH_PREFIX$', '');
+            $commandData->addDynamicVariable('$path_PREFIX$', '');
         }
 
         if (!empty($this->prefixes['view'])) {
@@ -396,14 +375,6 @@ class GeneratorConfig
 
         if (empty($this->options['save'])) {
             $this->options['save'] = config('delosfei.generator.options.save_schema_file', true);
-        }
-
-        if (empty($this->options['localized'])) {
-            $this->options['localized'] = config('delosfei.generator.options.localized', false);
-        }
-
-        if ($this->options['localized']) {
-            $commandData->getTemplatesManager()->setUseLocale(true);
         }
 
         $this->options['softDelete'] = config('delosfei.generator.options.softDelete', false);

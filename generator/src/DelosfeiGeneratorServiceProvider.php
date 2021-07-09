@@ -2,24 +2,21 @@
 
 namespace Delosfei\Generator;
 
-use Delosfei\Generator\Commands\Service\ServiceGeneratorCommand;
-use Illuminate\Support\ServiceProvider;
 use Delosfei\Generator\Commands\API\APIControllerGeneratorCommand;
 use Delosfei\Generator\Commands\API\APIGeneratorCommand;
 use Delosfei\Generator\Commands\API\APIRequestsGeneratorCommand;
-use Delosfei\Generator\Commands\API\TestsGeneratorCommand;
 use Delosfei\Generator\Commands\APIScaffoldGeneratorCommand;
 use Delosfei\Generator\Commands\Common\MigrationGeneratorCommand;
 use Delosfei\Generator\Commands\Common\ModelGeneratorCommand;
-use Delosfei\Generator\Commands\Common\RepositoryGeneratorCommand;
 use Delosfei\Generator\Commands\Publish\GeneratorPublishCommand;
 use Delosfei\Generator\Commands\Publish\PublishLayoutCommand;
 use Delosfei\Generator\Commands\Publish\PublishTemplateCommand;
-use Delosfei\Generator\Commands\Publish\PublishUserCommand;
 use Delosfei\Generator\Commands\RollbackGeneratorCommand;
 use Delosfei\Generator\Commands\Scaffold\ControllerGeneratorCommand;
 use Delosfei\Generator\Commands\Scaffold\ScaffoldGeneratorCommand;
 use Delosfei\Generator\Commands\Scaffold\ViewsGeneratorCommand;
+use Delosfei\Generator\Commands\Service\ServiceGeneratorCommand;
+use Illuminate\Support\ServiceProvider;
 
 class DelosfeiGeneratorServiceProvider extends ServiceProvider
 {
@@ -102,12 +99,6 @@ class DelosfeiGeneratorServiceProvider extends ServiceProvider
             }
         );
 
-        $this->app->singleton(
-            'delosfei.repository',
-            function ($app) {
-                return new RepositoryGeneratorCommand();
-            }
-        );
 
         $this->app->singleton(
             'delosfei.generator.path.controller',
@@ -123,12 +114,6 @@ class DelosfeiGeneratorServiceProvider extends ServiceProvider
             }
         );
 
-        $this->app->singleton(
-            'delosfei.generator.path.tests',
-            function ($app) {
-                return new TestsGeneratorCommand();
-            }
-        );
 
         $this->app->singleton(
             'delosfei.scaffold.controller',
@@ -158,12 +143,6 @@ class DelosfeiGeneratorServiceProvider extends ServiceProvider
             }
         );
 
-        $this->app->singleton(
-            'delosfei.publish.user',
-            function ($app) {
-                return new PublishUserCommand();
-            }
-        );
 
         $this->app->singleton(
             'delosfei.service',
@@ -183,15 +162,12 @@ class DelosfeiGeneratorServiceProvider extends ServiceProvider
                 'delosfei.publish.templates',
                 'delosfei.migration',
                 'delosfei.model',
-                'delosfei.repository',
                 'delosfei.generator.path.controller',
                 'delosfei.generator.path.requests',
-                'delosfei.generator.path.tests',
                 'delosfei.scaffold.controller',
                 'delosfei.scaffold.requests',
                 'delosfei.scaffold.views',
                 'delosfei.rollback',
-                'delosfei.publish.user',
                 'delosfei.service',
 
             ]

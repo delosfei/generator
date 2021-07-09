@@ -1,0 +1,31 @@
+{
+  "name": "delosfei/dsvue2-templates",
+  "type": "library",
+  "description": "Delosfei vue2 templates for Delosfei Generator",
+  "keywords": [
+    "templates"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "delosfei",
+      "email": "9739723@qq.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.2.5|^8.0",
+    "illuminate/support": "^6.0|^7.0|^8.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Delosfei\\Dsvue2Templates\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "\\Delosfei\\Dsvue2Templates\\Dsvue2TemplatesServiceProvider"
+      ]
+    }
+  }
+}

@@ -2,11 +2,9 @@
 
 namespace Delosfei\Generator\Generators;
 
+use Delosfei\Generator\Common\CommandData;
 use File;
 use Illuminate\Support\Str;
-use Delosfei\Generator\Common\CommandData;
-use Delosfei\Generator\Utils\FileUtil;
-use SplFileInfo;
 
 class MigrationGenerator extends BaseGenerator
 {
@@ -25,24 +23,21 @@ class MigrationGenerator extends BaseGenerator
     public function generate()
     {
         $templateData = get_template('migration', 'generator');
-
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
-
         $templateData = str_replace('$FIELDS$', $this->generateFields(), $templateData);
 
         $tableName = $this->commandData->dynamicVars['$TABLE_NAME$'];
-
-        $fileName = date('Y_m_d_His').'_'.'create_'.strtolower($tableName).'_table.php';
         $migrate_file = 'create_'.strtolower($tableName).'_table.php';
+        $fileName = date('Y_m_d_His').'_'.$migrate_file;
 
-
-        if ($this->migrate_file_is_exist($this->path, $migrate_file) && !$this->commandData->commandObj->confirmOverwrite($migrate_file)) {
-            return;
+        $file = $this->migrate_file_is_exist($this->path, $migrate_file);
+        if ($file) {
+            if ($this->commandData->commandObj->confirmOverwrite($migrate_file)) {
+                $this->commandData->commandComment($this->createFileAndShowInfo($this->path, $file, $templateData));
+            }
+        } else {
+            $this->commandData->commandComment($this->createFileAndShowInfo($this->path, $fileName, $templateData));
         }
-
-        FileUtil::createFile($this->path, $fileName, $templateData);
-
-        $this->commandData->commandInfo('+ '.$this->path.$fileName);
     }
 
     private function generateFields()
@@ -93,8 +88,8 @@ class MigrationGenerator extends BaseGenerator
         $file = $this->migrate_file_is_exist($this->path, $migrate_file);
         if ($file) {
             if ($this->rollbackFile($this->path, $file)) {
-                $this->commandData->commandInfo('- '.$this->path.$file);
-
+                $this->path = Str::after($this->path, base_path());
+                $this->commandData->commandComment('- '.$this->path.$file);
             }
         }
     }

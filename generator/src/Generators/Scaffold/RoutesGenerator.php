@@ -34,10 +34,10 @@ class RoutesGenerator
 
     public function generate()
     {
-        $this->routeContents .= "\n\n".$this->routesTemplate;
+        $this->routeContents .= infy_nl(1).$this->routesTemplate;
         $existingRouteContents = file_get_contents($this->path);
         if (Str::contains($existingRouteContents, "Route::resource('".$this->commandData->config->mSnakePlural."',")) {
-            $this->commandData->commandObj->info('Route '.$this->commandData->config->mPlural.' is already exists, Skipping Adjustment.');
+            $this->commandData->commandInfo('Route '.$this->commandData->config->mPlural.' is already exists, Skipping Adjustment.');
 
             return;
         }
@@ -49,9 +49,9 @@ class RoutesGenerator
     public function rollback()
     {
         if (Str::contains($this->routeContents, $this->routesTemplate)) {
-            $this->routeContents = str_replace($this->routesTemplate, '', $this->routeContents);
+            $this->routeContents = str_replace($this->routesTemplate, infy_nl(1), $this->routeContents);
             file_put_contents($this->path, $this->routeContents);
-            $this->commandData->commandComment('scaffold routes deleted');
+            $this->commandData->commandInfo('scaffold routes deleted');
         }
     }
 }

@@ -77,7 +77,7 @@ class ControllerGenerator extends BaseGenerator
 
         FileUtil::createFile($this->path, $this->fileName, $templateData);
 
-        $this->commandData->commandInfo('+ '.$this->path.$this->fileName);
+        $this->commandData->commandComment('+ '.$this->path.$this->fileName);
     }
 
     private function generateDataTable()
@@ -104,10 +104,7 @@ class ControllerGenerator extends BaseGenerator
         if (file_exists($this->path.$this->fileName) && !$this->commandData->commandObj->confirmOverwrite($this->fileName)) {
             return;
         }
-
-        FileUtil::createFile($path, $fileName, $templateData);
-
-        $this->commandData->commandInfo('+ '.$this->path.$this->fileName);
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->path, $this->fileName, $templateData));
     }
 
     private function generateDataTableColumns()
@@ -151,16 +148,14 @@ class ControllerGenerator extends BaseGenerator
 
     public function rollback()
     {
-        if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandInfo('- '.$this->path.$this->fileName);
-        }
+        ($del_path = $this->rollbackFile($this->path, $this->fileName)) ? $this->commandData->commandComment($del_path) : false;
 
         if ($this->commandData->getAddOn('datatables')) {
             if ($this->rollbackFile(
                 $this->commandData->config->pathDataTables,
                 $this->commandData->modelName.'DataTable.php'
             )) {
-                $this->commandData->commandInfo('- '.$this->path.$this->fileName);
+                $this->commandData->commandComment('- '.$this->path.$this->fileName);
             }
         }
     }

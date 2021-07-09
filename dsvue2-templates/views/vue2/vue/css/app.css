@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.admin {
+    background-image: url("/images/admin.jpeg");
+    min-height: 100vh;
+    background-size: cover;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.el-loading-spinner {
+    left: 50% !important;
+}

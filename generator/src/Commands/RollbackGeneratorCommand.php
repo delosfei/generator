@@ -2,24 +2,20 @@
 
 namespace Delosfei\Generator\Commands;
 
-use Delosfei\Generator\Generators\API\APIResourceGenerator;
-use Delosfei\Generator\Generators\SeederGenerator;
-use Illuminate\Console\Command;
 use Delosfei\Generator\Common\CommandData;
 use Delosfei\Generator\Generators\API\APIControllerGenerator;
 use Delosfei\Generator\Generators\API\APIRequestGenerator;
+use Delosfei\Generator\Generators\API\APIResourceGenerator;
 use Delosfei\Generator\Generators\API\APIRoutesGenerator;
-use Delosfei\Generator\Generators\API\APITestGenerator;
 use Delosfei\Generator\Generators\FactoryGenerator;
 use Delosfei\Generator\Generators\MigrationGenerator;
 use Delosfei\Generator\Generators\ModelGenerator;
-use Delosfei\Generator\Generators\RepositoryGenerator;
-use Delosfei\Generator\Generators\RepositoryTestGenerator;
 use Delosfei\Generator\Generators\Scaffold\ControllerGenerator;
-use Delosfei\Generator\Generators\Scaffold\MenuGenerator;
 use Delosfei\Generator\Generators\Scaffold\RequestGenerator;
 use Delosfei\Generator\Generators\Scaffold\RoutesGenerator;
 use Delosfei\Generator\Generators\Scaffold\ViewGenerator;
+use Delosfei\Generator\Generators\SeederGenerator;
+use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -78,7 +74,7 @@ class RollbackGeneratorCommand extends Command
         }
 
         $this->commandData = new CommandData($this, $this->argument('type'));
-        $this->commandData->config->mName = $this->commandData->modelName = $this->argument('model');
+        $this->commandData->config->mName = $this->commandData->modelName = ucfirst($this->argument('model'));
 
         $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural', 'views']);
 
@@ -88,7 +84,7 @@ class RollbackGeneratorCommand extends Command
             $viewGenerator = new ViewGenerator($this->commandData);
             $viewGenerator->rollback($views);
 
-            $this->info('Generating autoload files');
+            $this->commandData->commandInfo('Generating autoload files');
             $this->composer->dumpOptimized();
 
             return;
@@ -99,9 +95,6 @@ class RollbackGeneratorCommand extends Command
 
         $modelGenerator = new ModelGenerator($this->commandData);
         $modelGenerator->rollback();
-
-        $repositoryGenerator = new RepositoryGenerator($this->commandData);
-        $repositoryGenerator->rollback();
 
         $requestGenerator = new APIRequestGenerator($this->commandData);
         $requestGenerator->rollback();
@@ -118,19 +111,8 @@ class RollbackGeneratorCommand extends Command
         $controllerGenerator = new ControllerGenerator($this->commandData);
         $controllerGenerator->rollback();
 
-        $viewGenerator = new ViewGenerator($this->commandData);
-        $viewGenerator->rollback();
-
         $routeGenerator = new RoutesGenerator($this->commandData);
         $routeGenerator->rollback();
-
-        if ($this->commandData->getAddOn('tests')) {
-            $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
-            $repositoryTestGenerator->rollback();
-
-            $apiTestGenerator = new APITestGenerator($this->commandData);
-            $apiTestGenerator->rollback();
-        }
 
         $resourceGenerator = new APIResourceGenerator($this->commandData);
         $resourceGenerator->rollback();
@@ -141,12 +123,10 @@ class RollbackGeneratorCommand extends Command
         $seederGenerator = new SeederGenerator($this->commandData);
         $seederGenerator->rollback();
 
-        if ($this->commandData->config->getAddOn('menu.enabled')) {
-            $menuGenerator = new MenuGenerator($this->commandData);
-            $menuGenerator->rollback();
-        }
+        $viewGenerator = new ViewGenerator($this->commandData);
+        $viewGenerator->rollback();
 
-        $this->info('Generating autoload files');
+        $this->commandData->commandInfo('Generating autoload files');
         $this->composer->dumpOptimized();
     }
 

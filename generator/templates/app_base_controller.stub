@@ -2,37 +2,37 @@
 
 namespace $NAMESPACE_APP$\Http\Controllers;
 
-use Delosfei\Generator\Utils\ResponseUtil;
-use Response;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Routing\Controller as BaseController;
 
-/**
- * @SWG\Swagger(
- *   basePath="/$API_PREFIX$/$API_VERSION$",
- *   @SWG\Info(
- *     title="Laravel Generator APIs",
- *     version="1.0.0",
- *   )
- * )
- * This class should be parent class for other API controllers
- * Class AppBaseController
- */
-class AppBaseController extends Controller
+class Controller extends BaseController
 {
-    public function sendResponse($result, $message)
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    /**
+     * 成功响应
+     *
+     * @param string $message
+     * @param [type] $data
+     * @return void
+     */
+    public function message(string $message,  $data = [], $code = 0)
     {
-        return Response::json(ResponseUtil::makeResponse($message, $result));
+        return response(['message' => $message, 'code' => $code, 'data' => $data]);
     }
 
-    public function sendError($error, $code = 404)
+    /**
+     * 失败响应
+     *
+     * @param string $message
+     * @param integer $httpCode
+     * @return void
+     */
+    public function error(string $message, int $httpCode)
     {
-        return Response::json(ResponseUtil::makeError($error), $code);
-    }
-
-    public function sendSuccess($message)
-    {
-        return Response::json([
-            'success' => true,
-            'message' => $message
-        ], 200);
+        return response(['message' => $message], $httpCode);
     }
 }
+

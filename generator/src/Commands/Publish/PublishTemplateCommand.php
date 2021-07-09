@@ -34,7 +34,6 @@ class PublishTemplateCommand extends PublishBaseCommand
 
         if ($this->publishGeneratorTemplates()) {
             $this->publishScaffoldTemplates();
-            $this->publishSwaggerTemplates();
         }
     }
 
@@ -60,15 +59,6 @@ class PublishTemplateCommand extends PublishBaseCommand
         return $this->publishDirectory($templatesPath, $this->templatesDir.'scaffold', 'delosfei-generator-templates/scaffold', true);
     }
 
-    /**
-     * Publishes swagger stemplates.
-     */
-    public function publishSwaggerTemplates()
-    {
-        $templatesPath = base_path('vendor/delosfei/swagger-generator/templates');
-
-        return $this->publishDirectory($templatesPath, $this->templatesDir, 'swagger-generator', true);
-    }
 
     /**
      * Get the console command options.

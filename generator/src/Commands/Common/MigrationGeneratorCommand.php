@@ -42,7 +42,7 @@ class MigrationGeneratorCommand extends BaseCommand
         parent::handle();
 
         if ($this->commandData->getOption('fromTable')) {
-            $this->error('fromTable option is not allowed to use with migration generator');
+            $this->commandData->commandError('fromTable option is not allowed to use with migration generator');
 
             return;
         }
@@ -58,7 +58,7 @@ class MigrationGeneratorCommand extends BaseCommand
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return array_merge(parent::getOptions(), []);
     }
@@ -68,7 +68,7 @@ class MigrationGeneratorCommand extends BaseCommand
      *
      * @return array
      */
-    protected function getArguments()
+    protected function getArguments(): array
     {
         return array_merge(parent::getArguments(), []);
     }

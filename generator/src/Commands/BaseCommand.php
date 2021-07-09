@@ -2,27 +2,23 @@
 
 namespace Delosfei\Generator\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use Delosfei\Generator\Common\CommandData;
 use Delosfei\Generator\Generators\API\APIControllerGenerator;
+use Delosfei\Generator\Generators\API\APIPolicyGenerator;
 use Delosfei\Generator\Generators\API\APIRequestGenerator;
 use Delosfei\Generator\Generators\API\APIResourceGenerator;
 use Delosfei\Generator\Generators\API\APIRoutesGenerator;
-use Delosfei\Generator\Generators\API\APITestGenerator;
 use Delosfei\Generator\Generators\FactoryGenerator;
 use Delosfei\Generator\Generators\MigrationGenerator;
 use Delosfei\Generator\Generators\ModelGenerator;
-use Delosfei\Generator\Generators\RepositoryGenerator;
-use Delosfei\Generator\Generators\RepositoryTestGenerator;
 use Delosfei\Generator\Generators\Scaffold\ControllerGenerator;
-use Delosfei\Generator\Generators\Scaffold\JQueryDatatableAssetsGenerator;
-use Delosfei\Generator\Generators\Scaffold\MenuGenerator;
 use Delosfei\Generator\Generators\Scaffold\RequestGenerator;
 use Delosfei\Generator\Generators\Scaffold\RoutesGenerator;
 use Delosfei\Generator\Generators\Scaffold\ViewGenerator;
 use Delosfei\Generator\Generators\SeederGenerator;
 use Delosfei\Generator\Utils\FileUtil;
+use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -53,11 +49,8 @@ class BaseCommand extends Command
     public function handle()
     {
         $this->commandData->modelName = ucfirst($this->argument('model'));
-
         $this->commandData->initCommandData();
         $this->commandData->getFields();
-
-
     }
 
     public function generateCommonItems()
@@ -72,14 +65,7 @@ class BaseCommand extends Command
             $modelGenerator->generate();
         }
 
-        if (!$this->isSkip('repository') && $this->commandData->getOption('repositoryPattern')) {
-            $repositoryGenerator = new RepositoryGenerator($this->commandData);
-            $repositoryGenerator->generate();
-        }
-
-        if ($this->commandData->getOption('factory') || (
-                !$this->isSkip('tests') and $this->commandData->getAddOn('tests')
-            )) {
+        if ($this->commandData->getOption('factory')) {
             $factoryGenerator = new FactoryGenerator($this->commandData);
             $factoryGenerator->generate();
         }
@@ -88,6 +74,13 @@ class BaseCommand extends Command
             $seederGenerator = new SeederGenerator($this->commandData);
             $seederGenerator->generate();
         }
+
+//        if ($this->commandData->getOption('observer')) {
+//            $observerGenerator = new ObserverGenerator($this->commandData);
+//            $observerGenerator->generate();
+//        }
+
+
     }
 
     public function generateAPIItems()
@@ -107,19 +100,17 @@ class BaseCommand extends Command
             $routesGenerator->generate();
         }
 
-        if (!$this->isSkip('tests') and $this->commandData->getAddOn('tests')) {
-            if ($this->commandData->getOption('repositoryPattern')) {
-                $repositoryTestGenerator = new RepositoryTestGenerator($this->commandData);
-                $repositoryTestGenerator->generate();
-            }
-
-            $apiTestGenerator = new APITestGenerator($this->commandData);
-            $apiTestGenerator->generate();
-        }
-        if ($this->commandData->getOption('resources')) {
+        if (!$this->isSkip('resources') and !$this->isSkip('api_resources')) {
             $apiResourceGenerator = new APIResourceGenerator($this->commandData);
             $apiResourceGenerator->generate();
         }
+
+        if (!$this->isSkip('policies') and !$this->isSkip('api_policies')) {
+            $apiPolicyGenerator = new APIPolicyGenerator($this->commandData);
+            $apiPolicyGenerator->generate();
+        }
+
+
     }
 
     public function generateScaffoldItems()
@@ -144,15 +135,6 @@ class BaseCommand extends Command
             $routeGenerator->generate();
         }
 
-        if (!$this->isSkip('menu') and $this->commandData->config->getAddOn('menu.enabled')) {
-            $menuGenerator = new MenuGenerator($this->commandData);
-            $menuGenerator->generate();
-        }
-
-        if ($this->commandData->jqueryDT()) {
-            $assetsGenerator = new JQueryDatatableAssetsGenerator($this->commandData);
-            $assetsGenerator->generate();
-        }
     }
 
     public function performPostActions($runMigration = false)
@@ -165,17 +147,13 @@ class BaseCommand extends Command
             if ($this->commandData->getOption('forceMigrate')) {
                 $this->runMigration();
             } elseif (!$this->commandData->getOption('fromTable') and !$this->isSkip('migration')) {
-                $requestFromConsole = (php_sapi_name() == 'cli') ? true : false;
+                $requestFromConsole = php_sapi_name() == 'cli';
                 if ($this->commandData->getOption('jsonFromGUI') && $requestFromConsole) {
                     $this->runMigration();
                 } elseif ($requestFromConsole && $this->confirm("\nDo you want to migrate database? [y|N]", false)) {
                     $this->runMigration();
                 }
             }
-        }
-
-        if ($this->commandData->getOption('localized')) {
-            $this->saveLocaleFile();
         }
 
         if (!$this->isSkip('dump-autoload')) {
@@ -245,32 +223,9 @@ class BaseCommand extends Command
             return;
         }
         FileUtil::createFile($path, $fileName, json_encode($fileFields, JSON_UNESCAPED_UNICODE));
-        $this->commandData->commandInfo('+ '.$path.$fileName);
+        $this->commandData->commandComment('+ '.$path.$fileName);
     }
 
-    private function saveLocaleFile()
-    {
-        $locales = [
-            'singular' => $this->commandData->modelName,
-            'plural' => $this->commandData->config->mPlural,
-            'fields' => [],
-        ];
-
-        foreach ($this->commandData->fields as $field) {
-            $locales['fields'][$field->name] = Str::title(str_replace('_', ' ', $field->name));
-        }
-
-        $path = config('delosfei.generator.path.models_locale_files', base_path('resources/lang/en/models/'));
-
-        $fileName = $this->commandData->config->mCamelPlural.'.php';
-
-        if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
-            return;
-        }
-        $content = "<?php\n\nreturn ".var_export($locales, true).';'.\PHP_EOL;
-        FileUtil::createFile($path, $fileName, $content);
-        $this->commandData->commandInfo('+ '.$path.$fileName);
-    }
 
     /**
      * @param $fileName
@@ -286,6 +241,31 @@ class BaseCommand extends Command
 
         return $this->confirm($prompt, false);
     }
+
+
+    public function createFileAndShowInfo($path, $fileName, $templateData, $info = null)
+    {
+        if (file_exists($path.$fileName) && !$this->confirmOverwrite($fileName)) {
+            return false;
+        }
+        FileUtil::createFile($path, $fileName, $templateData);
+        $path = Str::after($path, base_path());
+
+        return $this->comment('+ '.$path.$fileName.$info);
+    }
+
+    public function deleteFileAndShowInfoIfExists($path, $fileName)
+    {
+        if (file_exists($path.$fileName)) {
+            FileUtil::deleteFile($path, $fileName);
+            $path = Str::after($path, base_path());
+
+            return $this->comment('- '.$path.$fileName);
+        }
+
+        return false;
+    }
+
 
     /**
      * Get the console command options.
@@ -309,7 +289,7 @@ class BaseCommand extends Command
                 'skip',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Skip Specific Items to Generate (migration,model,controllers,api_controller,scaffold_controller,repository,requests,api_requests,scaffold_requests,routes,api_routes,scaffold_routes,views,tests,menu,dump-autoload)',
+                'Skip Specific Items to Generate (migration,model,controllers,api_controller,scaffold_controller,policy,requests,api_requests,scaffold_requests,routes,api_routes,scaffold_routes,views,dump-autoload)',
             ],
             ['datatables', null, InputOption::VALUE_REQUIRED, 'Override datatables settings'],
             ['views', null, InputOption::VALUE_REQUIRED, 'Specify only the views you want generated: index,create,edit,show'],
@@ -318,11 +298,8 @@ class BaseCommand extends Command
             ['forceMigrate', null, InputOption::VALUE_NONE, 'Specify if you want to run migration or not'],
             ['factory', null, InputOption::VALUE_NONE, 'To generate factory'],
             ['seeder', null, InputOption::VALUE_NONE, 'To generate seeder'],
-            ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
-            ['repositoryPattern', null, InputOption::VALUE_REQUIRED, 'Repository Pattern'],
-            ['resources', null, InputOption::VALUE_REQUIRED, 'Resources'],
+            ['observer', null, InputOption::VALUE_REQUIRED, 'To generate observer'],
             ['connection', null, InputOption::VALUE_REQUIRED, 'Specify connection name'],
-            ['jqueryDT', null, InputOption::VALUE_NONE, 'Generate listing screen into JQuery Datatables'],
         ];
     }
 

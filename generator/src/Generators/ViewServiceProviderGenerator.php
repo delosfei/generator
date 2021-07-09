@@ -39,7 +39,7 @@ class ViewServiceProviderGenerator extends BaseGenerator
         File::copy($templateData, $destination);
 
         $this->commandData->commandComment($fileName.' published');
-        $this->commandData->commandInfo($fileName);
+        $this->commandData->commandComment($fileName);
     }
 
     /**

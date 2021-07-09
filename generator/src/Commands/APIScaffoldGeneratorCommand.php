@@ -53,7 +53,7 @@ class APIScaffoldGeneratorCommand extends BaseCommand
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return array_merge(parent::getOptions(), []);
     }
@@ -63,7 +63,7 @@ class APIScaffoldGeneratorCommand extends BaseCommand
      *
      * @return array
      */
-    protected function getArguments()
+    protected function getArguments(): array
     {
         return array_merge(parent::getArguments(), []);
     }

@@ -2,7 +2,6 @@
 
 namespace Delosfei\Generator\Commands\Publish;
 
-use Illuminate\Support\Str;
 use Delosfei\Generator\Utils\FileUtil;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -40,11 +39,7 @@ class PublishLayoutCommand extends PublishBaseCommand
 
         $this->createDirectories($viewsPath);
 
-        if ($this->option('localized')) {
-            $files = $this->getLocaleViews();
-        } else {
-            $files = $this->getViews();
-        }
+        $files = $this->getViews();
 
         foreach ($files as $stub => $blade) {
             $sourceFile = get_template_file_path('scaffold/'.$stub, $templateType);
@@ -56,10 +51,7 @@ class PublishLayoutCommand extends PublishBaseCommand
     private function createDirectories($viewsPath)
     {
         FileUtil::createDirectoryIfNotExist($viewsPath.'layouts');
-        FileUtil::createDirectoryIfNotExist($viewsPath.'auth');
 
-        FileUtil::createDirectoryIfNotExist($viewsPath.'auth/passwords');
-        FileUtil::createDirectoryIfNotExist($viewsPath.'auth/emails');
     }
 
     private function getViews()
@@ -67,49 +59,11 @@ class PublishLayoutCommand extends PublishBaseCommand
         $views = [
             'layouts/app' => 'layouts/app.blade.php',
             'layouts/sidebar' => 'layouts/sidebar.blade.php',
-            'layouts/datatables_css' => 'layouts/datatables_css.blade.php',
-            'layouts/datatables_js' => 'layouts/datatables_js.blade.php',
-            'layouts/menu' => 'layouts/menu.blade.php',
-            'layouts/home' => 'home.blade.php',
-            'auth/login' => 'auth/login.blade.php',
-            'auth/register' => 'auth/register.blade.php',
-            'auth/passwords/confirm' => 'auth/passwords/confirm.blade.php',
-            'auth/passwords/email' => 'auth/passwords/email.blade.php',
-            'auth/passwords/reset' => 'auth/passwords/reset.blade.php',
-            'auth/emails/password' => 'auth/emails/password.blade.php',
+
         ];
 
-        $version = $this->getApplication()->getVersion();
-        if (Str::contains($version, '6.')) {
-            $verifyView = [
-                'auth/verify_6' => 'auth/verify.blade.php',
-            ];
-        } else {
-            $verifyView = [
-                'auth/verify' => 'auth/verify.blade.php',
-            ];
-        }
-
-        $views = array_merge($views, $verifyView);
 
         return $views;
-    }
-
-    private function getLocaleViews()
-    {
-        return [
-            'layouts/app_locale' => 'layouts/app.blade.php',
-            'layouts/sidebar_locale' => 'layouts/sidebar.blade.php',
-            'layouts/datatables_css' => 'layouts/datatables_css.blade.php',
-            'layouts/datatables_js' => 'layouts/datatables_js.blade.php',
-            'layouts/menu' => 'layouts/menu.blade.php',
-            'layouts/home' => 'home.blade.php',
-            'auth/login_locale' => 'auth/login.blade.php',
-            'auth/register_locale' => 'auth/register.blade.php',
-            'auth/passwords/email_locale' => 'auth/passwords/email.blade.php',
-            'auth/passwords/reset_locale' => 'auth/passwords/reset.blade.php',
-            'auth/emails/password_locale' => 'auth/emails/password.blade.php',
-        ];
     }
 
     private function publishHomeController()
@@ -162,9 +116,7 @@ class PublishLayoutCommand extends PublishBaseCommand
      */
     public function getOptions()
     {
-        return [
-            ['localized', null, InputOption::VALUE_NONE, 'Localize files.'],
-        ];
+        return [];
     }
 
     /**

@@ -38,11 +38,8 @@ class FactoryGenerator extends BaseGenerator
         if (file_exists($this->path.$this->fileName) && !$this->commandData->commandObj->confirmOverwrite($this->fileName)) {
             return;
         }
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->path, $this->fileName, $templateData));
 
-
-        FileUtil::createFile($this->path, $this->fileName, $templateData);
-
-        $this->commandData->commandInfo('+ '.$this->path.$this->fileName);
     }
 
     /**
@@ -116,8 +113,6 @@ class FactoryGenerator extends BaseGenerator
 
     public function rollback()
     {
-        if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->commandData->commandInfo('- '.$this->path.$this->fileName);
-        }
+        ($del_path = $this->rollbackFile($this->path, $this->fileName)) ? $this->commandData->commandComment($del_path) : false;
     }
 }

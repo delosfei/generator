@@ -5,8 +5,8 @@ namespace Delosfei\Generator\Commands\Service;
 use Delosfei\Generator\Commands\Publish\PublishBaseCommand;
 use Delosfei\Generator\Utils\FileUtil;
 use Illuminate\Support\Str;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 
 class ServiceGeneratorCommand extends PublishBaseCommand
@@ -66,7 +66,7 @@ class ServiceGeneratorCommand extends PublishBaseCommand
             }
             FileUtil::createFile($this->servicesPath, $blade, $templateData);
 
-            $this->info('+ '.$this->servicesPath.$blade);
+            $this->comment('+ '.$this->servicesPath.$blade);
         }
     }
 
@@ -76,7 +76,7 @@ class ServiceGeneratorCommand extends PublishBaseCommand
         if (file_exists($this->servicesPath)) {
             foreach ($files as $blade) {
                 FileUtil::deleteFile($this->servicesPath, $blade);
-                $this->info('- '.$this->servicesPath.$blade);
+                $this->comment('- '.$this->servicesPath.$blade);
             }
         }
     }

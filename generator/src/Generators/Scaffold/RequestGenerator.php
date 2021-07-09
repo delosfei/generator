@@ -43,10 +43,7 @@ class RequestGenerator extends BaseGenerator
         if (file_exists($this->path.$this->createFileName) && !$this->commandData->commandObj->confirmOverwrite($this->createFileName)) {
             return;
         }
-
-        FileUtil::createFile($this->path, $this->createFileName, $templateData);
-
-        $this->commandData->commandInfo('+ '.$this->path.$this->createFileName);
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->path, $this->createFileName, $templateData));
     }
 
     private function generateUpdateRequest()
@@ -62,20 +59,15 @@ class RequestGenerator extends BaseGenerator
         if (file_exists($this->path.$this->updateFileName) && !$this->commandData->commandObj->confirmOverwrite($this->updateFileName)) {
             return;
         }
-        FileUtil::createFile($this->path, $this->updateFileName, $templateData);
-
-        $this->commandData->commandInfo('+ '.$this->path.$this->updateFileName);
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->path, $this->updateFileName, $templateData));
 
     }
 
     public function rollback()
     {
-        if ($this->rollbackFile($this->path, $this->createFileName)) {
-            $this->commandData->commandInfo('- '.$this->path.$this->createFileName);
-        }
+        ($del_path = $this->rollbackFile($this->path, $this->createFileName)) ? $this->commandData->commandComment($del_path) : false;
+        ($del_path = $this->rollbackFile($this->path, $this->updateFileName)) ? $this->commandData->commandComment($del_path) : false;
 
-        if ($this->rollbackFile($this->path, $this->updateFileName)) {
-            $this->commandData->commandInfo('- '.$this->path.$this->updateFileName);
-        }
+
     }
 }

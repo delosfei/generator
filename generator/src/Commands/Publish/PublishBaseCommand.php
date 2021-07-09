@@ -2,13 +2,16 @@
 
 namespace Delosfei\Generator\Commands\Publish;
 
+use Delosfei\Generator\Utils\FileUtil;
 use File;
 use Delosfei\Generator\Commands\BaseCommand;
+use Illuminate\Support\Str;
 
 class PublishBaseCommand extends BaseCommand
 {
     public function handle()
     {
+
     }
 
     public function publishFile($sourceFile, $destinationFile, $fileName)
@@ -45,6 +48,11 @@ class PublishBaseCommand extends BaseCommand
 
         return true;
     }
+
+
+
+
+
 
     /**
      * Get the console command options.

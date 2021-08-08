@@ -1,0 +1,6 @@
+<el-form-item label="用户必须绑定">
+                <el-checkbox-group v-model="form.user.bind">
+                    <el-checkbox label="email">邮箱</el-checkbox>
+                    <el-checkbox label="mobile">手机号</el-checkbox>
+                </el-checkbox-group>
+            </el-form-item>

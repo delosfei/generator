@@ -1,69 +1,32 @@
 <?php
 
-use App\Models\Module;
-use App\Models\Site;
-use Facades\App\Services\Module\ModuleService;
-use Facades\App\Services\Site\SiteService;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
-if (!function_exists('site')) {
+if (!function_exists('image_random')) {
     /**
-     * 当前站点数据9999
-     *
-     * @param Site|null $site
-     * @return Site|null
+     * 生成随机图片
+     * @return string
      */
-    function site(?Site $site = null): ?Site
+    function image_random()
     {
-        return SiteService::cache($site);
+        return "https://hdcms-dev.oss-cn-hangzhou.aliyuncs.com/images/b" . mt_rand(1, 110) . ".jpg";
     }
 }
 
-if (!function_exists('module')) {
-    /**
-     * 当前模块数据
-     *
-     * @param string $name
-     * @return array|null
-     */
-    function module(string $name = null): ?Module
-    {
-        return ModuleService::cache($name);
-    }
-}
 
 if (!function_exists('access')) {
-    /**
-     * 权限验证
-     *
-     * @param string $name
-     * @return boolean
-     */
-    function access(string $name = null): bool
-    {
-        //超级管理员与站长检测
-        if (UserService::isMaster(site(), Auth::user())) {
-            return true;
-        }
-        //管理员检测
-        if ($name) {
-            return \PermissionService::access($name, Auth::user(), site(), module());
-        }
 
+    /**
+     * 权限判断
+     * @param mixed $permission
+     * @return bool
+     * @throws BindingResolutionException
+     */
+    function access($permission)
+    {
+        if (\Auth::check()) {
+            return  \Auth::user()->can($permission);
+        }
         return false;
-    }
-}
-
-
-if (!function_exists('markdown')) {
-    /**
-     * 转换markdown
-     * @param string $content
-     * @return mixed
-     */
-    function markdown(string $content)
-    {
-        $Parsedown = new \Parsedown();
-
-        return $Parsedown->text($content);
     }
 }

@@ -28,11 +28,6 @@ class APIPolicyGenerator extends BaseGenerator
 
     public function generate()
     {
-        $this->generatePolicy();
-    }
-
-    private function generatePolicy()
-    {
         $templateData = get_template('policy.policy', 'generator');
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);

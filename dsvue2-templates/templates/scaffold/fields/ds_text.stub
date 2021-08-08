@@ -1,0 +1,4 @@
+<el-form-item label="$FIELD_LAB$">
+                    <el-input v-model="form.$FIELD_ID$"></el-input>
+                    <hd-form-error name="$FIELD_ID$" />
+                </el-form-item>

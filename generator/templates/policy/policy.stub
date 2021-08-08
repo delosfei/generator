@@ -1,29 +1,81 @@
 <?php
 
-namespace $NAMESPACE_API_REQUEST$;
+namespace $NAMESPACE_POLICY$;
 
 use $NAMESPACE_MODEL$\$MODEL_NAME$;
-use Delosfei\Generator\Request\APIRequest;
+use $NAMESPACE_MODEL$\User;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
-class Create$MODEL_NAME$APIRequest extends APIRequest
+class $MODEL_NAME$Policy
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    use HandlesAuthorization;
+
+    public function viewAny(User $user)
     {
-        return true;
+        //
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Determine whether the user can view the model.
      *
-     * @return array
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\$MODEL_NAME$  $$MODEL_NAME_CAMEL$
+     * @return mixed
      */
-    public function rules()
+    public function view(User $user, $MODEL_NAME$ $$MODEL_NAME_CAMEL$)
     {
-        return $MODEL_NAME$::$rules;
+        //
+    }
+
+    /**
+     * Determine whether the user can create models.
+     *
+     * @param  \App\Models\User  $user
+     * @return mixed
+     */
+    public function create(User $user)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\$MODEL_NAME$ $$MODEL_NAME_CAMEL$
+     * @return mixed
+     */
+    public function update(User $user, $MODEL_NAME$ $$MODEL_NAME_CAMEL$)
+    {
+       return access('$MODEL_NAME_CAMEL$-manage') || $user->id == $$MODEL_NAME_CAMEL$->user_id;
+    }
+
+    public function delete(User $user, $MODEL_NAME$ $$MODEL_NAME_CAMEL$)
+    {
+        return access('$MODEL_NAME_CAMEL$-manage') || $user->id == $$MODEL_NAME_CAMEL$->user_id;
+    }
+
+    /**
+     * Determine whether the user can restore the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\$MODEL_NAME$ $$MODEL_NAME_CAMEL$
+     * @return mixed
+     */
+    public function restore(User $user, $MODEL_NAME$ $$MODEL_NAME_CAMEL$)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\$MODEL_NAME$ $$MODEL_NAME_CAMEL$
+     * @return mixed
+     */
+    public function forceDelete(User $user, $MODEL_NAME$ $$MODEL_NAME_CAMEL$)
+    {
+        //
     }
 }

@@ -4,6 +4,7 @@ namespace Delosfei\Generator\Commands;
 
 use Delosfei\Generator\Common\CommandData;
 use Delosfei\Generator\Generators\API\APIControllerGenerator;
+use Delosfei\Generator\Generators\API\APIPolicyGenerator;
 use Delosfei\Generator\Generators\API\APIRequestGenerator;
 use Delosfei\Generator\Generators\API\APIResourceGenerator;
 use Delosfei\Generator\Generators\API\APIRoutesGenerator;
@@ -76,9 +77,12 @@ class RollbackGeneratorCommand extends Command
         $this->commandData = new CommandData($this, $this->argument('type'));
         $this->commandData->config->mName = $this->commandData->modelName = ucfirst($this->argument('model'));
 
-        $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural', 'views']);
+        $this->commandData->config->init($this->commandData, ['tableName', 'prefix', 'plural', 'views', 'vuePrefix']);
+
+
 
         $views = $this->commandData->getOption('views');
+
         if (!empty($views)) {
             $views = explode(',', $views);
             $viewGenerator = new ViewGenerator($this->commandData);
@@ -108,9 +112,6 @@ class RollbackGeneratorCommand extends Command
         $requestGenerator = new RequestGenerator($this->commandData);
         $requestGenerator->rollback();
 
-        $controllerGenerator = new ControllerGenerator($this->commandData);
-        $controllerGenerator->rollback();
-
         $routeGenerator = new RoutesGenerator($this->commandData);
         $routeGenerator->rollback();
 
@@ -122,6 +123,9 @@ class RollbackGeneratorCommand extends Command
 
         $seederGenerator = new SeederGenerator($this->commandData);
         $seederGenerator->rollback();
+
+        $policyGenerator = new APIPolicyGenerator($this->commandData);
+        $policyGenerator->rollback();
 
         $viewGenerator = new ViewGenerator($this->commandData);
         $viewGenerator->rollback();
@@ -142,6 +146,7 @@ class RollbackGeneratorCommand extends Command
             ['prefix', null, InputOption::VALUE_REQUIRED, 'Prefix for all files'],
             ['plural', null, InputOption::VALUE_REQUIRED, 'Plural Model name'],
             ['views', null, InputOption::VALUE_REQUIRED, 'Views to rollback'],
+            ['vuePrefix', null, InputOption::VALUE_REQUIRED, 'Views layout path'],
         ];
     }
 

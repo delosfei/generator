@@ -2,11 +2,10 @@
 
 namespace Delosfei\Generator\Generators;
 
-use Illuminate\Support\Str;
 use Delosfei\Generator\Common\CommandData;
 use Delosfei\Generator\Common\GeneratorFieldRelation;
-use Delosfei\Generator\Utils\FileUtil;
 use Delosfei\Generator\Utils\TableFieldsGenerator;
+use Illuminate\Support\Str;
 
 class ModelGenerator extends BaseGenerator
 {
@@ -212,7 +211,6 @@ class ModelGenerator extends BaseGenerator
             case 'hmt':
                 return '\Illuminate\Database\Eloquent\Collection $'.Str::camel(Str::plural($relationText));
             default:
-                $fieldData = SwaggerGenerator::getFieldType($db_type);
                 if (!empty($fieldData['fieldType'])) {
                     return $fieldData['fieldType'];
                 }

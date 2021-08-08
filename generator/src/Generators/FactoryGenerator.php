@@ -3,7 +3,6 @@
 namespace Delosfei\Generator\Generators;
 
 use Delosfei\Generator\Common\CommandData;
-use Delosfei\Generator\Utils\FileUtil;
 use Delosfei\Generator\Utils\GeneratorFieldsInputUtil;
 
 /**
@@ -53,7 +52,7 @@ class FactoryGenerator extends BaseGenerator
 
         $templateData = str_replace(
             '$FIELDS$',
-            implode(','.infy_nl_tab(1, 2), $this->generateFields()),
+            implode(','.infy_nl_tab(1, 3), $this->generateFields()),
             $templateData
         );
 

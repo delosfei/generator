@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'version' => '8.1.6',
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'houdunren.com'),
+    'name' => env('APP_NAME', 'Laravel'),
 
     /*
     |--------------------------------------------------------------------------
@@ -106,7 +106,7 @@ return [
     |
     */
 
-    'faker_locale' => 'zh_CN',
+    'faker_locale' => 'en_US',
 
     /*
     |--------------------------------------------------------------------------
@@ -135,7 +135,7 @@ return [
     */
 
     'providers' => [
-        \SocialiteProviders\Manager\ServiceProvider::class,
+
         /*
          * Laravel Framework Service Providers...
          */
@@ -174,22 +174,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        // App\Providers\TelescopeServiceProvider::class,
-        // 项目自定义
-        App\Services\Code\CodeServiceProvider::class,
-        App\Services\Menu\MenuServiceProvider::class,
-        App\Services\Module\ModuleServiceProvider::class,
-        App\Services\Pay\PayServiceProvider::class,
-        App\Services\Permission\PermissionServiceProvider::class,
-        App\Services\Site\SiteServiceProvider::class,
-        App\Services\Sms\SmsServiceProvider::class,
-        App\Services\Template\TemplateServiceProvider::class,
-        App\Services\Upload\UploadServiceProvider::class,
-        App\Services\User\UserServiceProvider::class,
-        App\Services\WeChat\WeChatServiceProvider::class,
-        App\Services\Activity\ActivityServiceProvider::class,
-        //图片处理
-        Intervention\Image\ImageServiceProvider::class
+        //验证码
+//        'Mews\Captcha\CaptchaServiceProvider',
 
     ],
 
@@ -217,6 +203,7 @@ return [
         'Config' => Illuminate\Support\Facades\Config::class,
         'Cookie' => Illuminate\Support\Facades\Cookie::class,
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
+        'Date' => Illuminate\Support\Facades\Date::class,
         'DB' => Illuminate\Support\Facades\DB::class,
         'Eloquent' => Illuminate\Database\Eloquent\Model::class,
         'Event' => Illuminate\Support\Facades\Event::class,
@@ -242,21 +229,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        // 项目自定义
-        'CodeService' => App\Services\Code\CodeFacade::class,
-        'MenuService' => App\Services\Menu\MenuFacade::class,
-        'ModuleService' => App\Services\Module\ModuleFacade::class,
-        'PayService' => App\Services\Pay\PayFacade::class,
-        'PermissionService' => App\Services\Permission\PermissionFacade::class,
-        'SiteService' => App\Services\Site\SiteFacade::class,
-        'SmsService' => App\Services\Sms\SmsFacade::class,
-        'TempalteService' => App\Services\Template\TemplateFacade::class,
-        'UploadService' => App\Services\Upload\UploadFacade::class,
-        'UserService' => App\Services\User\UserFacade::class,
-        'WeChatService' => App\Services\WeChat\WeChatFacade::class,
-        'ActivityService' => App\Services\Activity\ActivityFacade::class,
-        //图片处理
-        'Image' => Intervention\Image\Facades\Image::class
+//        'Captcha' => 'Mews\Captcha\Facades\Captcha',
+
     ],
 
 ];

@@ -19,21 +19,19 @@ class HTMLFieldGenerator
             case 'email':
             case 'password':
             case 'number':
-                $fieldTemplate = get_template('scaffold.fields.'.$field->htmlType.$localized, $templateType);
+                $fieldTemplate = get_template('scaffold.fields.ds_'.$field->htmlType.$localized, $templateType);
+                $fieldTemplate = str_replace('$FIELD_LAB$', $field->title, $fieldTemplate);
+                $fieldTemplate = str_replace('$FIELD_ID$', $field->name, $fieldTemplate);
                 break;
             case 'select':
             case 'enum':
                 $fieldTemplate = get_template('scaffold.fields.select'.$localized, $templateType);
                 $radioLabels = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
 
-                $fieldTemplate = str_replace(
-                    '$INPUT_ARR$',
-                    GeneratorFieldsInputUtil::prepareKeyValueArrayStr($radioLabels),
-                    $fieldTemplate
-                );
+                $fieldTemplate = str_replace('$INPUT_ARR$', GeneratorFieldsInputUtil::prepareKeyValueArrayStr($radioLabels), $fieldTemplate);
                 break;
             case 'checkbox':
-                $fieldTemplate = get_template('scaffold.fields.checkbox'.$localized, $templateType);
+                $fieldTemplate = get_template('scaffold.fields.ds_checkbox'.$localized, $templateType);
                 if (count($field->htmlValues) > 0) {
                     $checkboxValue = $field->htmlValues[0];
                 } else {

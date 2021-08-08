@@ -34,10 +34,6 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
         ],
-        'attachment' => [
-            'driver' => 'local',
-            'root' => public_path('attachments'),
-        ],
 
         'public' => [
             'driver' => 'local',
@@ -54,6 +50,7 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
+            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
         ],
 
     ],
@@ -71,6 +68,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('attachments') => storage_path('app/attachments'),
     ],
 
 ];

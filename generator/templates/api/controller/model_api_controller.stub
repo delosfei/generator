@@ -24,7 +24,7 @@ class $MODEL_NAME$Controller extends Controller
     public function index()
     {
         $$MODEL_NAME_PLURAL_CAMEL$ = $MODEL_NAME_CAMEL$::paginate(10);
-        return  $MODEL_NAME_CAMEL$Resource::collection($$MODEL_NAME_PLURAL_CAMEL$);
+        return  $MODEL_NAME$Resource::collection($$MODEL_NAME_PLURAL_CAMEL$);
     }
 
     /**
@@ -34,7 +34,7 @@ class $MODEL_NAME$Controller extends Controller
      */
     public function show($MODEL_NAME$ $$MODEL_NAME_CAMEL$)
     {
-        return new $MODEL_NAME$Resource($$$MODEL_NAME_CAMEL$);
+        return new $MODEL_NAME$Resource($$MODEL_NAME_CAMEL$);
     }
 
     /**

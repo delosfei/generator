@@ -116,13 +116,6 @@ class DelosfeiGeneratorServiceProvider extends ServiceProvider
 
 
         $this->app->singleton(
-            'delosfei.scaffold.controller',
-            function ($app) {
-                return new ControllerGeneratorCommand();
-            }
-        );
-
-        $this->app->singleton(
             'delosfei.scaffold.requests',
             function ($app) {
                 return new ServiceGeneratorCommand();
@@ -164,7 +157,6 @@ class DelosfeiGeneratorServiceProvider extends ServiceProvider
                 'delosfei.model',
                 'delosfei.generator.path.controller',
                 'delosfei.generator.path.requests',
-                'delosfei.scaffold.controller',
                 'delosfei.scaffold.requests',
                 'delosfei.scaffold.views',
                 'delosfei.rollback',

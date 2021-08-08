@@ -46,6 +46,7 @@ class GeneratorConfig
     public $pathPolicy;
     public $pathRoutes;
     public $pathViews;
+    public $pathVueViews;
     public $pathAssets;
 
     /* Model Names */
@@ -87,6 +88,7 @@ class GeneratorConfig
         'skip',
         'datatables',
         'views',
+        'vuePrefix',
         'relations',
         'plural',
         'softDelete',
@@ -113,7 +115,6 @@ class GeneratorConfig
         }
 
         $this->mName = $commandData->modelName;
-
         $this->prepareAddOns();
         $this->prepareOptions($commandData);
         $this->prepareModelNames();
@@ -148,10 +149,7 @@ class GeneratorConfig
             'Illuminate\Database\Eloquent\Model'
         );
 
-        $this->nsApiController = config(
-                'delosfei.generator.namespace.api_controller',
-                'App\Http\Controllers\API'
-            ).$prefix;
+        $this->nsApiController = config('delosfei.generator.namespace.api_controller', 'App\Http\Controllers\API').$prefix;
         $this->nsApiResource = config(
                 'delosfei.generator.namespace.api_resource',
                 'App\Http\Resources'
@@ -213,6 +211,7 @@ class GeneratorConfig
             ).$prefix;
 
         $this->pathRequest = config('delosfei.generator.path.request', app_path('Http/Requests/')).$prefix;
+        $this->pathPolicy = config('delosfei.generator.path.policy', app_path('Policies/')).$prefix;
 
         $this->pathRoutes = config('delosfei.generator.path.routes', base_path('routes/web.php'));
         $this->pathFactory = config('delosfei.generator.path.factory', database_path('factories/'));
@@ -221,6 +220,11 @@ class GeneratorConfig
                 'delosfei.generator.path.views',
                 resource_path('views/')
             ).$viewPrefix.$this->mSnakePlural.'/';
+
+        $this->pathVueViews = config(
+                'delosfei.generator.path.vue_views',
+                base_path('vue/')
+            ).$viewPrefix;
 
         $this->pathAssets = config(
             'delosfei.generator.path.assets',
@@ -246,6 +250,8 @@ class GeneratorConfig
 
         $commandData->addDynamicVariable('$NAMESPACE_SEEDER$', $this->nsSeeder);
         $commandData->addDynamicVariable('$NAMESPACE_FACTORY$', $this->nsFactory);
+        $commandData->addDynamicVariable('$NAMESPACE_POLICY$', $this->nsPolicy);
+
 
         $commandData->addDynamicVariable('$NAMESPACE_API_CONTROLLER$', $this->nsApiController);
         $commandData->addDynamicVariable('$NAMESPACE_API_RESOURCE$', $this->nsApiResource);

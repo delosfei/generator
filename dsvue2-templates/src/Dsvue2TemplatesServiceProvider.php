@@ -2,7 +2,6 @@
 
 namespace Delosfei\Dsvue2Templates;
 
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class Dsvue2TemplatesServiceProvider extends ServiceProvider
@@ -17,7 +16,8 @@ class Dsvue2TemplatesServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../views', 'dsvue2-templates');
         $this->publishes(
             [
-                __DIR__.'/../vue2' => base_path(),
+                __DIR__.'/../views/vue2' => base_path(),
+                __DIR__.'/../views/vue2-user' => base_path(),
 
             ]
         );

@@ -1,0 +1,7 @@
+<el-form-item label="公众号类型">
+                    <el-radio-group v-model="form.type">
+                        <el-radio label="subscribe">订阅号</el-radio>
+                        <el-radio label="service">服务号</el-radio>
+                    </el-radio-group>
+                    <hd-form-error name="type" />
+                </el-form-item>

@@ -32,7 +32,7 @@ class APIControllerGenerator extends BaseGenerator
         }
 
 
-        if ($this->commandData->getOption('resources')) {
+        if ($this->commandData->getOption('resource')) {
             $templateName .= '_resource';
         }
 

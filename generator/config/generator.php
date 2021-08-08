@@ -25,11 +25,11 @@ return [
 
         'request' => app_path('Http/Requests/'),
 
-        'api_request' => app_path('Http/Requests/API/'),
+        'api_request' => app_path('Http/Requests/'),
 
         'controller' => app_path('Http/Controllers/'),
 
-        'api_controller' => app_path('API/'),
+        'api_controller' => app_path('Http/Controllers/'),
 
         'api_resource' => app_path('Http/Resources/'),
 
@@ -41,7 +41,7 @@ return [
 
         'views' => resource_path('views/'),
 
-        'vue_views' => base_path('vue/'),
+        'vue_views' => base_path('vue/src/'),
 
         'schema_files' => resource_path('model_schemas/'),
 
@@ -59,7 +59,7 @@ return [
 
         'service' => app_path('Services/'),
 
-        'policy' => app_path('Policies'),
+        'policy' => app_path('Policies/'),
     ],
 
     /*
@@ -79,7 +79,7 @@ return [
 
         'controller' => 'App\Http\Controllers',
 
-        'api_controller' => 'App\Api',
+        'api_controller' => 'App\Http\Controllers',
 
         'api_resource' => 'App\Http\Resources',
 
@@ -150,7 +150,7 @@ return [
 
         'repository_pattern' => true,
 
-        'resources' => false,
+        'resources' => true,
 
         'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module
     ],
@@ -184,13 +184,13 @@ return [
 
         'swagger' => false,
 
-        'tests' => true,
+        'tests' => false,
 
         'datatables' => false,
 
         'menu' => [
 
-            'enabled' => true,
+            'enabled' => false,
 
             'menu_file' => 'layouts/menu.blade.php',
         ],

@@ -12,27 +12,17 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     /**
-     * 成功响应
-     *
+     * 响应成功消息
+     * @param mixed $data
      * @param string $message
-     * @param [type] $data
-     * @return void
+     * @return array
      */
-    public function message(string $message,  $data = [], $code = 0)
+    protected function success(string $message, $data = null)
     {
-        return response(['message' => $message, 'code' => $code, 'data' => $data]);
-    }
-
-    /**
-     * 失败响应
-     *
-     * @param string $message
-     * @param integer $httpCode
-     * @return void
-     */
-    public function error(string $message, int $httpCode)
-    {
-        return response(['message' => $message], $httpCode);
+        return [
+            'message' => $message,
+            'data' => $data,
+        ];
     }
 }
 

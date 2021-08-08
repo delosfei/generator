@@ -35,7 +35,7 @@ class GeneratorPublishCommand extends PublishBaseCommand
      */
     public function handle()
     {
-        $this->copyFiles();
+//        $this->copyFiles();
         $this->publishBaseController();
         $this->publishBaseRequest();
         $this->publishBasePolicy();

@@ -22,18 +22,69 @@ class ViewGenerator extends BaseGenerator
 
     /** @var array */
     private $htmlFields;
+    /**
+     * @var mixed|string
+     */
+    private $vueName;
+    /**
+     * @var string
+     */
+    private $vueLayoutName;
+    /**
+     * @var string
+     */
+    private $vuePath;
+    /**
+     * @var string
+     */
+    private $vueLayoutPath;
+    /**
+     * @var string
+     */
+    private $tabsFieldData;
+    /**
+     * @var string
+     */
+    private $layoutVueNamePath;
+    /**
+     * @var array|string|string[]
+     */
+    private $layoutVueName;
+
+    /**
+     * @var string
+     */
 
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
-        $this->path = $commandData->config->pathViews;
-        $this->templateType = config('delosfei.generator.templates', 'adminlte-templates');
+        $this->path = $commandData->config->pathVueViews;
+        $this->templateType = config('delosfei.generator.templates', 'dsvue2-templates');
+        if ($this->commandData->getOption('vuePrefix')) {
+            //如果有vuePrefix参数，分隔参数，作为layout组件名，和vue文件路径
+            $vuePrefix = $this->commandData->getOption('vuePrefix');
+            $vuePrefix = explode('/', $vuePrefix);
+            $this->vueName = (count($vuePrefix) > 1 ? $vuePrefix[1] : $this->commandData->config->mCamel);
+            $this->vueLayoutName = strtolower($vuePrefix[0]);
+            $this->layoutVueNamePath = strtolower($this->vueLayoutName.'/'.$this->vueName.'/');
+        } else {
+            //如果没有vuePrefix参数，取模型名称，作为layout组件名，和vue文件路径
+            $this->vueLayoutName = strtolower($this->commandData->config->mName);
+            $this->layoutVueNamePath = strtolower($this->vueLayoutName.'/'.$this->vueLayoutName.'/');
+        }
+        $this->vueLayoutPath = $this->path.'layouts/';
+        $this->vuePath = $this->path.'views/'.$this->layoutVueNamePath;
+        $this->layoutVueName = str_replace('/', '.', $this->layoutVueNamePath);
     }
 
     public function generate()
     {
-        if (!file_exists($this->path)) {
-            mkdir($this->path, 0755, true);
+        if (!file_exists($this->vueLayoutPath)) {
+            mkdir($this->vueLayoutPath, 0755, true);
+        }
+
+        if (!file_exists($this->vuePath)) {
+            mkdir($this->vuePath, 0755, true);
         }
 
         $htmlInputs = Arr::pluck($this->commandData->fields, 'htmlInput');
@@ -43,6 +94,8 @@ class ViewGenerator extends BaseGenerator
 
         $this->commandData->commandInfo("\nGenerating Views...");
 
+        $this->generateLayout();
+
         if ($this->commandData->getOption('views')) {
             $viewsToBeGenerated = explode(',', $this->commandData->getOption('views'));
 
@@ -51,7 +104,7 @@ class ViewGenerator extends BaseGenerator
             }
 
             if (count(array_intersect(['create', 'update'], $viewsToBeGenerated)) > 0) {
-                $this->generateFields();
+                $this->generateForm();
             }
 
             if (in_array('create', $viewsToBeGenerated)) {
@@ -68,64 +121,95 @@ class ViewGenerator extends BaseGenerator
             }
         } else {
             $this->generateIndex();
-            $this->generateFields();
+            $this->generateForm();
             $this->generateCreate();
             $this->generateUpdate();
             $this->generateShowFields();
             $this->generateShow();
         }
-
+        $this->generateTabsJs();
         $this->commandData->commandInfo('Views created: ');
     }
 
-
-    private function generateIndex()
+    private function generateLayout()
     {
-        $templateName = ($this->commandData->jqueryDT()) ? 'js_index' : 'index';
-
-        if ($this->commandData->isLocalizedTemplates()) {
-            $templateName .= '_locale';
-        }
+        $templateName = 'ds_layout';
 
         $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
-        if ($this->commandData->getAddOn('datatables')) {
-            $templateData = str_replace('$PAGINATE$', '', $templateData);
-        } else {
-            $paginate = $this->commandData->getOption('paginate');
-
-            if ($paginate) {
-                $paginateTemplate = get_template('scaffold.views.paginate', $this->templateType);
-
-                $paginateTemplate = fill_template($this->commandData->dynamicVars, $paginateTemplate);
-
-                $templateData = str_replace('$PAGINATE$', $paginateTemplate, $templateData);
-            } else {
-                $templateData = str_replace('$PAGINATE$', '', $templateData);
-            }
-        }
-
-        if (file_exists($this->path.'index.blade.php') && !$this->commandData->commandObj->confirmOverwrite('index.blade.php')) {
+        if (file_exists($this->vueLayoutPath.$this->vueLayoutName.'.vue') && !$this->commandData->commandObj->confirmOverwrite(
+                $this->vueLayoutName.'.vue'
+            )) {
             return;
         }
-        $this->commandData->commandComment($this->createFileAndShowInfo($this->path, 'index.blade.php', $templateData));
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->vueLayoutPath, $this->vueLayoutName.'.vue', $templateData));
+
+    }
+
+    private function generateTabsJs()
+    {
+        $templateName = 'ds_tabs_js';
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+        $templateData = str_replace(
+            '$FIELDS$',
+            $this->tabsFieldData,
+            $templateData
+        );
+
+
+        if (file_exists($this->vuePath.'tabs.js') && !$this->commandData->commandObj->confirmOverwrite('tabs.js')) {
+            return;
+        }
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->vuePath, 'tabs.js', $templateData));
 
 
     }
 
-    private function generateFields()
+    private function generateIndex()
     {
-        $templateName = 'fields';
+        //写进tabs.js文件，加入导航
+        $this->tabsFieldData .= infy_tab(4)."{ title: '会员组列表', name: '".$this->layoutVueName."index' },";
+
+        $templateName = 'ds_index';
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $this->commandData->addDynamicVariable('$EL_TABLE_FIELDS$', $this->generateIndexFields());
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+        if (file_exists($this->vuePath.'index.vue') && !$this->commandData->commandObj->confirmOverwrite('index.vue')) {
+            return;
+        }
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->vuePath, 'index.vue', $templateData));
+    }
+
+    private function generateForm()
+    {
+        $templateName = 'ds_form';
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+        $this->commandData->addDynamicVariable('$EL_FORM_FIELDS$', $this->generateFormFields());
+        $this->commandData->addDynamicVariable('$FORM_FIELDS_NAME$', $this->generateFormFieldsName());
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+        if (file_exists($this->vuePath.'form.vue') && !$this->commandData->commandObj->confirmOverwrite('form.vue')) {
+            return;
+        }
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->vuePath, 'form.vue', $templateData));
+    }
+
+    private function generateFormFields(): string
+    {
 
         $this->htmlFields = [];
-
+        $fieldTemplate = '\n';
         foreach ($this->commandData->fields as $field) {
             if (!$field->inForm) {
                 continue;
             }
-
             $validations = explode('|', $field->validations);
             $minMaxRules = '';
             foreach ($validations as $validation) {
@@ -146,7 +230,7 @@ class ViewGenerator extends BaseGenerator
             }
             $this->commandData->addDynamicVariable('$SIZE$', $minMaxRules);
 
-            $fieldTemplate = HTMLFieldGenerator::generateHTML($field, $this->templateType, false);
+            $fieldTemplate .= infy_nl_tab(1, 4).HTMLFieldGenerator::generateHTML($field, $this->templateType, false);
 
             if ($field->htmlType == 'selectTable') {
                 $inputArr = explode(',', $field->htmlValues[1]);
@@ -170,31 +254,28 @@ class ViewGenerator extends BaseGenerator
                 }
 
                 $variableName = Str::singular($selectTable).'Items'; // e.g $userItems
-
-                $fieldTemplate = $this->generateViewComposer($tableName, $variableName, $columns, $selectTable, $modalName);
+                $fieldTemplateSb = $this->generateViewComposer($tableName, $variableName, $columns, $selectTable, $modalName);
             }
 
-            if (!empty($fieldTemplate)) {
-                $fieldTemplate = fill_template_with_field_data(
-                    $this->commandData->dynamicVars,
-                    $this->commandData->fieldNamesMapping,
-                    $fieldTemplate,
-                    $field
-                );
-                $this->htmlFields[] = $fieldTemplate;
+            if (!empty($fieldTemplateSb)) {
+                $fieldTemplate .= $fieldTemplateSb;
             }
         }
 
-        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
-        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+        return $fieldTemplate;
+    }
 
-        $templateData = str_replace('$FIELDS$', implode("\n\n", $this->htmlFields), $templateData);
-        if (file_exists($this->path.'fields.blade.php') && !$this->commandData->commandObj->confirmOverwrite('fields.blade.php')) {
-            return;
+    private function generateFormFieldsName(): string
+    {
+        $formFieldsName = '';
+        foreach ($this->commandData->fields as $field) {
+            if (!$field->inForm) {
+                continue;
+            }
+            $formFieldsName .= $field->name.": '',";
         }
-        $this->commandData->commandComment($this->createFileAndShowInfo($this->path, 'fields.blade.php', $templateData));
 
-
+        return $formFieldsName;
     }
 
     private function generateViewComposer($tableName, $variableName, $columns, $selectTable, $modelName = null)
@@ -218,95 +299,99 @@ class ViewGenerator extends BaseGenerator
 
     private function generateCreate()
     {
-        $templateName = 'create';
+        //写进tabs.js文件，加入导航
+        $this->tabsFieldData .= infy_nl_tab(1, 1)."{ title: '添加会员组', name: '".$this->layoutVueName."create' },";
+
+        $templateName = 'ds_create';
 
         $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
-        if (file_exists($this->path.'create.blade.php') && !$this->commandData->commandObj->confirmOverwrite('create.blade.php')) {
+
+
+        if (file_exists($this->vuePath.'create.vue') && !$this->commandData->commandObj->confirmOverwrite('create.vue')) {
             return;
         }
-        $this->commandData->commandComment($this->createFileAndShowInfo($this->path, 'create.blade.php', $templateData));
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->vuePath, 'create.vue', $templateData));
 
     }
 
     private function generateUpdate()
     {
-        $templateName = 'edit';
+        //写进tabs.js文件，加入导航
+        $this->tabsFieldData .= infy_nl_tab(1, 1)."{ title: '修改会员组', name: '".$this->layoutVueName."edit', current: true },";
+
+        $templateName = 'ds_edit';
 
         $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
-        if (file_exists($this->path.'edit.blade.php') && !$this->commandData->commandObj->confirmOverwrite('edit.blade.php')) {
+
+        if (file_exists($this->vuePath.'edit.vue') && !$this->commandData->commandObj->confirmOverwrite('edit.vue')) {
             return;
         }
-        $this->commandData->commandComment($this->createFileAndShowInfo($this->path, 'edit.blade.php', $templateData));
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->vuePath, 'edit.vue', $templateData));
 
     }
 
-    private function generateShowFields()
+    private function generateIndexFields(): string
     {
-        $templateName = 'show_field';
-
+        $templateName = 'ds_index_field';
         $fieldTemplate = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $fieldsStr = '';
-
         foreach ($this->commandData->fields as $field) {
-            if (!$field->inView) {
+            if (!$field->inIndex) {
                 continue;
             }
-            $singleFieldStr = str_replace(
-                '$FIELD_NAME_TITLE$',
-                Str::title(str_replace('_', ' ', $field->name)),
-                $fieldTemplate
-            );
+            $singleFieldStr = str_replace('$FIELD_TITLE$', Str::title(str_replace('_', ' ', $field->title)), $fieldTemplate);
             $singleFieldStr = str_replace('$FIELD_NAME$', $field->name, $singleFieldStr);
+            $singleFieldStr = str_replace('$FIELD_TITLE$', $field->title, $singleFieldStr);
             $singleFieldStr = fill_template($this->commandData->dynamicVars, $singleFieldStr);
-
-            $fieldsStr .= $singleFieldStr."\n\n";
+            $fieldsStr .= infy_nl_tab().$singleFieldStr;
         }
-        if (file_exists($this->path.'show_fields.blade.php') && !$this->commandData->commandObj->confirmOverwrite('show_fields.blade.php')) {
-            return;
-        }
-        $this->commandData->commandComment($this->createFileAndShowInfo($this->path, 'show_fields.blade.php', $templateData));
 
+        return $fieldsStr;
     }
 
     private function generateShow()
     {
-        $templateName = 'show';
+        $templateName = 'ds_show';
 
         $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
 
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
-        if (file_exists($this->path.'show.blade.php') && !$this->commandData->commandObj->confirmOverwrite('show.blade.php')) {
+        if (file_exists($this->vuePath.'show.vue') && !$this->commandData->commandObj->confirmOverwrite('show.vue')) {
             return;
         }
-        $this->commandData->commandComment($this->createFileAndShowInfo($this->path, 'show.blade.php', $templateData));
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->vuePath, 'show.vue', $templateData));
     }
 
     public function rollback($views = [])
     {
         $files = [
-            'index.blade.php',
-            'fields.blade.php',
-            'create.blade.php',
-            'edit.blade.php',
-            'show.blade.php',
-            'show_fields.blade.php',
+
+            'tabs.js',
+            'index.vue',
+            'form.vue',
+            'create.vue',
+            'edit.vue',
+            'show.vue',
         ];
 
         if (!empty($views)) {
-            $files = [];
+            $files = ['tabs.js'];
             foreach ($views as $view) {
-                $files[] = $view.'.blade.php';
+                $files[] = $view.'.vue';
             }
         }
 
         foreach ($files as $file) {
-
-            ($del_path = $this->rollbackFile($this->path, $file)) ? $this->commandData->commandComment($del_path) : false;
+            ($del_path = $this->rollbackFile($this->vuePath, $file)) ? $this->commandData->commandComment($del_path) : false;
+        }
+        @rmdir($this->vuePath);
+        if (@rmdir($this->path.'views/'.strtolower($this->vueLayoutName.'/'))) {
+            ($del_path = $this->rollbackFile($this->vueLayoutPath, $this->vueLayoutName.'.vue')) ? $this->commandData->commandComment($del_path) : false;
         }
     }
 }

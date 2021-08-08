@@ -1,0 +1,5 @@
+<el-form-item label="$FIELD_LAB$">
+                    <el-checkbox v-model="form.$FIELD_ID$">$CHECKBOX_VALUE$</el-checkbox>
+                    <hd-form-error name="$FIELD_ID$" />
+                </el-form-item>
+

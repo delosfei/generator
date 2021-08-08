@@ -1,0 +1,4 @@
+<el-form-item label="二维码">
+                    <hd-upload-image v-model="form.qr" :sid="$route.params.sid" />
+                    <hd-form-error name="qr" />
+                </el-form-item>

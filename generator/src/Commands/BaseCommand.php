@@ -120,11 +120,6 @@ class BaseCommand extends Command
             $requestGenerator->generate();
         }
 
-        if (!$this->isSkip('controllers') and !$this->isSkip('scaffold_controller')) {
-            $controllerGenerator = new ControllerGenerator($this->commandData);
-            $controllerGenerator->generate();
-        }
-
         if (!$this->isSkip('views')) {
             $viewGenerator = new ViewGenerator($this->commandData);
             $viewGenerator->generate();
@@ -293,11 +288,13 @@ class BaseCommand extends Command
             ],
             ['datatables', null, InputOption::VALUE_REQUIRED, 'Override datatables settings'],
             ['views', null, InputOption::VALUE_REQUIRED, 'Specify only the views you want generated: index,create,edit,show'],
+            ['vuePrefix', null, InputOption::VALUE_REQUIRED, 'vuePrefix'],
             ['relations', null, InputOption::VALUE_NONE, 'Specify if you want to pass relationships for fields'],
             ['softDelete', null, InputOption::VALUE_NONE, 'Soft Delete Option'],
             ['forceMigrate', null, InputOption::VALUE_NONE, 'Specify if you want to run migration or not'],
             ['factory', null, InputOption::VALUE_NONE, 'To generate factory'],
             ['seeder', null, InputOption::VALUE_NONE, 'To generate seeder'],
+            ['resources', null, InputOption::VALUE_NONE, 'To generate seeder'],
             ['observer', null, InputOption::VALUE_REQUIRED, 'To generate observer'],
             ['connection', null, InputOption::VALUE_REQUIRED, 'Specify connection name'],
         ];

@@ -50,6 +50,8 @@ class GeneratorConfig
     public $pathAssets;
 
     /* Model Names */
+
+    public $tableTitle;
     public $mName;
     public $mPlural;
     public $mCamel;
@@ -79,6 +81,7 @@ class GeneratorConfig
         'fieldsFile',
         'jsonFromGUI',
         'tableName',
+        'tableTitle',
         'fromTable',
         'ignoreFields',
         'save',
@@ -287,6 +290,10 @@ class GeneratorConfig
         }
         $commandData->addDynamicVariable('$CONNECTION$', $connectionText);
 
+        $tableTitleText = $this->getOption('tableTitle')?$this->getOption('tableTitle'):'';
+
+        $commandData->addDynamicVariable('$TABLE_TITLE$', $tableTitleText);
+
         if (!empty($this->prefixes['route'])) {
             $commandData->addDynamicVariable('$ROUTE_NAMED_PREFIX$', $this->prefixes['route'].'.');
             $commandData->addDynamicVariable('$ROUTE_PREFIX$', str_replace('.', '/', $this->prefixes['route']).'/');
@@ -349,6 +356,9 @@ class GeneratorConfig
 
     public function prepareModelNames()
     {
+        if ($this->getOption('tableTitle')) {
+            $this->tableTitle = $this->getOption('tableTitle');
+        }
         if ($this->getOption('plural')) {
             $this->mPlural = $this->getOption('plural');
         } else {

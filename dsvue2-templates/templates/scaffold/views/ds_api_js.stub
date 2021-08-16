@@ -1,0 +1,8 @@
+import base from './base'
+
+
+export default {
+  ...base,
+  url: '$MODEL_NAME_SNAKE$',
+
+}

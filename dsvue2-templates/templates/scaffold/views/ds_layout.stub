@@ -9,13 +9,15 @@
         <el-backtop> </el-backtop>
     </div>
 </template>
+<script setup>
+import TopMenu from './components/TopMenu.vue'
+import QuickMenu from './components/QuickMenu.vue'
+import XFooter from './components/Footer.vue'
+
+</script>
 <script>
-import TopMenu from './components/TopMenu'
-import QuickMenu from './components/QuickMenu'
-import XFooter from './components/Footer'
 export default {
     route: { meta: { auth: true } },
-    components: { TopMenu, QuickMenu, XFooter }
 }
 </script>
 

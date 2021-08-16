@@ -1,12 +1,16 @@
 <template>
-    <XForm :id="$route.params.id" />
+    <hd-tabs />
+    <hd-form name="$MODEL_NAME_SNAKE$" :data="$MODEL_NAME_SNAKE$" @submit="submit" />
 </template>
 
-<script>
-import XForm from './Form'
-export default {
-    components: { XForm }
+<script setup>
+import $MODEL_NAME_SNAKE$Api from 'api/$MODEL_NAME_SNAKE$Api'
+import helper from 'utils/helper'
+const $MODEL_NAME_SNAKE$Id = helper.route().query.id;
+const $MODEL_NAME_SNAKE$ = await $MODEL_NAME_SNAKE$Api.find($MODEL_NAME_SNAKE$Id)
+
+const submit = async ({ form }) => {
+    await $MODEL_NAME_SNAKE$Api.update(form)
+    helper.router({ name: '$ROUTER_LAYOUT_VUE_NAME$index' })
 }
 </script>
-
-<style></style>

@@ -85,7 +85,7 @@ return [
 
         'request' => 'App\Http\Requests',
 
-        'api_request' => 'App\Http\Requests\API',
+        'api_request' => 'App\Http\Requests',
 
         'seeder' => 'Database\Seeders',
 

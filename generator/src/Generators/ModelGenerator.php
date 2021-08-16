@@ -131,19 +131,14 @@ class ModelGenerator extends BaseGenerator
 
     private function fillHasFactory($templateData)
     {
-        if (!$this->commandData->getAddOn('tests')) {
-            $templateData = str_replace('$HAS_FACTORY_IMPORT$', '', $templateData);
-            $templateData = str_replace('$HAS_FACTORY$', '', $templateData);
-        } else {
+
             $templateData = str_replace(
                 '$HAS_FACTORY_IMPORT$',
                 'use Illuminate\Database\Eloquent\Factories\HasFactory;',
                 $templateData
             );
-            $templateData = str_replace('$HAS_FACTORY$', infy_tab()."use HasFactory;\n", $templateData);
-        }
 
-        return $templateData;
+        return str_replace('$HAS_FACTORY$', infy_tab()."use HasFactory;\n", $templateData);
     }
 
     private function fillDocs($templateData)
@@ -419,6 +414,10 @@ class ModelGenerator extends BaseGenerator
                 case 'text':
                     $rule .= "'string'";
                     break;
+                case 'json':
+                    $rule .= "'array'";
+                    break;
+
                 default:
                     $rule = '';
                     break;

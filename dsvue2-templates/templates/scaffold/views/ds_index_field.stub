@@ -1,1 +1,1 @@
-{ label: '$FIELD_TITLE$', prop: '$FIELD_NAME$' },
+$FIELD_NAME$: {title: '$FIELD_TITLE$', type: '', width: '', align: 'center'},

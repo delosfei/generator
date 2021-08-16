@@ -1,4 +1,4 @@
 export default [
-    { title: '系统管理', name: 'system.index' },
+    {title: '系统管理', icon: 'fas fa-cogs', route: {name: 'system.index' }},
 $FIELDS$
 ]

@@ -40,7 +40,7 @@ class APIRoutesGenerator extends BaseGenerator
     {
         $this->routeContents .= infy_nl(1).$this->routesTemplate;
         $existingRouteContents = file_get_contents($this->path);
-        if (Str::contains($existingRouteContents, "Route::resource('".$this->commandData->config->mSnakePlural."',")) {
+        if (Str::contains($existingRouteContents, "$this->routesTemplate")) {
             $this->commandData->commandInfo('+ '.$this->path.' (Skipping)');
 
             return;

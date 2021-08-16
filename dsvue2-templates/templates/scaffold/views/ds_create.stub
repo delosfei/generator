@@ -1,11 +1,14 @@
 <template>
-    <XForm />
+    <hd-tabs />
+    <hd-form name="$MODEL_NAME_SNAKE$" @submit="submit" />
 </template>
 
-<script>
-import XForm from './Form'
-export default {
-    components: { XForm }
+<script setup>
+import helper from 'utils/helper'
+import $MODEL_NAME_SNAKE$Api from 'api/$MODEL_NAME_SNAKE$Api'
+const submit = async ({ form }) => {
+    await $MODEL_NAME_SNAKE$Api.store(form)
+    helper.router({ name: '$ROUTER_LAYOUT_VUE_NAME$index' })
 }
 </script>
 

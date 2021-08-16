@@ -1,50 +1,22 @@
 <template>
-    <div>
-        <hd-tab :tabs="tabs" />
-        <el-alert type="info"> <i class="fa fa-info-circle" aria-hidden="true"></i> 您正在管理【 {{ site.title }}】站点 </el-alert>
-
-        <el-table :data="$MODEL_NAME_PLURAL_CAMEL$" style="width: 100%" border class="mt-3" v-loading="loading">
-            <el-table-column :prop="file.prop" :label="field.label" v-for="(field, index) in fields" :key="index"> </el-table-column>
-            <el-table-column width="160" align="center" #default="{ row: $MODEL_NAME_CAMEL$ }">
-                <el-button-group>
-                    <el-button type="primary" size="small" @click="$router.push({ name: 'system.$MODEL_NAME_CAMEL$.edit', params: { id: $MODEL_NAME_CAMEL$.id } })">
-                        编辑
-                    </el-button>
-                    <el-button :type="$MODEL_NAME_CAMEL$.id == 1 ? 'info' : 'danger'" size="small" @click="del($MODEL_NAME_CAMEL$)" :disabled="$MODEL_NAME_CAMEL$.id == 1">删除</el-button>
-                </el-button-group>
-            </el-table-column>
-        </el-table>
-    </div>
+    <hd-tabs />
+    <hd-table-list name="$MODEL_NAME_SNAKE$" @del="del" class="mt-3" />
 </template>
 
-<script>
-const fields = [$EL_TABLE_FIELDS$
-]
-import tabs from './tabs'
-export default {
-    data() {
-        return {
-            tabs,
-            fields,
-            site: {},
-            $MODEL_NAME_PLURAL_CAMEL$: [],
-            sid: this.$route.query.sid,
-            loading: true
-        }
-    },
-    async created() {
-        this.site = await this.axios.get(`site/${this.sid}`)
-        this.$MODEL_NAME_PLURAL_CAMEL$ = await this.axios.get(`site/${this.sid}/$MODEL_NAME_CAMEL$`)
-        this.loading = false
-    },
-    methods: {
-        async del($MODEL_NAME_CAMEL$) {
-            await this.$confirm('确定删除角色吗', '温馨提示')
-            await this.axios.delete(`site/${this.sid}/$MODEL_NAME_CAMEL$/${$MODEL_NAME_CAMEL$.id}`)
-            this.$MODEL_NAME_PLURAL_CAMEL$.splice(this.$MODEL_NAME_PLURAL_CAMEL$.indexOf($MODEL_NAME_CAMEL$), 1)
-        }
+<script setup>
+import helper from 'utils/helper'
+import $MODEL_NAME_SNAKE$Api from 'api/$MODEL_NAME_SNAKE$Api'
+
+const del = async ({ row, query }) => {
+    try {
+        await helper.confirm(`确定删除【${row.title}】吗？`)
+        await $MODEL_NAME_SNAKE$Api.destroy(row.id)
+        query();
+    } catch (e) {
+        console.log(e)
     }
 }
 </script>
 
-<style></style>
+<style>
+</style>

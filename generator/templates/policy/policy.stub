@@ -6,7 +6,7 @@ use $NAMESPACE_MODEL$\$MODEL_NAME$;
 use $NAMESPACE_MODEL$\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class $MODEL_NAME$Policy
+class $MODEL_NAME$Policy extends Policy
 {
     use HandlesAuthorization;
 

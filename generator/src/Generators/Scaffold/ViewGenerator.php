@@ -41,6 +41,14 @@ class ViewGenerator extends BaseGenerator
     /**
      * @var string
      */
+    private $vueApiPath;
+    /**
+     * @var string
+     */
+    private $vueDataPath;
+    /**
+     * @var string
+     */
     private $tabsFieldData;
     /**
      * @var string
@@ -54,11 +62,13 @@ class ViewGenerator extends BaseGenerator
     /**
      * @var string
      */
+    private $tableTitle;
 
     public function __construct(CommandData $commandData)
     {
         $this->commandData = $commandData;
         $this->path = $commandData->config->pathVueViews;
+        $this->tableTitle=$this->commandData->getOption('tableTitle');
         $this->templateType = config('delosfei.generator.templates', 'dsvue2-templates');
         if ($this->commandData->getOption('vuePrefix')) {
             //如果有vuePrefix参数，分隔参数，作为layout组件名，和vue文件路径
@@ -73,6 +83,8 @@ class ViewGenerator extends BaseGenerator
             $this->layoutVueNamePath = strtolower($this->vueLayoutName.'/'.$this->vueLayoutName.'/');
         }
         $this->vueLayoutPath = $this->path.'layouts/';
+        $this->vueApiPath = $this->path.'api/';
+        $this->vueDataPath = $this->path.'data/';
         $this->vuePath = $this->path.'views/'.$this->layoutVueNamePath;
         $this->layoutVueName = str_replace('/', '.', $this->layoutVueNamePath);
     }
@@ -81,6 +93,12 @@ class ViewGenerator extends BaseGenerator
     {
         if (!file_exists($this->vueLayoutPath)) {
             mkdir($this->vueLayoutPath, 0755, true);
+        }
+        if (!file_exists($this->vueApiPath)) {
+            mkdir($this->vueApiPath, 0755, true);
+        }
+        if (!file_exists($this->vueDataPath)) {
+            mkdir($this->vueDataPath, 0755, true);
         }
 
         if (!file_exists($this->vuePath)) {
@@ -95,38 +113,43 @@ class ViewGenerator extends BaseGenerator
         $this->commandData->commandInfo("\nGenerating Views...");
 
         $this->generateLayout();
+        $this->generateApiJs();
+        $this->generateDataJs();
 
-        if ($this->commandData->getOption('views')) {
-            $viewsToBeGenerated = explode(',', $this->commandData->getOption('views'));
 
-            if (in_array('index', $viewsToBeGenerated)) {
-                $this->generateIndex();
-            }
+//        if ($this->commandData->getOption('views')) {
+//            $viewsToBeGenerated = explode(',', $this->commandData->getOption('views'));
+//
+//            if (in_array('index', $viewsToBeGenerated)) {
+//                $this->generateIndex();
+//            }
+//
+//            if (count(array_intersect(['create', 'update'], $viewsToBeGenerated)) > 0) {
+//                $this->generateForm();
+//            }
+//
+//            if (in_array('create', $viewsToBeGenerated)) {
+//                $this->generateCreate();
+//            }
+//
+//            if (in_array('edit', $viewsToBeGenerated)) {
+//                $this->generateUpdate();
+//            }
+//
+//            if (in_array('show', $viewsToBeGenerated)) {
+//                $this->generateShowFields();
+//                $this->generateShow();
+//            }
+//        } else {
 
-            if (count(array_intersect(['create', 'update'], $viewsToBeGenerated)) > 0) {
-                $this->generateForm();
-            }
+        $this->generateIndex();
 
-            if (in_array('create', $viewsToBeGenerated)) {
-                $this->generateCreate();
-            }
-
-            if (in_array('edit', $viewsToBeGenerated)) {
-                $this->generateUpdate();
-            }
-
-            if (in_array('show', $viewsToBeGenerated)) {
-                $this->generateShowFields();
-                $this->generateShow();
-            }
-        } else {
-            $this->generateIndex();
-            $this->generateForm();
-            $this->generateCreate();
-            $this->generateUpdate();
-            $this->generateShowFields();
-            $this->generateShow();
-        }
+//        $this->generateForm();
+        $this->generateCreate();
+        $this->generateUpdate();
+//            $this->generateShowFields();
+//            $this->generateShow();
+//        }
         $this->generateTabsJs();
         $this->commandData->commandInfo('Views created: ');
     }
@@ -171,14 +194,55 @@ class ViewGenerator extends BaseGenerator
 
     }
 
+    private function generateApiJs()
+    {
+        $templateName = 'ds_api_js';
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+
+        if (file_exists($this->vueApiPath.$this->commandData->config->mCamel.'Api.js') && !$this->commandData->commandObj->confirmOverwrite(
+                $this->commandData->config->mCamel.'Api.js'
+            )) {
+            return;
+        }
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->vueApiPath, $this->commandData->config->mCamel.'Api.js', $templateData));
+    }
+
+    private function generateDataJs()
+    {
+        $templateName = 'ds_data_js';
+
+        $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
+
+        $this->commandData->addDynamicVariable('$LAYOUT_VUE_NAME$', $this->layoutVueName);
+
+        $this->commandData->addDynamicVariable('$TABLE_FIELDS$', $this->generateIndexFields());
+        $this->commandData->addDynamicVariable('$FORM_FIELDS$', $this->generateFormFields());
+
+        $templateData = fill_template($this->commandData->dynamicVars, $templateData);
+
+
+        if (file_exists($this->vueDataPath.$this->commandData->config->mCamel.'.js') && !$this->commandData->commandObj->confirmOverwrite(
+                $this->commandData->config->mCamel.'.js'
+            )) {
+            return;
+        }
+        $this->commandData->commandComment($this->createFileAndShowInfo($this->vueDataPath, $this->commandData->config->mCamel.'.js', $templateData));
+    }
+
     private function generateIndex()
     {
         //写进tabs.js文件，加入导航
-        $this->tabsFieldData .= infy_tab(4)."{ title: '会员组列表', name: '".$this->layoutVueName."index' },";
+        $this->tabsFieldData .= infy_tab(4)."{ title: '".$this->tableTitle."列表', icon: 'fas fa-list', route: {name: '".$this->layoutVueName."index' }},";
+
 
         $templateName = 'ds_index';
         $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
-        $this->commandData->addDynamicVariable('$EL_TABLE_FIELDS$', $this->generateIndexFields());
+//        $this->commandData->addDynamicVariable('$EL_TABLE_FIELDS$', $this->generateIndexFields());
+//        dd($this->commandData->dynamicVars);
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         if (file_exists($this->vuePath.'index.vue') && !$this->commandData->commandObj->confirmOverwrite('index.vue')) {
@@ -202,6 +266,25 @@ class ViewGenerator extends BaseGenerator
     }
 
     private function generateFormFields(): string
+    {
+        $templateName = 'ds_form_fields';
+        $fieldTemplate = get_template('scaffold.views.'.$templateName, $this->templateType);
+
+        $fieldsStr = '';
+        foreach ($this->commandData->fields as $field) {
+            if (!$field->inForm) {
+                continue;
+            }
+            $singleFieldStr = str_replace('$FIELD_NAME$', $field->name, $fieldTemplate);
+            $singleFieldStr = str_replace('$FIELD_TITLE$', $field->title, $singleFieldStr);
+            $singleFieldStr = fill_template($this->commandData->dynamicVars, $singleFieldStr);
+            $fieldsStr .= infy_nl_tab(1, 4).$singleFieldStr;
+        }
+
+        return $fieldsStr;
+    }
+
+    private function generateFormFields_beifen(): string
     {
 
         $this->htmlFields = [];
@@ -300,12 +383,11 @@ class ViewGenerator extends BaseGenerator
     private function generateCreate()
     {
         //写进tabs.js文件，加入导航
-        $this->tabsFieldData .= infy_nl_tab(1, 1)."{ title: '添加会员组', name: '".$this->layoutVueName."create' },";
-
+        $this->tabsFieldData .= infy_nl_tab(1, 1)."{ title: '添加".$this->tableTitle."', icon: 'fas fa-plus', route: {name: '".$this->layoutVueName."create' }},";
         $templateName = 'ds_create';
 
         $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
-
+        $this->commandData->addDynamicVariable('$ROUTER_LAYOUT_VUE_NAME$', $this->layoutVueName);
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
 
@@ -319,12 +401,12 @@ class ViewGenerator extends BaseGenerator
     private function generateUpdate()
     {
         //写进tabs.js文件，加入导航
-        $this->tabsFieldData .= infy_nl_tab(1, 1)."{ title: '修改会员组', name: '".$this->layoutVueName."edit', current: true },";
+        $this->tabsFieldData .= infy_nl_tab(1, 1)."{ title: '修改".$this->tableTitle."', icon: 'fas fa-edit', route: {name: '".$this->layoutVueName."edit'}, current: true },";
 
         $templateName = 'ds_edit';
 
         $templateData = get_template('scaffold.views.'.$templateName, $this->templateType);
-
+        $this->commandData->addDynamicVariable('$ROUTER_LAYOUT_VUE_NAME$', $this->layoutVueName);
         $templateData = fill_template($this->commandData->dynamicVars, $templateData);
 
         if (file_exists($this->vuePath.'edit.vue') && !$this->commandData->commandObj->confirmOverwrite('edit.vue')) {
@@ -348,7 +430,7 @@ class ViewGenerator extends BaseGenerator
             $singleFieldStr = str_replace('$FIELD_NAME$', $field->name, $singleFieldStr);
             $singleFieldStr = str_replace('$FIELD_TITLE$', $field->title, $singleFieldStr);
             $singleFieldStr = fill_template($this->commandData->dynamicVars, $singleFieldStr);
-            $fieldsStr .= infy_nl_tab().$singleFieldStr;
+            $fieldsStr .= infy_nl_tab(1, 3).$singleFieldStr;
         }
 
         return $fieldsStr;
@@ -393,5 +475,11 @@ class ViewGenerator extends BaseGenerator
         if (@rmdir($this->path.'views/'.strtolower($this->vueLayoutName.'/'))) {
             ($del_path = $this->rollbackFile($this->vueLayoutPath, $this->vueLayoutName.'.vue')) ? $this->commandData->commandComment($del_path) : false;
         }
+
+        ($del_path = $this->rollbackFile($this->vueApiPath, $this->commandData->config->mCamel.'Api.js')) ? $this->commandData->commandComment(
+            $del_path
+        ) : false;
+        ($del_path = $this->rollbackFile($this->vueDataPath, $this->commandData->config->mCamel.'.js')) ? $this->commandData->commandComment($del_path) : false;
+
     }
 }

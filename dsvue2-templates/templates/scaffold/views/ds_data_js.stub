@@ -1,0 +1,24 @@
+export default {
+    table: {
+        columns: {
+            //index表格数据遍历
+$TABLE_FIELDS$
+        },
+        btns: [
+            { title: '编辑$TABLE_TITLE$', route: { name: `$LAYOUT_VUE_NAME$edit` } },
+            { title: '删除$TABLE_TITLE$', emit: 'del' },
+        ],
+    },
+    form: {
+        cards: [
+            {
+                title: '$TABLE_TITLE$信息',
+                fields: {
+                //form表单遍历数据
+$FORM_FIELDS$
+                },
+            },
+        ],
+        btns: [{ title: '保存提交', emit: 'submit' }],
+    },
+}

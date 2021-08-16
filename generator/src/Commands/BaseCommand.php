@@ -11,8 +11,8 @@ use Delosfei\Generator\Generators\API\APIRoutesGenerator;
 use Delosfei\Generator\Generators\FactoryGenerator;
 use Delosfei\Generator\Generators\MigrationGenerator;
 use Delosfei\Generator\Generators\ModelGenerator;
+use Delosfei\Generator\Generators\ObserverGenerator;
 use Delosfei\Generator\Generators\Scaffold\ControllerGenerator;
-use Delosfei\Generator\Generators\Scaffold\RequestGenerator;
 use Delosfei\Generator\Generators\Scaffold\RoutesGenerator;
 use Delosfei\Generator\Generators\Scaffold\ViewGenerator;
 use Delosfei\Generator\Generators\SeederGenerator;
@@ -65,21 +65,6 @@ class BaseCommand extends Command
             $modelGenerator->generate();
         }
 
-        if ($this->commandData->getOption('factory')) {
-            $factoryGenerator = new FactoryGenerator($this->commandData);
-            $factoryGenerator->generate();
-        }
-
-        if ($this->commandData->getOption('seeder')) {
-            $seederGenerator = new SeederGenerator($this->commandData);
-            $seederGenerator->generate();
-        }
-
-//        if ($this->commandData->getOption('observer')) {
-//            $observerGenerator = new ObserverGenerator($this->commandData);
-//            $observerGenerator->generate();
-//        }
-
 
     }
 
@@ -109,16 +94,27 @@ class BaseCommand extends Command
             $apiPolicyGenerator = new APIPolicyGenerator($this->commandData);
             $apiPolicyGenerator->generate();
         }
+        if (!$this->isSkip('factory')) {
+            $factoryGenerator = new FactoryGenerator($this->commandData);
+            $factoryGenerator->generate();
+        }
+
+        if (!$this->isSkip('seeder')) {
+            $seederGenerator = new SeederGenerator($this->commandData);
+            $seederGenerator->generate();
+        }
+
+//        if (!$this->isSkip('observer')) {
+//            $observerGenerator = new ObserverGenerator($this->commandData);
+//            $observerGenerator->generate();
+//        }
 
 
     }
 
     public function generateScaffoldItems()
     {
-        if (!$this->isSkip('requests') and !$this->isSkip('scaffold_requests')) {
-            $requestGenerator = new RequestGenerator($this->commandData);
-            $requestGenerator->generate();
-        }
+
 
         if (!$this->isSkip('views')) {
             $viewGenerator = new ViewGenerator($this->commandData);
@@ -274,6 +270,7 @@ class BaseCommand extends Command
             ['jsonFromGUI', null, InputOption::VALUE_REQUIRED, 'Direct Json string while using GUI interface'],
             ['plural', null, InputOption::VALUE_REQUIRED, 'Plural Model name'],
             ['tableName', null, InputOption::VALUE_REQUIRED, 'Table Name'],
+            ['tableTitle', null, InputOption::VALUE_REQUIRED, 'Table Title'],
             ['fromTable', null, InputOption::VALUE_NONE, 'Generate from existing table'],
             ['ignoreFields', null, InputOption::VALUE_REQUIRED, 'Ignore fields while generating from table'],
             ['save', null, InputOption::VALUE_NONE, 'Save model schema to file'],

@@ -3,6 +3,7 @@
 namespace $NAMESPACE_API_REQUEST$;
 
 use $NAMESPACE_REQUEST$\Request;
+use Illuminate\Validation\Rule;
 
 class $MODEL_NAME$Request extends Request
 {
@@ -14,7 +15,7 @@ class $MODEL_NAME$Request extends Request
             case 'POST':
             {
                 return [
-                    // CREATE ROLES
+                    $RULES$
                 ];
             }
             // UPDATE
@@ -22,7 +23,7 @@ class $MODEL_NAME$Request extends Request
             case 'PATCH':
             {
                 return [
-                    // UPDATE ROLES
+                    $RULES$
                 ];
             }
             case 'GET':
@@ -36,7 +37,10 @@ class $MODEL_NAME$Request extends Request
 
     public function attributes()
     {
-        return ['title' => '套餐名称', 'site_num' => '站点数量', 'days' => '可用天数'];
+        return [
+            $ATTRIBUTES$
+
+            ];
     }
 
     public function messages()
@@ -46,3 +50,4 @@ class $MODEL_NAME$Request extends Request
         ];
     }
 }
+

@@ -1,1 +1,1 @@
- $this->call($MODEL_NAME_PLURAL_HUMAN$TableSeeder::class);
+ $this->call($MODEL_NAME_PLURAL$TableSeeder::class);

@@ -51,11 +51,11 @@ class MigrationGenerator extends BaseGenerator
             if ($field->name == 'created_at') {
                 $createdAtField = $field;
                 continue;
-            } else {
-                if ($field->name == 'updated_at') {
-                    $updatedAtField = $field;
-                    continue;
-                }
+            } elseif ($field->name == 'updated_at') {
+                $updatedAtField = $field;
+                continue;
+            }elseif($field->name == 'deleted_at'){
+                continue;
             }
 
             $fields[] = $field->migrationText;

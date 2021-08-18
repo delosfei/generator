@@ -80,6 +80,11 @@ class FactoryGenerator extends BaseGenerator
                 case 'bigInteger':
                     $fakerData = 'randomDigitNotNull';
                     break;
+                case 'smallInteger':
+                    $fakerData = 'randomElement(['."'0','1','2','3','4','5','6','7','8','9','10','11'".'])';
+                    break;
+
+
                 case 'string':
                     $fakerData = 'word';
                     break;

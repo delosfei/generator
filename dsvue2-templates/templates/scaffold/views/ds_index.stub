@@ -1,16 +1,16 @@
 <template>
     <hd-tabs />
-    <hd-table-list name="$MODEL_NAME_SNAKE$" @del="del" class="mt-3" />
+    <hd-table-list name="$MODEL_NAME_CAMEL$" @del="del" class="mt-3" />
 </template>
 
 <script setup>
 import helper from 'utils/helper'
-import $MODEL_NAME_SNAKE$Api from 'api/$MODEL_NAME_SNAKE$Api'
+import $MODEL_NAME_CAMEL$Api from 'api/$MODEL_NAME_CAMEL$Api'
 
 const del = async ({ row, query }) => {
     try {
         await helper.confirm(`确定删除【${row.title}】吗？`)
-        await $MODEL_NAME_SNAKE$Api.destroy(row.id)
+        await $MODEL_NAME_CAMEL$Api.destroy(row.id)
         query();
     } catch (e) {
         console.log(e)

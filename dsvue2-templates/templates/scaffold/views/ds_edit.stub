@@ -1,16 +1,16 @@
 <template>
     <hd-tabs />
-    <hd-form name="$MODEL_NAME_SNAKE$" :data="$MODEL_NAME_SNAKE$" @submit="submit" />
+    <hd-form name="$MODEL_NAME_CAMEL$" :data="$MODEL_NAME_CAMEL$" @submit="submit" />
 </template>
 
 <script setup>
-import $MODEL_NAME_SNAKE$Api from 'api/$MODEL_NAME_SNAKE$Api'
+import $MODEL_NAME_CAMEL$Api from 'api/$MODEL_NAME_CAMEL$Api'
 import helper from 'utils/helper'
-const $MODEL_NAME_SNAKE$Id = helper.route().query.id;
-const $MODEL_NAME_SNAKE$ = await $MODEL_NAME_SNAKE$Api.find($MODEL_NAME_SNAKE$Id)
+const $MODEL_NAME_CAMEL$Id = helper.route().query.id;
+const $MODEL_NAME_CAMEL$ = await $MODEL_NAME_CAMEL$Api.find($MODEL_NAME_CAMEL$Id)
 
 const submit = async ({ form }) => {
-    await $MODEL_NAME_SNAKE$Api.update(form)
+    await $MODEL_NAME_CAMEL$Api.update(form)
     helper.router({ name: '$ROUTER_LAYOUT_VUE_NAME$index' })
 }
 </script>
